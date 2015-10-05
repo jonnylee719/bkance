@@ -87,7 +87,7 @@ public class BookInfoFragment extends Fragment {
         protected void onPostExecute(JSONObject searchResults){
             JSONObject randItem;
             try {
-                while(!checkVolumeReq(randItem = new BookFetcher().getRandomVolume(searchResults))){
+                while(!checkVolumeReq(randItem = getRandomVolume(searchResults))){
                 }
 
                 JSONObject volumeInfo = randItem.getJSONObject("volumeInfo");
@@ -130,6 +130,19 @@ public class BookInfoFragment extends Fragment {
             } finally {
                 return haveAllReq;
             }
+        }
+
+        public JSONObject getRandomVolume(JSONObject searchResults) throws JSONException{
+            int totalItems = searchResults.getInt("totalItems");
+            int randomItemIndex;
+            if(totalItems >= 40){
+                randomItemIndex = new Random().nextInt(40);
+            }
+            else{
+                randomItemIndex = new Random().nextInt(totalItems);
+            }
+            JSONArray items = searchResults.getJSONArray("items");
+            return (JSONObject) items.get(randomItemIndex);
         }
     }
 }
