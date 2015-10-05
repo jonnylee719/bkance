@@ -50,7 +50,7 @@ public class BookInfoFragment extends Fragment {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mNewSearchTerm = "romance";
+                mNewSearchTerm = "adventure";
                 new FetchVolumesTask().execute(mNewSearchTerm);
             }
         });
@@ -72,33 +72,27 @@ public class BookInfoFragment extends Fragment {
                 Log.d(TAG, "Looking up the same term again.");
                 if(mSearchResults==null){
                     Log.d(TAG, "SearchResults JSONObject is null");
-                    mSearchResults = new BookFetcher().searchFiction(mSearchTerm);
+                    mSearchResults = new BookFetcher().searchFiction(mSearchTerm, 1);
                 }
             }
             else {      //New search term
                 Log.d(TAG, "New search term");
                 mSearchTerm = searchSubject;
-                mSearchResults = new BookFetcher().searchFiction(mSearchTerm);
+                mSearchResults = new BookFetcher().searchFiction(mSearchTerm, 1);
             }
             return mSearchResults;
         }
 
         @Override
         protected void onPostExecute(JSONObject searchResults){
+            JSONObject randItem;
             try {
-                int totalItems = searchResults.getInt("totalItems");
-                //Get a random book from the search results, results are paginated up to 40
-                JSONObject randItem = getRandomVolumeItem(searchResults, totalItems);
+                while(!checkVolumeReq(randItem = new BookFetcher().getRandomVolume(searchResults))){
+                }
 
                 JSONObject volumeInfo = randItem.getJSONObject("volumeInfo");
                 JSONArray authors = volumeInfo.getJSONArray("authors");
                 JSONArray industryIdentifiers = volumeInfo.getJSONArray("industryIdentifiers");
-                while(authors == null ||                            //There's no author or industryIdentifiers for the book,
-                        industryIdentifiers == null){             //need to at least have an author and industryIdentifier, therefore redo the search
-                    randItem = getRandomVolumeItem(searchResults, totalItems);
-                    volumeInfo = randItem.getJSONObject("volumeInfo");
-                    authors = volumeInfo.getJSONArray("authors");
-                }
                 JSONObject isbn13 = industryIdentifiers.getJSONObject(0);
 
                 //Set up as a new Book
@@ -122,18 +116,20 @@ public class BookInfoFragment extends Fragment {
             mTextViewDescription.setText(mBook.getmDescription());
         }
 
-        private JSONObject getRandomVolumeItem(JSONObject searchResults, int totalItems) throws JSONException{
-            //Get a random book from the search results, results are normally paginated up to 10
-            int randomBookIndex;
-            if(totalItems >= 40){
-                randomBookIndex = new Random().nextInt(40);
+        private boolean checkVolumeReq(JSONObject item){
+            boolean haveAllReq = false;
+            try {
+                JSONObject volumeInfo = item.getJSONObject("volumeInfo");
+                JSONArray authors = volumeInfo.getJSONArray("authors");
+                JSONArray industryIdentifiers = volumeInfo.getJSONArray("industryIdentifiers");
+                String description = volumeInfo.getString("description");
+                //Able to pass all the requisites
+                haveAllReq = true;
+            } catch (JSONException e) {
+                Log.e(TAG, "Random item did not pass check volume requisites", e);
+            } finally {
+                return haveAllReq;
             }
-            else {
-                randomBookIndex = new Random().nextInt(totalItems);
-            }
-
-            JSONArray items = searchResults.getJSONArray("items");
-            return (JSONObject) items.get(randomBookIndex);
         }
     }
 }
