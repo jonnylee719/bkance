@@ -28,9 +28,18 @@ public class BookInfoFragment extends Fragment {
     private TextView mTextViewDate;
     private TextView mTextViewRating;
     private TextView mTextViewDescription;
+    private String mSearchTerm;
+    private String mNewSearchTerm;
+    private JSONObject mSearchResults;
     private Book mBook;
 
     public BookInfoFragment() {
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        mSearchTerm = "";
     }
 
     @Override
@@ -41,7 +50,8 @@ public class BookInfoFragment extends Fragment {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new FetchVolumesTask().execute("Sea");
+                mNewSearchTerm = "romance";
+                new FetchVolumesTask().execute(mNewSearchTerm);
             }
         });
 
@@ -58,7 +68,19 @@ public class BookInfoFragment extends Fragment {
         @Override
         protected JSONObject doInBackground(String... params) {
             String searchSubject = params[0];
-            return new BookFetcher().searchFiction(searchSubject);
+            if(mSearchTerm.equals(searchSubject)){
+                Log.d(TAG, "Looking up the same term again.");
+                if(mSearchResults==null){
+                    Log.d(TAG, "SearchResults JSONObject is null");
+                    mSearchResults = new BookFetcher().searchFiction(mSearchTerm);
+                }
+            }
+            else {      //New search term
+                Log.d(TAG, "New search term");
+                mSearchTerm = searchSubject;
+                mSearchResults = new BookFetcher().searchFiction(mSearchTerm);
+            }
+            return mSearchResults;
         }
 
         @Override
@@ -70,12 +92,13 @@ public class BookInfoFragment extends Fragment {
 
                 JSONObject volumeInfo = randItem.getJSONObject("volumeInfo");
                 JSONArray authors = volumeInfo.getJSONArray("authors");
-                while(authors.length()==0){            //There's no author for the book, need to at least have an author, therefore redo the search
+                JSONArray industryIdentifiers = volumeInfo.getJSONArray("industryIdentifiers");
+                while(authors == null ||                            //There's no author or industryIdentifiers for the book,
+                        industryIdentifiers == null){             //need to at least have an author and industryIdentifier, therefore redo the search
                     randItem = getRandomVolumeItem(searchResults, totalItems);
                     volumeInfo = randItem.getJSONObject("volumeInfo");
                     authors = volumeInfo.getJSONArray("authors");
                 }
-                JSONArray industryIdentifiers = volumeInfo.getJSONArray("industryIdentifiers");
                 JSONObject isbn13 = industryIdentifiers.getJSONObject(0);
 
                 //Set up as a new Book
