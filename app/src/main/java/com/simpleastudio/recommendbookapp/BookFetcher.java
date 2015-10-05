@@ -22,15 +22,19 @@ public class BookFetcher {
     private static final String SEARCH_SUBJECT = "subject:";
 
     private static final String PARAM_MAX_RESULTS = "&maxResults=40";       //the Maximum results at one time is 40
-    private static final String PARAM_LANG_RESTRICT = "&langRestrict=en";
-    private static final String PARAM_ORDER_BY = "&orderBy=relevance";
-    private static final String PARAM_PRINT_TYPE = "&printType=books";
+    private static final String PARAM_LANG_RESTRICT = "&langRestrict=";
+    private static final String PARAM_ORDER_BY = "&orderBy=";
+    private static final String PARAM_PRINT_TYPE = "&printType=";
     private static final String API_KEY = "&key=AIzaSyC00WZv8MZ9P0gsl4VTTIl09LIyGtjN1gI";
 
     public JSONObject searchTerm(String searchTerm){
         String url = ENDPOINT
                 + searchTerm
-                + PARAM_MAX_RESULTS + PARAM_LANG_RESTRICT + PARAM_ORDER_BY + PARAM_PRINT_TYPE + API_KEY;
+                + PARAM_MAX_RESULTS
+                + PARAM_LANG_RESTRICT + "en"
+                + PARAM_ORDER_BY + "newest"         //Order from the most recently published
+                + PARAM_PRINT_TYPE + "books"
+                + API_KEY;
         Log.d(TAG, "URL sent: " + url);
         try {
             JSONObject searchResults = getUrl(url);
@@ -44,7 +48,11 @@ public class BookFetcher {
     public JSONObject searchSubject(String searchSubject){
         String url = ENDPOINT
                 + SEARCH_SUBJECT + searchSubject
-                + PARAM_MAX_RESULTS + PARAM_LANG_RESTRICT + PARAM_ORDER_BY + PARAM_PRINT_TYPE + API_KEY;
+                + PARAM_MAX_RESULTS
+                + PARAM_LANG_RESTRICT + "en"
+                + PARAM_ORDER_BY + "newest"
+                + PARAM_PRINT_TYPE + "books"
+                + API_KEY;
         Log.d(TAG, "URL sent: " + url);
         try{
             JSONObject searchResults = getUrl(url);
@@ -57,8 +65,12 @@ public class BookFetcher {
 
     public JSONObject searchFiction(String genre){
         String url = ENDPOINT
-                + SEARCH_SUBJECT + "\"" + "fiction" + "+" + genre + "\""
-                + PARAM_MAX_RESULTS + PARAM_LANG_RESTRICT + PARAM_ORDER_BY + PARAM_PRINT_TYPE + API_KEY;
+                + SEARCH_SUBJECT + "Fiction" + "+" + SEARCH_SUBJECT + genre
+                + PARAM_MAX_RESULTS
+                + PARAM_LANG_RESTRICT + "en"
+                + PARAM_ORDER_BY + "newest"
+                + PARAM_PRINT_TYPE + "books"
+                + API_KEY;
         Log.d(TAG, "URL sent: " + url);
         try{
             JSONObject searchResults = getUrl(url);
