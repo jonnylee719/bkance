@@ -1,0 +1,116 @@
+package com.simpleastudio.recommendbookapp;
+
+import android.os.AsyncTask;
+import android.support.v4.app.Fragment;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+/**
+ * A placeholder fragment containing a simple view.
+ */
+public class BookInfoFragment extends Fragment {
+    private static final String TAG = "BookInfoFragment";
+    private Button searchButton;
+    private TextView mTextViewTitle;
+    private TextView mTextViewAuthor;
+    private TextView mTextViewDate;
+    private TextView mTextViewRating;
+    private TextView mTextViewDescription;
+    private Book mBook;
+
+    public BookInfoFragment() {
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_book_info, container, false);
+        searchButton = (Button) v.findViewById(R.id.button_search_book);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new FetchVolumesTask().execute("Sea");
+            }
+        });
+
+        mTextViewTitle = (TextView) v.findViewById(R.id.textview_title);
+        mTextViewAuthor = (TextView) v.findViewById(R.id.textview_author);
+        mTextViewDate = (TextView) v.findViewById(R.id.textview_date);
+        mTextViewRating = (TextView) v.findViewById(R.id.textview_rating);
+        mTextViewDescription = (TextView) v.findViewById(R.id.textview_description);
+
+        return v;
+    }
+
+    private class FetchVolumesTask extends AsyncTask<String, Void, JSONObject>{
+        @Override
+        protected JSONObject doInBackground(String... params) {
+            String searchSubject = params[0];
+            return new BookFetcher().searchFiction(searchSubject);
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject searchResults){
+            try {
+                int totalItems = searchResults.getInt("totalItems");
+                //Get a random book from the search results, results are paginated up to 40
+                JSONObject randItem = getRandomVolumeItem(searchResults, totalItems);
+
+                JSONObject volumeInfo = randItem.getJSONObject("volumeInfo");
+                JSONArray authors = volumeInfo.getJSONArray("authors");
+                while(authors.length()==0){            //There's no author for the book, need to at least have an author, therefore redo the search
+                    randItem = getRandomVolumeItem(searchResults, totalItems);
+                    volumeInfo = randItem.getJSONObject("volumeInfo");
+                    authors = volumeInfo.getJSONArray("authors");
+                }
+                JSONArray industryIdentifiers = volumeInfo.getJSONArray("industryIdentifiers");
+                JSONObject isbn13 = industryIdentifiers.getJSONObject(0);
+
+                //Set up as a new Book
+                mBook = new Book(volumeInfo.getString("title"));
+                ArrayList<String> authorList = new ArrayList<>();
+                for(int i = 0; i < authors.length(); i++){
+                    String author = authors.getString(i);
+                    authorList.add(author);
+                }
+                mBook.setmIsbn(isbn13.getString("identifier"));
+                mBook.setmAuthors(authorList);
+                mBook.setmPublishDate(volumeInfo.getString("publishedDate"));
+                mBook.setmDescription(volumeInfo.getString("description"));
+            } catch (JSONException e) {
+                Log.e(TAG, "JSONException: " + e);
+            }
+
+            mTextViewTitle.setText(mBook.getmTitle());
+            mTextViewDate.setText(mBook.getmPublishDate());
+            mTextViewAuthor.setText(mBook.getmAuthors());
+            mTextViewDescription.setText(mBook.getmDescription());
+        }
+
+        private JSONObject getRandomVolumeItem(JSONObject searchResults, int totalItems) throws JSONException{
+            //Get a random book from the search results, results are normally paginated up to 10
+            int randomBookIndex;
+            if(totalItems >= 40){
+                randomBookIndex = new Random().nextInt(40);
+            }
+            else {
+                randomBookIndex = new Random().nextInt(totalItems);
+            }
+
+            JSONArray items = searchResults.getJSONArray("items");
+            return (JSONObject) items.get(randomBookIndex);
+        }
+    }
+}
