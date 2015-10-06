@@ -29,19 +29,41 @@
             android:text="@string/book_author"
             android:layout_below="@id/textview_title"/>
 
-        <TextView
-            android:id="@+id/textview_date"
+        <RelativeLayout
+            android:id="@+id/relativelayout_imageview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/book_date"
-            android:layout_below="@id/textview_author"/>
+            android:layout_below="@id/textview_author">
 
-        <TextView
-            android:id="@+id/textview_rating"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/book_rating"
-            android:layout_below="@id/textview_date"/>
+            <ImageView
+                android:contentDescription="@string/thumbnail_description"
+                android:layout_width="wrap_content"
+                android:layout_height="183dp"
+                android:padding="4dp"
+                android:id="@+id/imageview_thumbnail"
+                android:scaleType="fitXY"
+                android:adjustViewBounds="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"/>
+
+            <TextView
+                android:id="@+id/textview_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/book_date"
+                android:layout_toRightOf="@id/imageview_thumbnail"/>
+
+            <TextView
+                android:id="@+id/textview_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/book_rating"
+                android:layout_toRightOf="@id/imageview_thumbnail"
+                android:layout_below="@id/textview_date"/>
+
+        </RelativeLayout>
+
 
 
         <TextView
@@ -49,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/book_description"
-            android:layout_below="@id/textview_rating"
+            android:layout_below="@id/relativelayout_imageview"
             />
 
         <TextView
