@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -28,6 +29,7 @@ public class BookInfoFragment extends Fragment {
     private TextView mTextViewDate;
     private TextView mTextViewRating;
     private TextView mTextViewDescription;
+    private ImageView mImageView;
     private String mSearchTerm;
     private String mNewSearchTerm;
     private JSONObject mSearchResults;
@@ -50,7 +52,8 @@ public class BookInfoFragment extends Fragment {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mNewSearchTerm = "adventure";
+                mImageView.setImageBitmap(null);
+                mNewSearchTerm = "of Mice and Men";
                 new FetchVolumesTask().execute(mNewSearchTerm);
             }
         });
@@ -60,6 +63,7 @@ public class BookInfoFragment extends Fragment {
         mTextViewDate = (TextView) v.findViewById(R.id.textview_date);
         mTextViewRating = (TextView) v.findViewById(R.id.textview_rating);
         mTextViewDescription = (TextView) v.findViewById(R.id.textview_description);
+        mImageView = (ImageView) v.findViewById(R.id.imageview_thumbnail);
 
         return v;
     }
@@ -72,13 +76,13 @@ public class BookInfoFragment extends Fragment {
                 Log.d(TAG, "Looking up the same term again.");
                 if(mSearchResults==null){
                     Log.d(TAG, "SearchResults JSONObject is null");
-                    mSearchResults = new BookFetcher().searchFiction(mSearchTerm, 1);
+                    mSearchResults = new TastekBooksFetcher(getActivity()).getRecommendation(mSearchTerm);
                 }
             }
             else {      //New search term
                 Log.d(TAG, "New search term");
                 mSearchTerm = searchSubject;
-                mSearchResults = new BookFetcher().searchFiction(mSearchTerm, 1);
+                mSearchResults = new TastekBooksFetcher(getActivity()).getRecommendation(mSearchTerm);
             }
             return mSearchResults;
         }
@@ -87,32 +91,17 @@ public class BookInfoFragment extends Fragment {
         protected void onPostExecute(JSONObject searchResults){
             JSONObject randItem;
             try {
-                while(!checkVolumeReq(randItem = getRandomVolume(searchResults))){
-                }
-
-                JSONObject volumeInfo = randItem.getJSONObject("volumeInfo");
-                JSONArray authors = volumeInfo.getJSONArray("authors");
-                JSONArray industryIdentifiers = volumeInfo.getJSONArray("industryIdentifiers");
-                JSONObject isbn13 = industryIdentifiers.getJSONObject(0);
+                randItem = getRandomVolume(searchResults);
 
                 //Set up as a new Book
-                mBook = new Book(volumeInfo.getString("title"));
-                ArrayList<String> authorList = new ArrayList<>();
-                for(int i = 0; i < authors.length(); i++){
-                    String author = authors.getString(i);
-                    authorList.add(author);
-                }
-                mBook.setmIsbn(isbn13.getString("identifier"));
-                mBook.setmAuthors(authorList);
-                mBook.setmPublishDate(volumeInfo.getString("publishedDate"));
-                mBook.setmDescription(volumeInfo.getString("description"));
+                mBook = new Book(randItem.getString("Name"));
+                mBook.setmDescription(randItem.getString("wTeaser"));
+
             } catch (JSONException e) {
                 Log.e(TAG, "JSONException: " + e);
             }
 
             mTextViewTitle.setText(mBook.getmTitle());
-            mTextViewDate.setText(mBook.getmPublishDate());
-            mTextViewAuthor.setText(mBook.getmAuthors());
             mTextViewDescription.setText(mBook.getmDescription());
         }
 
@@ -122,9 +111,16 @@ public class BookInfoFragment extends Fragment {
                 JSONObject volumeInfo = item.getJSONObject("volumeInfo");
                 JSONArray authors = volumeInfo.getJSONArray("authors");
                 JSONArray industryIdentifiers = volumeInfo.getJSONArray("industryIdentifiers");
+                JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
                 String description = volumeInfo.getString("description");
-                //Able to pass all the requisites
+                //String ratingString = volumeInfo.getString("averageRating");
+                //int rating = Integer.parseInt(ratingString);
+
+                //Able to pass all non-null requisites
                 haveAllReq = true;
+
+                //if(rating < 3)
+                    //haveAllReq = false;
             } catch (JSONException e) {
                 Log.e(TAG, "Random item did not pass check volume requisites", e);
             } finally {
@@ -133,7 +129,21 @@ public class BookInfoFragment extends Fragment {
         }
 
         public JSONObject getRandomVolume(JSONObject searchResults) throws JSONException{
-            int totalItems = searchResults.getInt("totalItems");
+            JSONObject similar = searchResults.getJSONObject("Similar");
+            JSONArray results = similar.getJSONArray("Results");
+            int totalItems = results.length();
+            int randomItemIndex;
+            if(totalItems >= 50){
+                randomItemIndex = new Random().nextInt(50);
+            }
+            else{
+                randomItemIndex = new Random().nextInt(totalItems);
+            }
+            return results.getJSONObject(randomItemIndex);
+        }
+
+        public JSONObject getRandomVolume(JSONArray qualityResults) throws JSONException{
+            int totalItems = qualityResults.length();
             int randomItemIndex;
             if(totalItems >= 40){
                 randomItemIndex = new Random().nextInt(40);
@@ -141,8 +151,31 @@ public class BookInfoFragment extends Fragment {
             else{
                 randomItemIndex = new Random().nextInt(totalItems);
             }
+            return (JSONObject) qualityResults.get(randomItemIndex);
+        }
+
+        public JSONArray getQualityResults(JSONObject searchResults) throws JSONException{
+            int totalItems = searchResults.getInt("totalItems");
+            int length = 0;
+            if(totalItems >= 40){
+                length = 40;
+            }
+            else {
+                length = totalItems;
+            }
+
+            //Run through all results
+            JSONArray qualityResults = new JSONArray();
             JSONArray items = searchResults.getJSONArray("items");
-            return (JSONObject) items.get(randomItemIndex);
+            for(int i = 0; i < length; i++){
+                Log.d(TAG, "Checking item " + i);
+                JSONObject item = items.getJSONObject(i);
+                if(checkVolumeReq(item)){
+                    Log.d(TAG, "Got quality result at " + i);
+                   qualityResults.put(item);
+                }
+            }
+            return qualityResults;
         }
     }
 }
