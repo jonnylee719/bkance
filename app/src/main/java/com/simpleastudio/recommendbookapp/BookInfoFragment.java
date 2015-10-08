@@ -33,6 +33,11 @@ public class BookInfoFragment extends Fragment {
     private String mSearchTerm;
     private String mNewSearchTerm;
     private JSONObject mSearchResults;
+
+    public void setmBook(Book mBook) {
+        this.mBook = mBook;
+    }
+
     private Book mBook;
 
     public BookInfoFragment() {
@@ -53,7 +58,7 @@ public class BookInfoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mImageView.setImageBitmap(null);
-                mNewSearchTerm = "of Mice and Men";
+                mNewSearchTerm = "razor's edge";
                 new FetchVolumesTask().execute(mNewSearchTerm);
             }
         });
@@ -96,6 +101,7 @@ public class BookInfoFragment extends Fragment {
                 //Set up as a new Book
                 mBook = new Book(randItem.getString("Name"));
                 mBook.setmDescription(randItem.getString("wTeaser"));
+                new GoodReadsAsyncTasker(getActivity()).execute(mBook);
 
             } catch (JSONException e) {
                 Log.e(TAG, "JSONException: " + e);
