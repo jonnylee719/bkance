@@ -42,8 +42,9 @@ public class BookInputFragment extends Fragment {
                         .putString(PREF_INITIAL_BOOK, bookInput.getText().toString())
                         .commit();
 
-                Intent i = new Intent(getActivity(), BookInfoActivity.class);
-                startActivity(i);
+                Intent i = new Intent();
+                getActivity().setResult(Activity.RESULT_OK, i);
+                getActivity().finish();
             }
         });
 

@@ -1,5 +1,6 @@
 package com.simpleastudio.recommendbookapp;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -26,6 +27,7 @@ import java.util.Random;
  */
 public class BookInfoFragment extends Fragment {
     private static final String TAG = "BookInfoFragment";
+    public static final int INPUT_BOOK_REQUEST = 1;
     private Button searchButton;
     private TextView mTextViewTitle;
     private TextView mTextViewAuthor;
@@ -56,10 +58,7 @@ public class BookInfoFragment extends Fragment {
                 .getString(BookInputFragment.PREF_INITIAL_BOOK, null);
         if(storedTitle == null || storedTitle.equals("")){
             Intent i = new Intent(getActivity(), BookInputActivity.class);
-            startActivity(i);
-        }
-        else {
-            mSearchTerm = storedTitle.replace(" ", "%20");
+            startActivityForResult(i, INPUT_BOOK_REQUEST);
         }
     }
 
@@ -88,6 +87,20 @@ public class BookInfoFragment extends Fragment {
         mTextViewGRTitle = (TextView) v.findViewById(R.id.textView_goodreads_title);
 
         return v;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == INPUT_BOOK_REQUEST){
+            if(resultCode == Activity.RESULT_OK){
+                String storedTitle = PreferenceManager.getDefaultSharedPreferences(getActivity())
+                        .getString(BookInputFragment.PREF_INITIAL_BOOK, null);
+                if(storedTitle != null){
+                    mSearchTerm = storedTitle.replace(" ", "%20");
+                }
+            }
+        }
     }
 
     private void clearTextviews(){
