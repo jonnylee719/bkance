@@ -1,5 +1,6 @@
 package com.simpleastudio.recommendbookapp;
 
+import android.content.Context;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -20,8 +21,10 @@ import java.util.Random;
  */
 public class GoogleBooksFetcher {
     private static final String TAG = "GoogleBooksFetcher";
+    private Context mAppContext;
     private static final String ENDPOINT = "https://www.googleapis.com/books/v1/volumes?q=";
     private static final String SEARCH_SUBJECT = "subject:";
+    private static final String SPACE_ENCODED = "%20";
 
     private static final String PARAM_MAX_RESULTS = "&maxResults=";       //the Maximum results at one time is 40
     private static final String NUM_RESULTS = "40";
@@ -33,13 +36,17 @@ public class GoogleBooksFetcher {
     private static final String PARAM_PRINT_TYPE = "&printType=";
     private static final String API_KEY = "&key=";
 
+    public GoogleBooksFetcher(Context c){
+        mAppContext = c;
+    }
+
     public JSONObject searchBook(String bookTitle){
         String url = ENDPOINT
-                + bookTitle
+                + getSpaceEncoded(bookTitle) + "+" + SEARCH_SUBJECT + "Fiction"
                 + PARAM_MAX_RESULTS + NUM_RESULTS
                 + PARAM_ORDER_BY + ORDER         //Order from the most recently published
                 + PARAM_PRINT_TYPE + "books"
-                + API_KEY + R.string.googleBooks;
+                + API_KEY + mAppContext.getResources().getString(R.string.googleBooks);
         Log.d(TAG, "URL sent: " + url);
         try {
             JSONObject searchResults = getUrl(url);
@@ -48,6 +55,33 @@ public class GoogleBooksFetcher {
             Log.e(TAG, "IOException: " + e);
         }
         return null;
+    }
+
+    public String getSpaceEncoded(String in){
+        return in.replace(" ", SPACE_ENCODED);
+    }
+
+    public String getThumbnail(String bookTitle){
+        JSONObject object = searchBook(bookTitle);
+        String thumbnailLink = "";
+        boolean foundThumbnail = false;
+        int index = 0;
+        while(!foundThumbnail){
+            try {
+                JSONArray items = object.getJSONArray("items");
+                JSONObject item = items.getJSONObject(index);
+                JSONObject volumeInfo = item.getJSONObject("volumeInfo");
+                JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
+                if(imageLinks != null){
+                    thumbnailLink = imageLinks.getString("thumbnail");
+                    foundThumbnail = true;
+                }
+                index++;
+            } catch (JSONException e) {
+                Log.e(TAG, "JSONException: ", e);
+            }
+        }
+        return thumbnailLink;
     }
 
     public JSONObject searchSubject(String searchSubject, int pageNum){

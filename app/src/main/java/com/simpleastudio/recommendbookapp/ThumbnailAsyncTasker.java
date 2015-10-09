@@ -1,5 +1,6 @@
 package com.simpleastudio.recommendbookapp;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -18,16 +19,19 @@ import java.net.URL;
  */
 public class ThumbnailAsyncTasker extends AsyncTask<String, Void, Bitmap> {
     private static final String TAG = "ThumbnailAsyncTasker";
-    ImageView mImageView;
+    private Context mAppContext;
+    private ImageView mImageView;
 
-    public ThumbnailAsyncTasker(ImageView imageView){
+    public ThumbnailAsyncTasker(ImageView imageView, Context c){
         mImageView = imageView;
+        mAppContext = c;
     }
 
     @Override
     protected Bitmap doInBackground(String... params) {
-        String urlString = params[0];
+        String bookTitle = params[0];
         try {
+            String urlString = new GoogleBooksFetcher(mAppContext).getThumbnail(bookTitle);
             byte[] bitmapBytes = getUrlBytes(urlString);
             final Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapBytes, 0, bitmapBytes.length);
             return bitmap;

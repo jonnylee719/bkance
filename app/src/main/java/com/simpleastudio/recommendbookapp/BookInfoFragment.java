@@ -107,6 +107,7 @@ public class BookInfoFragment extends Fragment {
                 mBook = new Book(randItem.getString("Name"));
                 mBook.setmDescription(randItem.getString("wTeaser"));
                 new GoodReadsAsyncTasker().execute(mBook);
+                new ThumbnailAsyncTasker(mImageView, getActivity()).execute(mBook.getmTitle());
 
             } catch (JSONException e) {
                 Log.e(TAG, "JSONException: " + e);
