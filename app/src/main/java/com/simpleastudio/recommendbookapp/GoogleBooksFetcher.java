@@ -31,18 +31,15 @@ public class GoogleBooksFetcher {
     private static final String PARAM_ORDER_BY = "&orderBy=";
     private static final String ORDER = "relevance";
     private static final String PARAM_PRINT_TYPE = "&printType=";
-    private static final String API_KEY = "&key=AIzaSyC00WZv8MZ9P0gsl4VTTIl09LIyGtjN1gI";
+    private static final String API_KEY = "&key=";
 
-    public JSONObject searchTerm(String searchTerm, int pageNum){
-        int startIndex = Integer.parseInt(NUM_RESULTS)*(pageNum-1);         //Index starts at 0
+    public JSONObject searchBook(String bookTitle){
         String url = ENDPOINT
-                + searchTerm
+                + bookTitle
                 + PARAM_MAX_RESULTS + NUM_RESULTS
-                + PARAM_START_INDEX + String.valueOf(startIndex)
-                + PARAM_LANG_RESTRICT + LANG
                 + PARAM_ORDER_BY + ORDER         //Order from the most recently published
                 + PARAM_PRINT_TYPE + "books"
-                + API_KEY;
+                + API_KEY + R.string.googleBooks;
         Log.d(TAG, "URL sent: " + url);
         try {
             JSONObject searchResults = getUrl(url);

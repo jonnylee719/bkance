@@ -19,8 +19,7 @@ public class GoodReadsAsyncTasker extends AsyncTask<Book, Void, Book> {
     @Override
     protected Book doInBackground(Book... params) {
         Book book = params[0];
-        Book editedBook = new GoodreadsFetcher(mAppContext).getBookInfo(book);
-        return editedBook;
+        return new GoodreadsFetcher(mAppContext).getBookInfo(book);
     }
 
 }

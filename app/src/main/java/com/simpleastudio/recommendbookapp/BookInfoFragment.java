@@ -15,7 +15,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.Random;
 
 /**
@@ -28,6 +29,7 @@ public class BookInfoFragment extends Fragment {
     private TextView mTextViewAuthor;
     private TextView mTextViewDate;
     private TextView mTextViewRating;
+    private TextView mTextViewRatingCount;
     private TextView mTextViewDescription;
     private ImageView mImageView;
     private String mSearchTerm;
@@ -67,6 +69,7 @@ public class BookInfoFragment extends Fragment {
         mTextViewAuthor = (TextView) v.findViewById(R.id.textview_author);
         mTextViewDate = (TextView) v.findViewById(R.id.textview_date);
         mTextViewRating = (TextView) v.findViewById(R.id.textview_rating);
+        mTextViewRatingCount = (TextView) v.findViewById(R.id.textview_rating_count);
         mTextViewDescription = (TextView) v.findViewById(R.id.textview_description);
         mImageView = (ImageView) v.findViewById(R.id.imageview_thumbnail);
 
@@ -101,7 +104,7 @@ public class BookInfoFragment extends Fragment {
                 //Set up as a new Book
                 mBook = new Book(randItem.getString("Name"));
                 mBook.setmDescription(randItem.getString("wTeaser"));
-                new GoodReadsAsyncTasker(getActivity()).execute(mBook);
+                new GoodReadsAsyncTasker().execute(mBook);
 
             } catch (JSONException e) {
                 Log.e(TAG, "JSONException: " + e);
@@ -182,6 +185,34 @@ public class BookInfoFragment extends Fragment {
                 }
             }
             return qualityResults;
+        }
+    }
+
+    public class GoodReadsAsyncTasker extends AsyncTask<Book, Void, Book> {
+        private static final String TAG = "GoodReadsAsyncTasker";
+
+        public GoodReadsAsyncTasker(){
+            Log.d(TAG, "Initiated GoodReadsAsyncTasker.");
+        }
+
+        @Override
+        protected Book doInBackground(Book... params) {
+            Book book = params[0];
+            return new GoodreadsFetcher(getActivity()).getBookInfo(book);
+        }
+
+        @Override
+        protected void onPostExecute(Book book){
+            mBook = book;
+            String date = String.format(getResources().getString(R.string.book_date), mBook.getmYear());
+            mTextViewDate.setText(date);
+            String avgRating = String.format(getResources().getString(R.string.book_rating), mBook.getmAvgRating());
+            mTextViewRating.setText(avgRating);
+            String ratingCount = String.format(getResources().getString(R.string.rating_count), NumberFormat.getInstance(Locale.getDefault()).format(mBook.getmRatingCount()));
+            mTextViewRatingCount.setText(ratingCount);
+            mTextViewAuthor.setText(book.getmAuthors());
+
+
         }
     }
 }
