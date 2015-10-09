@@ -1,6 +1,9 @@
 package com.simpleastudio.recommendbookapp;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +18,7 @@ import java.util.zip.Inflater;
  */
 public class BookInputFragment extends Fragment {
     private static final String TAG = "BookInputFragment";
+    public static final String PREF_INITIAL_BOOK = "initialBook";
     private EditText bookInput;
     private Button enterBook;
 
@@ -30,6 +34,18 @@ public class BookInputFragment extends Fragment {
 
         bookInput = (EditText) v.findViewById(R.id.editText_book);
         enterBook = (Button) v.findViewById(R.id.button_input_book);
+        enterBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PreferenceManager.getDefaultSharedPreferences(getActivity())
+                        .edit()
+                        .putString(PREF_INITIAL_BOOK, bookInput.getText().toString())
+                        .commit();
+
+                Intent i = new Intent(getActivity(), BookInfoActivity.class);
+                startActivity(i);
+            }
+        });
 
         return v;
     }

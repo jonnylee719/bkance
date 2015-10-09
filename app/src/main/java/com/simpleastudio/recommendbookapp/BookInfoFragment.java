@@ -1,6 +1,8 @@
 package com.simpleastudio.recommendbookapp;
 
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -49,7 +51,16 @@ public class BookInfoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        mSearchTerm = "";
+        //Get search term from shared preference
+        String storedTitle = PreferenceManager.getDefaultSharedPreferences(getActivity())
+                .getString(BookInputFragment.PREF_INITIAL_BOOK, null);
+        if(storedTitle == null || storedTitle.equals("")){
+            Intent i = new Intent(getActivity(), BookInputActivity.class);
+            startActivity(i);
+        }
+        else {
+            mSearchTerm = storedTitle.replace(" ", "%20");
+        }
     }
 
     @Override
@@ -62,8 +73,7 @@ public class BookInfoFragment extends Fragment {
             public void onClick(View v) {
                 clearTextviews();
                 mImageView.setImageBitmap(null);
-                mNewSearchTerm = "razor's edge";
-                new FetchVolumesTask().execute(mNewSearchTerm);
+                new FetchVolumesTask().execute(mSearchTerm);
             }
         });
 
