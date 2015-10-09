@@ -53,15 +53,14 @@ public class TastekBooksFetcher {
                 + PARAM_KEY + mAppContext.getResources().getString(R.string.tastekid);
 
         try{
-            JSONObject results = getUrl(urlString);
-            return results;
+            return getResponse(urlString);
         } catch (IOException e) {
             Log.e(TAG, "IOException: " + e);
         }
         return null;
     }
 
-    public JSONObject getUrl(String urlString) throws IOException {
+    public JSONObject getResponse(String urlString) throws IOException {
         URL url = new URL(urlString);
         Log.d(TAG, "url: " + url);
         HttpURLConnection connection = (HttpURLConnection)url.openConnection();
@@ -102,9 +101,5 @@ public class TastekBooksFetcher {
         }
         return null;
     }
-
-
-
-
-
+    
 }

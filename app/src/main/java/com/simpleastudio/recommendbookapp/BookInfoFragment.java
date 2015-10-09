@@ -114,29 +114,6 @@ public class BookInfoFragment extends Fragment {
             mTextViewDescription.setText(mBook.getmDescription());
         }
 
-        private boolean checkVolumeReq(JSONObject item){
-            boolean haveAllReq = false;
-            try {
-                JSONObject volumeInfo = item.getJSONObject("volumeInfo");
-                JSONArray authors = volumeInfo.getJSONArray("authors");
-                JSONArray industryIdentifiers = volumeInfo.getJSONArray("industryIdentifiers");
-                JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
-                String description = volumeInfo.getString("description");
-                //String ratingString = volumeInfo.getString("averageRating");
-                //int rating = Integer.parseInt(ratingString);
-
-                //Able to pass all non-null requisites
-                haveAllReq = true;
-
-                //if(rating < 3)
-                    //haveAllReq = false;
-            } catch (JSONException e) {
-                Log.e(TAG, "Random item did not pass check volume requisites", e);
-            } finally {
-                return haveAllReq;
-            }
-        }
-
         public JSONObject getRandomVolume(JSONObject searchResults) throws JSONException{
             JSONObject similar = searchResults.getJSONObject("Similar");
             JSONArray results = similar.getJSONArray("Results");
@@ -149,42 +126,6 @@ public class BookInfoFragment extends Fragment {
                 randomItemIndex = new Random().nextInt(totalItems);
             }
             return results.getJSONObject(randomItemIndex);
-        }
-
-        public JSONObject getRandomVolume(JSONArray qualityResults) throws JSONException{
-            int totalItems = qualityResults.length();
-            int randomItemIndex;
-            if(totalItems >= 40){
-                randomItemIndex = new Random().nextInt(40);
-            }
-            else{
-                randomItemIndex = new Random().nextInt(totalItems);
-            }
-            return (JSONObject) qualityResults.get(randomItemIndex);
-        }
-
-        public JSONArray getQualityResults(JSONObject searchResults) throws JSONException{
-            int totalItems = searchResults.getInt("totalItems");
-            int length = 0;
-            if(totalItems >= 40){
-                length = 40;
-            }
-            else {
-                length = totalItems;
-            }
-
-            //Run through all results
-            JSONArray qualityResults = new JSONArray();
-            JSONArray items = searchResults.getJSONArray("items");
-            for(int i = 0; i < length; i++){
-                Log.d(TAG, "Checking item " + i);
-                JSONObject item = items.getJSONObject(i);
-                if(checkVolumeReq(item)){
-                    Log.d(TAG, "Got quality result at " + i);
-                   qualityResults.put(item);
-                }
-            }
-            return qualityResults;
         }
     }
 
