@@ -28,6 +28,7 @@ public class BookInfoFragment extends Fragment {
     private TextView mTextViewTitle;
     private TextView mTextViewAuthor;
     private TextView mTextViewDate;
+    private TextView mTextViewGRTitle;
     private TextView mTextViewRating;
     private TextView mTextViewRatingCount;
     private TextView mTextViewDescription;
@@ -72,6 +73,7 @@ public class BookInfoFragment extends Fragment {
         mTextViewRatingCount = (TextView) v.findViewById(R.id.textview_rating_count);
         mTextViewDescription = (TextView) v.findViewById(R.id.textview_description);
         mImageView = (ImageView) v.findViewById(R.id.imageview_thumbnail);
+        mTextViewGRTitle = (TextView) v.findViewById(R.id.textView_goodreads_title);
 
         return v;
     }
@@ -152,6 +154,7 @@ public class BookInfoFragment extends Fragment {
             String ratingCount = String.format(getResources().getString(R.string.rating_count), NumberFormat.getInstance(Locale.getDefault()).format(mBook.getmRatingCount()));
             mTextViewRatingCount.setText(ratingCount);
             mTextViewAuthor.setText(book.getmAuthors());
+            mTextViewGRTitle.setText(getResources().getString(R.string.Goodreads_title));
 
 
         }

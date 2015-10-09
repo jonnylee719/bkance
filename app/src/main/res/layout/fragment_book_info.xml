@@ -54,11 +54,19 @@
                 android:layout_toRightOf="@id/imageview_thumbnail"/>
 
             <TextView
+                android:layout_marginTop="4dp"
+                android:id="@+id/textView_goodreads_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textview_date"
+                android:layout_toRightOf="@id/imageview_thumbnail"/>
+
+            <TextView
                 android:id="@+id/textview_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/imageview_thumbnail"
-                android:layout_below="@id/textview_date"/>
+                android:layout_below="@id/textView_goodreads_title"/>
 
             <TextView
                 android:id="@+id/textview_rating_count"

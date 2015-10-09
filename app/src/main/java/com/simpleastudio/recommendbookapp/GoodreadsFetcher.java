@@ -108,57 +108,57 @@ public class GoodreadsFetcher {
                         XML_DAY.equals(parser.getName())){
                     String day = parser.nextText();
                     Log.d(TAG, "Day: " + day);
-                    if(day != "")
+                    if(!day.equals(""))
                         book.setmDay(Integer.parseInt(day));
                 }
                 else if(eventType == XmlPullParser.START_TAG &&
                         XML_MONTH.equals(parser.getName())){
                     String month = parser.nextText();
                     Log.d(TAG, "Month: " + month);
-                    if(month != "")
+                    if(!month.equals(""))
                         book.setmMonth(Integer.parseInt(month));
                 }
                 else if(eventType == XmlPullParser.START_TAG &&
                         XML_YEAR.equals(parser.getName())){
                     String year = parser.nextText();
                     Log.d(TAG, "Year: " + year);
-                    if(year != "")
+                    if(!year.equals(""))
                         book.setmYear(Integer.parseInt(year));
                 }
                 else if(eventType == XmlPullParser.START_TAG &&
                         XML_RATING_COUNT.equals(parser.getName())){
                     String ratingCount = parser.nextText();
                     Log.d(TAG, "Rating count: " + ratingCount);
-                    if(ratingCount != "")
+                    if(!ratingCount.equals(""))
                         book.setmRatingCount(Integer.parseInt(ratingCount));
                 }
                 else if(eventType == XmlPullParser.START_TAG &&
                         XML_RATING.equals(parser.getName())){
                     String rating= parser.nextText();
                     Log.d(TAG, "Rating: " + rating);
-                    if(rating != "")
+                    if(!rating.equals(""))
                         book.setmAvgRating(Double.parseDouble(rating));
                 }
                 else if(eventType == XmlPullParser.START_TAG &&
                         XML_THUMB.equals(parser.getName())){
                     String url = parser.nextText();
                     Log.d(TAG, "Url: " + url);
-                    if(url != "")
+                    if(!url.equals(""))
                         book.setmThumbnailUrl(url);
                 }
                 else if(eventType == XmlPullParser.START_TAG &&
                         XML_AUTHOR.equals(parser.getName())){
                     String author = parser.nextText();
                     Log.d(TAG, "Author: " + author);
-                    if(author != "")
+                    if(!author.equals(""))
                         book.setmAuthors(author);
                 }
                 else if(eventType == XmlPullParser.START_TAG &&
                         XML_ID.equals(parser.getName())){
                     String id = parser.nextText();
-                    Log.d(TAG, "id: " + id);
-                    if(id != "" && book.getmId() != null)
+                    if(!id.equals("") && book.getmId()==null)
                         book.setmId(id);
+                    Log.d(TAG, "id: " + book.getmId());
                 }
                 else if(eventType == XmlPullParser.END_TAG &&
                         XML_WORK.equals(parser.getName())){
