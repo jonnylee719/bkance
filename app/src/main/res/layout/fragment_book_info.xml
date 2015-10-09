@@ -19,14 +19,12 @@
             android:id="@+id/textview_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/book_title"
             android:layout_alignParentTop="true"/>
 
         <TextView
             android:id="@+id/textview_author"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/book_author"
             android:layout_below="@id/textview_title"/>
 
         <RelativeLayout
@@ -48,17 +46,9 @@
                 android:layout_alignParentStart="true"/>
 
             <TextView
-                android:id="@+id/textview_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/imageview_thumbnail"/>
-
-            <TextView
-                android:layout_marginTop="4dp"
                 android:id="@+id/textView_goodreads_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/textview_date"
                 android:layout_toRightOf="@id/imageview_thumbnail"/>
 
             <TextView
@@ -75,6 +65,14 @@
                 android:layout_toRightOf="@id/imageview_thumbnail"
                 android:layout_below="@id/textview_rating"/>
 
+            <TextView
+                android:id="@+id/textview_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_below="@id/textview_rating_count"
+                android:layout_toRightOf="@id/imageview_thumbnail"/>
+
         </RelativeLayout>
 
 
@@ -83,7 +81,6 @@
             android:id="@+id/textview_description_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/book_description"
             android:layout_below="@id/relativelayout_imageview"
             />
 

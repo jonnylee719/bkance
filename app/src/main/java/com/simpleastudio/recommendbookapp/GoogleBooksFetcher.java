@@ -27,7 +27,7 @@ public class GoogleBooksFetcher {
     private static final String SPACE_ENCODED = "%20";
 
     private static final String PARAM_MAX_RESULTS = "&maxResults=";       //the Maximum results at one time is 40
-    private static final String NUM_RESULTS = "40";
+    private static final String NUM_RESULTS = "10";
     private static final String PARAM_START_INDEX = "&startIndex=";
     private static final String PARAM_LANG_RESTRICT = "&langRestrict=";
     private static final String LANG = "en";

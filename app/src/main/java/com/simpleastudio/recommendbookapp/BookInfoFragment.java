@@ -60,6 +60,7 @@ public class BookInfoFragment extends Fragment {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                clearTextviews();
                 mImageView.setImageBitmap(null);
                 mNewSearchTerm = "razor's edge";
                 new FetchVolumesTask().execute(mNewSearchTerm);
@@ -73,9 +74,20 @@ public class BookInfoFragment extends Fragment {
         mTextViewRatingCount = (TextView) v.findViewById(R.id.textview_rating_count);
         mTextViewDescription = (TextView) v.findViewById(R.id.textview_description);
         mImageView = (ImageView) v.findViewById(R.id.imageview_thumbnail);
+        mImageView.setImageBitmap(null);
         mTextViewGRTitle = (TextView) v.findViewById(R.id.textView_goodreads_title);
 
         return v;
+    }
+
+    private void clearTextviews(){
+        mTextViewTitle.setText("");
+        mTextViewAuthor.setText("");
+        mTextViewDate.setText("");
+        mTextViewRating.setText("");
+        mTextViewRatingCount.setText("");
+        mTextViewDescription.setText("");
+        mTextViewGRTitle.setText("");
     }
 
     private class FetchVolumesTask extends AsyncTask<String, Void, JSONObject>{
