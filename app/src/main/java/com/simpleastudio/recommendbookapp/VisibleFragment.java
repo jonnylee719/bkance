@@ -14,10 +14,13 @@ import android.widget.Toast;
 public class VisibleFragment extends Fragment {
     public static final String TAG = "VisibleFragment";
 
+    public void actionOnReceive(){};
+
     private BroadcastReceiver mOnRandomBookNotification = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG, "Received a broadcast intent.");
+            actionOnReceive();
             Toast.makeText(getActivity(),
                     "Got a broadcast: " + intent.getAction(),
                     Toast.LENGTH_LONG)

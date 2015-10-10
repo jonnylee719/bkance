@@ -18,7 +18,7 @@ import java.util.Random;
  */
 public class RandomBookService extends IntentService {
     private static final String TAG = "RandomBookService";
-    private static final String PREF_RANDOM_BOOK = "randomBookIndex";
+    public static final String PREF_RANDOM_BOOK = "randomBookIndex";
     private static final int RAND_INTERVAL = 1000*15;
     public static final String EVENT_NEW_RANDOM =
             "com.simpleastudio.recommendbookapp.NEW_RANDOM";

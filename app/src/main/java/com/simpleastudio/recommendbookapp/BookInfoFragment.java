@@ -109,6 +109,24 @@ public class BookInfoFragment extends VisibleFragment {
         }
     }
 
+    @Override
+    public void actionOnReceive(){
+        int randomIndex = PreferenceManager.getDefaultSharedPreferences(getActivity())
+                .getInt(RandomBookService.PREF_RANDOM_BOOK, 0);
+        Book b = BookLab.get(getActivity()).getRecommendBook(randomIndex);
+        mTextViewTitle.setText(b.getmTitle());
+        mTextViewAuthor.setText(b.getmAuthors());
+        String date = String.format(getResources().getString(R.string.book_date), b.getmYear());
+        mTextViewDate.setText(date);
+        String avgRating = String.format(getResources().getString(R.string.book_rating), b.getmAvgRating());
+        mTextViewRating.setText(avgRating);
+        String ratingCount = String.format(getResources().getString(R.string.rating_count), NumberFormat.getInstance(Locale.getDefault()).format(b.getmRatingCount()));
+        mTextViewRatingCount.setText(ratingCount);
+        mTextViewGRTitle.setText(getResources().getString(R.string.Goodreads_title));
+        mImageView.setImageBitmap(b.getmBitmap());
+        mTextViewDescription.setText(b.getmDescription());
+    }
+
     private void clearTextviews(){
         mTextViewTitle.setText("");
         mTextViewAuthor.setText("");

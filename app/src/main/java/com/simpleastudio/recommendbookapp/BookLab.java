@@ -20,22 +20,6 @@ public class BookLab implements Serializable {
         mAppContext = c;
         mRecommendList = new ArrayList<Book>();
         mPastRecList = new ArrayList<Book>();
-        for(int i = 0; i < 100; i++){
-            Book b;
-            if(i%2==0){
-                b = new Book("random");
-                b.setmThumbnailUrl("www.silly.com");
-                b.setmAuthors("James Hammerton");
-                b.setmDescription("This is a very short story");
-            }
-            else{
-                b = new Book("Strick");
-                b.setmThumbnailUrl("www.boring.com");
-                b.setmAuthors("Bob Doe");
-                b.setmDescription("This is a very dull story");
-            }
-            mRecommendList.add(b);
-        }
     }
 
     public static BookLab get(Context c){

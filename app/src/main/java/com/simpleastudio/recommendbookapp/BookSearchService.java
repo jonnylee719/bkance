@@ -22,7 +22,7 @@ import java.util.Random;
  */
 public class BookSearchService extends IntentService {
     private static final String TAG = "BookSearchService";
-    private static final String PREF_SEARCHED_TITLE = "searchedTitle";
+    public static final String PREF_SEARCHED_TITLE = "searchedTitle";
 
     public BookSearchService(){
         super(TAG);
@@ -47,7 +47,7 @@ public class BookSearchService extends IntentService {
             return;
         }
         else{
-            if(searchedTitle==null || !searchedTitle.equals(inputTitle)){
+            //if(searchedTitle==null || !searchedTitle.equals(inputTitle)){
                 //Get search results using TastekBooksFetcher
                 JSONObject results = new TastekBooksFetcher(this).getRecommendation(inputTitle);
                 ArrayList<Book> newRecList = parseJsonResult(results);
@@ -59,10 +59,10 @@ public class BookSearchService extends IntentService {
                         .putString(PREF_SEARCHED_TITLE, inputTitle)
                         .commit();
                 Log.d(TAG, "Searched title of current book list: " + inputTitle);
-            }
+            //}
         }
 
-        RandomBookService.setServiceAlarm(this, false);
+        RandomBookService.setServiceAlarm(this, true);
     }
 
     private ArrayList<Book> parseJsonResult(JSONObject object) {
@@ -84,6 +84,7 @@ public class BookSearchService extends IntentService {
                 JSONObject item = results.getJSONObject(i);
                 Book b = new Book(item.getString("Name"));
                 b.setmDescription(item.getString("wTeaser"));
+                Log.d(TAG, "Book description: " + b.getmDescription());
                 bookList.add(b);
             }
 
