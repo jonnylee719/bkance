@@ -12,9 +12,6 @@ public class BookLab implements Serializable {
     private static BookLab mLab;
     private Context mAppContext;
 
-    public void setmRecommendList(ArrayList<Book> mRecommendList) {
-        this.mRecommendList = mRecommendList;
-    }
 
     private ArrayList<Book> mRecommendList;
     private ArrayList<Book> mPastRecList;
@@ -54,6 +51,10 @@ public class BookLab implements Serializable {
 
     public Book getRecommendBook(int index){
         return mRecommendList.get(index);
+    }
+
+    public void setmRecommendList(ArrayList<Book> mRecommendList) {
+        this.mRecommendList = mRecommendList;
     }
 
     public void putToPastRec(int index){

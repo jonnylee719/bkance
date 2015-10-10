@@ -55,6 +55,7 @@ public class BookSearchService extends IntentService {
                         .edit()
                         .putString(PREF_SEARCHED_TITLE, inputTitle)
                         .commit();
+                Log.d(TAG, "Searched title of current book list: " + inputTitle);
             }
         }
     }

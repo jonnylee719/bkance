@@ -32,7 +32,7 @@ public class BookListFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new BookCardAdaptor(BookLab.get(getActivity()).getBooks());
+        mAdapter = new BookCardAdaptor(BookLab.get(getActivity()).getmRecommendList());
         mRecyclerView.setAdapter(mAdapter);
         return v;
     }

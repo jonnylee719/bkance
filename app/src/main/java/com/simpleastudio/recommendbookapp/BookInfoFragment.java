@@ -60,6 +60,12 @@ public class BookInfoFragment extends Fragment {
             Intent i = new Intent(getActivity(), BookInputActivity.class);
             startActivityForResult(i, INPUT_BOOK_REQUEST);
         }
+        else {
+            mSearchTerm = storedTitle;
+        }
+
+        Intent i = new Intent(getActivity(), BookSearchService.class);
+        getActivity().startService(i);
     }
 
     @Override
