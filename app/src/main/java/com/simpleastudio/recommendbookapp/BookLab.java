@@ -2,19 +2,22 @@ package com.simpleastudio.recommendbookapp;
 
 import android.content.Context;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Jonathan on 9/10/2015.
  */
-public class BookLab {
+public class BookLab implements Serializable {
     private static BookLab mLab;
     private Context mAppContext;
-    private ArrayList<Book> mBookList;
+    private ArrayList<Book> mRecommendList;
+    private ArrayList<Book> mPastRecList;
 
     private BookLab(Context c){
         mAppContext = c;
-        mBookList = new ArrayList<Book>();
+        mRecommendList = new ArrayList<Book>();
+        mPastRecList = new ArrayList<Book>();
         for(int i = 0; i < 100; i++){
             Book b;
             if(i%2==0){
@@ -29,7 +32,7 @@ public class BookLab {
                 b.setmAuthors("Bob Doe");
                 b.setmDescription("This is a very dull story");
             }
-            mBookList.add(b);
+            mRecommendList.add(b);
         }
     }
 
@@ -41,10 +44,25 @@ public class BookLab {
     }
 
     public void addBook(Book b){
-        mBookList.add(b);
+        mRecommendList.add(b);
     }
 
-    public ArrayList<Book> getBooks(){
-        return mBookList;
+    public Book getRecommendBook(int index){
+        return mRecommendList.get(index);
     }
+
+    public void putToPastRec(int index){
+        Book pastRecommendation = mRecommendList.get(index);
+        mPastRecList.add(pastRecommendation);
+        mRecommendList.remove(index);
+    }
+
+    public ArrayList<Book> getmRecommendList(){
+        return mRecommendList;
+    }
+
+    public ArrayList<Book> getmPastRecList() {
+        return mPastRecList;
+    }
+
 }
