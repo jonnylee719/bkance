@@ -1,8 +1,11 @@
 package com.simpleastudio.recommendbookapp;
 
+import android.app.AlarmManager;
 import android.app.IntentService;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -40,11 +43,11 @@ public class BookSearchService extends IntentService {
                 .getString(PREF_SEARCHED_TITLE, null);
         String inputTitle = PreferenceManager.getDefaultSharedPreferences(this)
                 .getString(BookInputFragment.PREF_INITIAL_BOOK, null);
-        if(inputTitle == null || searchedTitle == null){
+        if(inputTitle == null){
             return;
         }
         else{
-            if(!searchedTitle.equals(inputTitle)){
+            if(searchedTitle==null || !searchedTitle.equals(inputTitle)){
                 //Get search results using TastekBooksFetcher
                 JSONObject results = new TastekBooksFetcher(this).getRecommendation(inputTitle);
                 ArrayList<Book> newRecList = parseJsonResult(results);
@@ -58,6 +61,8 @@ public class BookSearchService extends IntentService {
                 Log.d(TAG, "Searched title of current book list: " + inputTitle);
             }
         }
+
+        RandomBookService.setServiceAlarm(this, true);
     }
 
     private ArrayList<Book> parseJsonResult(JSONObject object) {
@@ -87,6 +92,9 @@ public class BookSearchService extends IntentService {
         }
         return bookList;
     }
+
+
+
 
 
 }

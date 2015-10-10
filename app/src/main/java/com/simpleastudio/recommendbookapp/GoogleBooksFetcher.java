@@ -1,6 +1,8 @@
 package com.simpleastudio.recommendbookapp;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -8,7 +10,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
@@ -160,6 +164,41 @@ public class GoogleBooksFetcher {
         } catch (SocketTimeoutException se){
             Log.e(TAG, "SocketTimeoutException: " + se);
         }finally {
+            connection.disconnect();
+        }
+        return null;
+    }
+
+    public Bitmap getThumbnailBitmap(String bookTitle){
+        String urlString = new GoogleBooksFetcher(mAppContext).getThumbnail(bookTitle);
+        HttpURLConnection connection = null;
+        try {
+            URL url = new URL(urlString);
+            connection = (HttpURLConnection) url.openConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            InputStream in = connection.getInputStream();
+
+            if(connection.getResponseCode() != HttpURLConnection.HTTP_OK){
+                return null;
+            }
+
+            int bytesRead = 0;
+            byte[] buffer = new byte[1024];
+            while((bytesRead=in.read(buffer))>0){
+                out.write(buffer, 0, bytesRead);
+            }
+
+            out.close();
+            byte[] bitmapBytes = out.toByteArray();
+            final Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapBytes, 0, bitmapBytes.length);
+            return bitmap;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
             connection.disconnect();
         }
         return null;

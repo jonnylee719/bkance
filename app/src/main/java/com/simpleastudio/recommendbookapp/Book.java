@@ -1,5 +1,7 @@
 package com.simpleastudio.recommendbookapp;
 
+import android.graphics.Bitmap;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,6 +22,7 @@ public class Book implements Serializable {
     private int mRatingCount;
     private double mAvgRating;
     private String mThumbnailUrl;
+    private Bitmap mBitmap;
 
     public Book(String title){
         mTitle = title;
@@ -115,5 +118,13 @@ public class Book implements Serializable {
 
     public void setmId(String mId) {
         this.mId = mId;
+    }
+
+    public Bitmap getmBitmap() {
+        return mBitmap;
+    }
+
+    public void setmBitmap(Bitmap mBitmap) {
+        this.mBitmap = mBitmap;
     }
 }
