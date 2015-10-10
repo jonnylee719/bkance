@@ -153,17 +153,17 @@ public class BookInfoFragment extends Fragment {
         }
 
         public JSONObject getRandomVolume(JSONObject searchResults) throws JSONException{
-            JSONObject similar = searchResults.getJSONObject("Similar");
-            JSONArray results = similar.getJSONArray("Results");
-            int totalItems = results.length();
-            int randomItemIndex;
-            if(totalItems >= 50){
-                randomItemIndex = new Random().nextInt(50);
-            }
-            else{
-                randomItemIndex = new Random().nextInt(totalItems);
-            }
-            return results.getJSONObject(randomItemIndex);
+        JSONObject similar = searchResults.getJSONObject("Similar");
+        JSONArray results = similar.getJSONArray("Results");
+        int totalItems = results.length();
+        int randomItemIndex;
+        if(totalItems >= 50){
+            randomItemIndex = new Random().nextInt(50);
+        }
+        else{
+            randomItemIndex = new Random().nextInt(totalItems);
+        }
+        return results.getJSONObject(randomItemIndex);
         }
     }
 

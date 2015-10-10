@@ -25,6 +25,9 @@ public class BookInputFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+
+        Intent i = new Intent(getActivity(), BookSearchService.class);
+        getActivity().startService(i);
     }
 
     @Override

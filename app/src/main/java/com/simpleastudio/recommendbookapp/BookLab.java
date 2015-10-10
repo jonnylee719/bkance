@@ -11,6 +11,11 @@ import java.util.ArrayList;
 public class BookLab implements Serializable {
     private static BookLab mLab;
     private Context mAppContext;
+
+    public void setmRecommendList(ArrayList<Book> mRecommendList) {
+        this.mRecommendList = mRecommendList;
+    }
+
     private ArrayList<Book> mRecommendList;
     private ArrayList<Book> mPastRecList;
 
