@@ -45,6 +45,7 @@ public class RandomBookService extends IntentService {
                 .putInt(PREF_RANDOM_BOOK, randomIndex)
                 .commit();
         sendBroadcast(new Intent(EVENT_NEW_RANDOM));
+        Log.d(TAG, "Broadcast intent should be sent.");
     }
 
 

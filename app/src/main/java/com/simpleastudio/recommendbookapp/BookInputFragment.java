@@ -16,7 +16,7 @@ import java.util.zip.Inflater;
 /**
  * Created by Jonathan on 9/10/2015.
  */
-public class BookInputFragment extends VisibleFragment {
+public class BookInputFragment extends Fragment {
     private static final String TAG = "BookInputFragment";
     public static final String PREF_INITIAL_BOOK = "initialBook";
     private EditText bookInput;

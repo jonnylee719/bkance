@@ -25,7 +25,7 @@ import java.util.Random;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class BookInfoFragment extends Fragment {
+public class BookInfoFragment extends VisibleFragment {
     private static final String TAG = "BookInfoFragment";
     public static final int INPUT_BOOK_REQUEST = 1;
     private Button searchButton;
