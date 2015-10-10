@@ -62,7 +62,7 @@ public class BookSearchService extends IntentService {
             //}
         }
 
-        RandomBookService.setServiceAlarm(this, true);
+        RandomBookService.setServiceAlarm(this, false);
     }
 
     private ArrayList<Book> parseJsonResult(JSONObject object) {

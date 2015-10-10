@@ -20,7 +20,7 @@ public class RandomBookService extends IntentService {
     private static final String TAG = "RandomBookService";
     public static final String PREF_RANDOM_BOOK = "randomBookIndex";
     private static final int RAND_INTERVAL = 1000*15;
-    public static final String EVENT_NEW_RANDOM =
+    public static final String EVENT_NEW_RECOMMENDATION =
             "com.simpleastudio.recommendbookapp.NEW_RANDOM";
 
     public RandomBookService(){
@@ -44,7 +44,7 @@ public class RandomBookService extends IntentService {
                 .edit()
                 .putInt(PREF_RANDOM_BOOK, randomIndex)
                 .commit();
-        sendBroadcast(new Intent(EVENT_NEW_RANDOM));
+        sendBroadcast(new Intent(EVENT_NEW_RECOMMENDATION));
         Log.d(TAG, "Broadcast intent should be sent.");
     }
 
