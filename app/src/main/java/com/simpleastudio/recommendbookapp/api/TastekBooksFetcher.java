@@ -1,7 +1,9 @@
-package com.simpleastudio.recommendbookapp;
+package com.simpleastudio.recommendbookapp.api;
 
 import android.content.Context;
 import android.util.Log;
+
+import com.simpleastudio.recommendbookapp.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -8,6 +8,8 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.simpleastudio.recommendbookapp.services.RandomBookService;
+
 /**
  * Created by Jonathan on 10/10/2015.
  */

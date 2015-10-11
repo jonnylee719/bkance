@@ -13,12 +13,14 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+
 /**
  * Created by Jonathan on 9/10/2015.
  */
 public class BookListFragment extends Fragment {
     private static final String TAG = "BookListFragment";
-    private RecyclerView mRecyclerView;
+    @Bind(R.id.book_recycler_view) protected RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
@@ -26,7 +28,6 @@ public class BookListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_book_list, container, false);
-        mRecyclerView = (RecyclerView) v.findViewById(R.id.book_recycler_view);
 
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());

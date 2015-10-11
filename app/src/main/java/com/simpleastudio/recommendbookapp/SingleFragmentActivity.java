@@ -16,17 +16,12 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
         return R.layout.activity_fragment;
     }
 
-    protected int getToolbarResId(){
-        return R.id.toolbar;
-    }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResId());
-        Toolbar toolbar = (Toolbar) findViewById(getToolbarResId());
-        setSupportActionBar(toolbar);
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);

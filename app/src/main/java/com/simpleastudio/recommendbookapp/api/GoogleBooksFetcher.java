@@ -1,9 +1,15 @@
-package com.simpleastudio.recommendbookapp;
+package com.simpleastudio.recommendbookapp.api;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.util.Log;
+
+import com.simpleastudio.recommendbookapp.R;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.UrlConnectionDownloader;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,7 +23,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
-import java.util.Random;
 
 /**
  * Purpose: To search for books results using Google Books API
@@ -169,37 +174,14 @@ public class GoogleBooksFetcher {
         return null;
     }
 
-    public Bitmap getThumbnailBitmap(String bookTitle){
-        String urlString = new GoogleBooksFetcher(mAppContext).getThumbnail(bookTitle);
-        HttpURLConnection connection = null;
-        try {
-            URL url = new URL(urlString);
-            connection = (HttpURLConnection) url.openConnection();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            InputStream in = connection.getInputStream();
-
-            if(connection.getResponseCode() != HttpURLConnection.HTTP_OK){
-                return null;
-            }
-
-            int bytesRead = 0;
-            byte[] buffer = new byte[1024];
-            while((bytesRead=in.read(buffer))>0){
-                out.write(buffer, 0, bytesRead);
-            }
-
-            out.close();
-            byte[] bitmapBytes = out.toByteArray();
-            final Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapBytes, 0, bitmapBytes.length);
+    public Bitmap loadThumbnailBitmap(String bookTitle) {
+        String urlString = this.getThumbnail(bookTitle);
+        Uri url = Uri.parse(urlString);
+        try{
+            Bitmap bitmap = Picasso.with(mAppContext).load(url).get();
             return bitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            connection.disconnect();
+        }catch (IOException ie){
+            Log.e(TAG, "IOException: ", ie);
         }
         return null;
     }

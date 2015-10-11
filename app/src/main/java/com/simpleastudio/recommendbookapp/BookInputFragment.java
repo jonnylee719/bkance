@@ -13,14 +13,18 @@ import android.widget.EditText;
 
 import java.util.zip.Inflater;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * Created by Jonathan on 9/10/2015.
  */
 public class BookInputFragment extends Fragment {
     private static final String TAG = "BookInputFragment";
     public static final String PREF_INITIAL_BOOK = "initialBook";
-    private EditText bookInput;
-    private Button enterBook;
+    @Bind(R.id.editText_book) protected EditText bookInput;
+    @Bind(R.id.button_input_book) protected Button enterBook;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -31,9 +35,8 @@ public class BookInputFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_book_input, container, false);
+        ButterKnife.bind(this, v);
 
-        bookInput = (EditText) v.findViewById(R.id.editText_book);
-        enterBook = (Button) v.findViewById(R.id.button_input_book);
         enterBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -2,9 +2,9 @@ package com.simpleastudio.recommendbookapp;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +14,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.simpleastudio.recommendbookapp.api.GoodreadsFetcher;
+import com.simpleastudio.recommendbookapp.api.GoogleBooksFetcher;
+import com.simpleastudio.recommendbookapp.api.TastekBooksFetcher;
+import com.simpleastudio.recommendbookapp.api.ThumbnailAsyncTasker;
+import com.simpleastudio.recommendbookapp.services.BookSearchService;
+import com.simpleastudio.recommendbookapp.services.RandomBookService;
+import com.squareup.picasso.Picasso;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,21 +30,24 @@ import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Random;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * A placeholder fragment containing a simple view.
  */
 public class BookInfoFragment extends VisibleFragment {
     private static final String TAG = "BookInfoFragment";
     public static final int INPUT_BOOK_REQUEST = 1;
-    private Button searchButton;
-    private TextView mTextViewTitle;
-    private TextView mTextViewAuthor;
-    private TextView mTextViewDate;
-    private TextView mTextViewGRTitle;
-    private TextView mTextViewRating;
-    private TextView mTextViewRatingCount;
-    private TextView mTextViewDescription;
-    private ImageView mImageView;
+    @Bind(R.id.button_search_book) protected Button mSearchButton;
+    @Bind(R.id.textview_title) protected TextView mTextViewTitle;
+    @Bind(R.id.textview_author) protected TextView mTextViewAuthor;
+    @Bind(R.id.textview_date) protected TextView mTextViewDate;
+    @Bind(R.id.textView_goodreads_title) protected TextView mTextViewGRTitle;
+    @Bind(R.id.textview_rating) protected TextView mTextViewRating;
+    @Bind(R.id.textview_rating_count) protected TextView mTextViewRatingCount;
+    @Bind(R.id.textview_description) protected TextView mTextViewDescription;
+    @Bind(R.id.imageview_thumbnail) protected ImageView mImageView;
     private String mSearchTerm;
     private String mNewSearchTerm;
     private JSONObject mSearchResults;
@@ -72,8 +83,9 @@ public class BookInfoFragment extends VisibleFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_book_info, container, false);
-        searchButton = (Button) v.findViewById(R.id.button_search_book);
-        searchButton.setOnClickListener(new View.OnClickListener() {
+        ButterKnife.bind(this, v);
+
+        mSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 clearTextviews();
@@ -82,16 +94,7 @@ public class BookInfoFragment extends VisibleFragment {
             }
         });
 
-        mTextViewTitle = (TextView) v.findViewById(R.id.textview_title);
-        mTextViewAuthor = (TextView) v.findViewById(R.id.textview_author);
-        mTextViewDate = (TextView) v.findViewById(R.id.textview_date);
-        mTextViewRating = (TextView) v.findViewById(R.id.textview_rating);
-        mTextViewRatingCount = (TextView) v.findViewById(R.id.textview_rating_count);
-        mTextViewDescription = (TextView) v.findViewById(R.id.textview_description);
-        mImageView = (ImageView) v.findViewById(R.id.imageview_thumbnail);
         mImageView.setImageBitmap(null);
-        mTextViewGRTitle = (TextView) v.findViewById(R.id.textView_goodreads_title);
-
         return v;
     }
 
@@ -127,7 +130,7 @@ public class BookInfoFragment extends VisibleFragment {
         mTextViewDescription.setText(b.getmDescription());
     }
 
-    private void clearTextviews(){
+    protected void clearTextviews(){
         mTextViewTitle.setText("");
         mTextViewAuthor.setText("");
         mTextViewDate.setText("");
@@ -166,8 +169,9 @@ public class BookInfoFragment extends VisibleFragment {
                 mBook = new Book(randItem.getString("Name"));
                 mBook.setmDescription(randItem.getString("wTeaser"));
                 new GoodReadsAsyncTasker().execute(mBook);
-                new ThumbnailAsyncTasker(mImageView, getActivity()).execute(mBook.getmTitle());
 
+                //Loading thumbnail using Picasso
+                new ThumbnailAsyncTasker(mImageView, getActivity()).execute(mBook.getmTitle());
             } catch (JSONException e) {
                 Log.e(TAG, "JSONException: " + e);
             }
