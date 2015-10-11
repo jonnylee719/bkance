@@ -39,7 +39,7 @@ import butterknife.ButterKnife;
 public class BookInfoFragment extends VisibleFragment {
     private static final String TAG = "BookInfoFragment";
     public static final int INPUT_BOOK_REQUEST = 1;
-    @Bind(R.id.button_search_book) protected Button mSearchButton;
+    @Bind(R.id.toolbar_search_button) protected Button mSearchButton;
     @Bind(R.id.textview_title) protected TextView mTextViewTitle;
     @Bind(R.id.textview_author) protected TextView mTextViewAuthor;
     @Bind(R.id.textview_date) protected TextView mTextViewDate;
