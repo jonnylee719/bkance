@@ -46,6 +46,16 @@ public class TastekBooksFetcher {
         return in.replace(" ", SPACE_ENCODED);
     }
 
+    public String getRecommedationUrl(String bookTitle){
+        String urlString = ENDPOINT
+                + PARAM_SEARCH + getSpaceEncoded(bookTitle) + PARAM_SEPARATOR
+                + PARAM_TYPE + DEFAULT_TYPE + PARAM_SEPARATOR
+                + PARAM_LIMIT + DEFAULT_LIMIT + PARAM_SEPARATOR
+                + PARAM_INFO + DEFAULT_INFO + PARAM_SEPARATOR
+                + PARAM_KEY + mAppContext.getResources().getString(R.string.tastekid);
+        return urlString;
+    }
+
     public JSONObject getRecommendation(String book){
         String urlString = ENDPOINT
                 + PARAM_SEARCH + getSpaceEncoded(book) + PARAM_SEPARATOR

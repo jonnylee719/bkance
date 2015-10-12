@@ -2,7 +2,6 @@ package com.simpleastudio.recommendbookapp;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
@@ -15,12 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.simpleastudio.recommendbookapp.api.GoodreadsFetcher;
-import com.simpleastudio.recommendbookapp.api.GoogleBooksFetcher;
 import com.simpleastudio.recommendbookapp.api.TastekBooksFetcher;
 import com.simpleastudio.recommendbookapp.api.ThumbnailAsyncTasker;
-import com.simpleastudio.recommendbookapp.services.BookSearchService;
-import com.simpleastudio.recommendbookapp.services.RandomBookService;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
