@@ -2,23 +2,18 @@ package com.simpleastudio.recommendbookapp.api;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.Log;
 
 import com.simpleastudio.recommendbookapp.R;
-import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.UrlConnectionDownloader;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
@@ -70,7 +65,7 @@ public class GoogleBooksFetcher {
         return in.replace(" ", SPACE_ENCODED);
     }
 
-    public String getThumbnail(String bookTitle){
+    public String getThumbnailUrl(String bookTitle){
         JSONObject object = searchBook(bookTitle);
         String thumbnailLink = "";
         boolean foundThumbnail = false;
@@ -175,7 +170,7 @@ public class GoogleBooksFetcher {
     }
 
     public Bitmap loadThumbnailBitmap(String bookTitle) {
-        String urlString = this.getThumbnail(bookTitle);
+        String urlString = this.getThumbnailUrl(bookTitle);
         Uri url = Uri.parse(urlString);
         try{
             Bitmap bitmap = Picasso.with(mAppContext).load(url).get();

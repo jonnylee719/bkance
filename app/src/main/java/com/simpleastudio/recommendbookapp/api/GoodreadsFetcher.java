@@ -91,16 +91,6 @@ public class GoodreadsFetcher {
     }
 
 
-    public JSONObject parseJsonResponse(String responseString){
-        try{
-            JSONObject results = new JSONObject(responseString);
-            return results;
-        } catch (JSONException je) {
-            Log.e(TAG, "JsonException: " + je);
-        }
-        return null;
-    }
-
     public Book parseXmlResponse(Book book, XmlPullParser parser) throws XmlPullParserException, IOException{
 
             Log.d(TAG, "Started parsing xml Response.");
