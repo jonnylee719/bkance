@@ -16,8 +16,6 @@ import android.widget.TextView;
 import com.simpleastudio.recommendbookapp.api.GoodreadsFetcher;
 import com.simpleastudio.recommendbookapp.api.TastekBooksFetcher;
 import com.simpleastudio.recommendbookapp.api.ThumbnailAsyncTasker;
-import com.simpleastudio.recommendbookapp.services.BookSearchService;
-import com.simpleastudio.recommendbookapp.services.RandomBookService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
