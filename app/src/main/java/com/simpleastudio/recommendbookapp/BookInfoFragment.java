@@ -90,6 +90,7 @@ public class BookInfoFragment extends VisibleFragment {
             public void onClick(View v) {
                 clearTextviews();
                 mImageView.setImageBitmap(null);
+                mBook = BookLab.get(getActivity()).getRandomBook();
                 goodreadsStringRequest();
             }
         });
@@ -212,7 +213,7 @@ public class BookInfoFragment extends VisibleFragment {
                         book.setmId(resultBook.getmId());
                         mBook = book;
 
-                        BookLab.get(getActivity()).putToPastRec(book.getTag());
+                        BookLab.get(getActivity()).putToPastRec(mBook.getTag());
 
                         String date = String.format(getResources().getString(R.string.book_date), mBook.getmYear());
                         mTextViewDate.setText(date);
@@ -232,4 +233,5 @@ public class BookInfoFragment extends VisibleFragment {
         request.setTag("GET");
         SingRequestQueue.getInstance(getActivity()).addToRequestQueue(request);
     }
+
 }

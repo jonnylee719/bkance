@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by Jonathan on 9/10/2015.
@@ -55,4 +56,12 @@ public class BookLab implements Serializable {
         return mPastRecList;
     }
 
+    public Book getRandomBook(){
+        int size = mRecommendList.size();
+        int randomIndex = new Random().nextInt(size);
+
+        Book randBook = mRecommendList.get(randomIndex);
+        randBook.setTag(randomIndex);
+        return randBook;
+    }
 }
