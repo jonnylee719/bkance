@@ -41,7 +41,7 @@ public class RandomBookService extends IntentService {
 
         Log.i(TAG, "Received an intent: " + intent);
 
-        int randomIndex = getRandomRec();
+        int randomIndex = BookLab.get(this).getRandomBook().getTag();
         Log.d(TAG, "Random index: " + randomIndex);
         PreferenceManager.getDefaultSharedPreferences(this)
                 .edit()
@@ -50,22 +50,7 @@ public class RandomBookService extends IntentService {
         sendBroadcast(new Intent(EVENT_NEW_RECOMMENDATION));
         Log.d(TAG, "Broadcast intent should be sent.");
     }
-
-
-    public int getRandomRec(){
-        ArrayList<Book> mBookList = BookLab.get(this).getmRecommendList();
-        int randIndex = new Random().nextInt(mBookList.size());
-        Book b = BookLab.get(this).getRecommendBook(randIndex);
-
-        //Getting additional results
-        new GoodreadsFetcher(this).getBookInfo(b);
-        //Bitmap thumbnail = new GoogleBooksFetcher(this).getThumbnailBitmap(b.getmTitle());
-        Bitmap thumbnail = new GoogleBooksFetcher(this).loadThumbnailBitmap(b.getmTitle());
-        b.setmBitmap(thumbnail);
-
-        return randIndex;
-    }
-
+    
     public static void setServiceAlarm(Context c, boolean isOn){
         Intent i = new Intent(c, RandomBookService.class);
         PendingIntent pi = PendingIntent.getService(c, 0, i, 0);
