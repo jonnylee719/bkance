@@ -132,6 +132,13 @@ public class BookInfoFragment extends VisibleFragment {
         mTextViewGRTitle.setText("");
     }
 
+    @Override
+    public void onStop(){
+        super.onStop();
+        SingRequestQueue.getInstance(getActivity()).getRequestQueue().cancelAll("GET");
+        Log.i(TAG, "Canceled all request with GET tag");
+    }
+
     private class FetchVolumesTask extends AsyncTask<String, Void, JSONObject>{
         @Override
         protected JSONObject doInBackground(String... params) {
