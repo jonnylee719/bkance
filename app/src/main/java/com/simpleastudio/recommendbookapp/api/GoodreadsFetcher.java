@@ -62,6 +62,14 @@ public class GoodreadsFetcher {
         mAppContext = c;
     }
 
+    public String getUrl(String bookTitle){
+        String urlString = ENDPOINT
+                + PARAM_QUERY + getSpaceEncoded(bookTitle) + PARAM_SEPARATOR
+                + PARAM_SEARCH_TITLE + getSpaceEncoded(bookTitle) + PARAM_SEPARATOR
+                + PARAM_API + mAppContext.getResources().getString(R.string.goodreads);
+        return urlString;
+    }
+
     public Book getBookInfo(Book book){
         String title = book.getmTitle();
         String urlString = ENDPOINT
@@ -91,8 +99,81 @@ public class GoodreadsFetcher {
     }
 
 
-    public Book parseXmlResponse(Book book, XmlPullParser parser) throws XmlPullParserException, IOException{
+    public static Book parseXmlResponse(String response) {
+        Book book = new Book("Xml Parser Result");
+        try {
+            //Setting up xml pull parser
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            XmlPullParser parser = factory.newPullParser();
+            parser.setInput(new StringReader(response));
 
+            int eventType = parser.next();
+            boolean stopParsing = false;
+            while (eventType != XmlPullParser.END_DOCUMENT && !stopParsing) {
+                if (eventType == XmlPullParser.START_TAG &&
+                        XML_DAY.equals(parser.getName())) {
+                    String day = parser.nextText();
+                    Log.d(TAG, "Day: " + day);
+                    if (!day.equals(""))
+                        book.setmDay(Integer.parseInt(day));
+                } else if (eventType == XmlPullParser.START_TAG &&
+                        XML_MONTH.equals(parser.getName())) {
+                    String month = parser.nextText();
+                    Log.d(TAG, "Month: " + month);
+                    if (!month.equals(""))
+                        book.setmMonth(Integer.parseInt(month));
+                } else if (eventType == XmlPullParser.START_TAG &&
+                        XML_YEAR.equals(parser.getName())) {
+                    String year = parser.nextText();
+                    Log.d(TAG, "Year: " + year);
+                    if (!year.equals(""))
+                        book.setmYear(Integer.parseInt(year));
+                } else if (eventType == XmlPullParser.START_TAG &&
+                        XML_RATING_COUNT.equals(parser.getName())) {
+                    String ratingCount = parser.nextText();
+                    Log.d(TAG, "Rating count: " + ratingCount);
+                    if (!ratingCount.equals(""))
+                        book.setmRatingCount(Integer.parseInt(ratingCount));
+                } else if (eventType == XmlPullParser.START_TAG &&
+                        XML_RATING.equals(parser.getName())) {
+                    String rating = parser.nextText();
+                    Log.d(TAG, "Rating: " + rating);
+                    if (!rating.equals(""))
+                        book.setmAvgRating(Double.parseDouble(rating));
+                } else if (eventType == XmlPullParser.START_TAG &&
+                        XML_THUMB.equals(parser.getName())) {
+                    String url = parser.nextText();
+                    Log.d(TAG, "Url: " + url);
+                    if (!url.equals(""))
+                        book.setmThumbnailUrl(url);
+                } else if (eventType == XmlPullParser.START_TAG &&
+                        XML_AUTHOR.equals(parser.getName())) {
+                    String author = parser.nextText();
+                    Log.d(TAG, "Author: " + author);
+                    if (!author.equals(""))
+                        book.setmAuthors(author);
+                } else if (eventType == XmlPullParser.START_TAG &&
+                        XML_ID.equals(parser.getName())) {
+                    String id = parser.nextText();
+                    if (!id.equals("") && book.getmId() == null)
+                        book.setmId(id);
+                    Log.d(TAG, "id: " + book.getmId());
+                } else if (eventType == XmlPullParser.END_TAG &&
+                        XML_WORK.equals(parser.getName())) {
+                    stopParsing = true;
+                }
+                eventType = parser.next();
+            }
+        } catch (IOException ie) {
+            Log.e(TAG, "IOException: ", ie);
+        } catch (XmlPullParserException xppe) {
+            Log.e(TAG, "XmlException: ", xppe);
+        }
+        return book;
+    }
+
+
+    public Book parseXmlResponse(Book book, XmlPullParser parser) throws XmlPullParserException, IOException{
             Log.d(TAG, "Started parsing xml Response.");
             int eventType = parser.next();
             boolean stopParsing = false;

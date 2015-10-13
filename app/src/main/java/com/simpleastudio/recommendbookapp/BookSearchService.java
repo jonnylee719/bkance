@@ -42,6 +42,11 @@ public class BookSearchService extends IntentService {
 
         Log.i(TAG, "Received an intent: " + intent);
 
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .edit()
+                .putBoolean(PREF_SEARCHED_TITLE, false)
+                .commit();
+
         boolean searchedTitle = PreferenceManager.getDefaultSharedPreferences(this)
                 .getBoolean(PREF_SEARCHED_TITLE, false);
         String inputTitle = PreferenceManager.getDefaultSharedPreferences(this)

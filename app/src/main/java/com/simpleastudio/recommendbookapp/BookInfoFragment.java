@@ -13,7 +13,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.simpleastudio.recommendbookapp.api.GoodreadsFetcher;
+import com.simpleastudio.recommendbookapp.api.SingRequestQueue;
 import com.simpleastudio.recommendbookapp.api.TastekBooksFetcher;
 import com.simpleastudio.recommendbookapp.api.ThumbnailAsyncTasker;
 
@@ -85,7 +90,7 @@ public class BookInfoFragment extends VisibleFragment {
             public void onClick(View v) {
                 clearTextviews();
                 mImageView.setImageBitmap(null);
-                new FetchVolumesTask().execute(mSearchTerm);
+                goodreadsStringRequest();
             }
         });
 
@@ -163,8 +168,6 @@ public class BookInfoFragment extends VisibleFragment {
                 //Set up as a new Book
                 mBook = new Book(randItem.getString("Name"));
                 mBook.setmDescription(randItem.getString("wTeaser"));
-                new GoodReadsAsyncTasker().execute(mBook);
-
                 //Loading thumbnail using Picasso
                 new ThumbnailAsyncTasker(mImageView, getActivity()).execute(mBook.getmTitle());
             } catch (JSONException e) {
@@ -190,32 +193,43 @@ public class BookInfoFragment extends VisibleFragment {
         }
     }
 
-    public class GoodReadsAsyncTasker extends AsyncTask<Book, Void, Book> {
-        private static final String TAG = "GoodReadsAsyncTasker";
+    public void goodreadsStringRequest(){
+        Log.d(TAG, "Sending Goodreads String request");
+        String url = new GoodreadsFetcher(getActivity()).getUrl(mBook.getmTitle());
+        StringRequest request = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Book resultBook = GoodreadsFetcher.parseXmlResponse(response);
+                        Book book = BookLab.get(getActivity()).getRecommendBook(mBook.getTag());
+                        book.setmDay(resultBook.getmDay());
+                        book.setmMonth(resultBook.getmMonth());
+                        book.setmYear(resultBook.getmYear());
+                        book.setmRatingCount(resultBook.getmRatingCount());
+                        book.setmAvgRating(resultBook.getmAvgRating());
+                        book.setmAuthors(resultBook.getmAuthors());
+                        book.setmThumbnailUrl(resultBook.getmThumbnailUrl());
+                        book.setmId(resultBook.getmId());
+                        mBook = book;
 
-        public GoodReadsAsyncTasker(){
-            Log.d(TAG, "Initiated GoodReadsAsyncTasker.");
-        }
+                        BookLab.get(getActivity()).putToPastRec(book.getTag());
 
-        @Override
-        protected Book doInBackground(Book... params) {
-            Book book = params[0];
-            return new GoodreadsFetcher(getActivity()).getBookInfo(book);
-        }
-
-        @Override
-        protected void onPostExecute(Book book){
-            mBook = book;
-            String date = String.format(getResources().getString(R.string.book_date), mBook.getmYear());
-            mTextViewDate.setText(date);
-            String avgRating = String.format(getResources().getString(R.string.book_rating), mBook.getmAvgRating());
-            mTextViewRating.setText(avgRating);
-            String ratingCount = String.format(getResources().getString(R.string.rating_count), NumberFormat.getInstance(Locale.getDefault()).format(mBook.getmRatingCount()));
-            mTextViewRatingCount.setText(ratingCount);
-            mTextViewAuthor.setText(book.getmAuthors());
-            mTextViewGRTitle.setText(getResources().getString(R.string.Goodreads_title));
-
-
-        }
+                        String date = String.format(getResources().getString(R.string.book_date), mBook.getmYear());
+                        mTextViewDate.setText(date);
+                        String avgRating = String.format(getResources().getString(R.string.book_rating), mBook.getmAvgRating());
+                        mTextViewRating.setText(avgRating);
+                        String ratingCount = String.format(getResources().getString(R.string.rating_count), NumberFormat.getInstance(Locale.getDefault()).format(mBook.getmRatingCount()));
+                        mTextViewRatingCount.setText(ratingCount);
+                        mTextViewAuthor.setText(book.getmAuthors());
+                        mTextViewGRTitle.setText(getResources().getString(R.string.Goodreads_title));
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "Something went wrong at goodreads StringRequest.");
+            }
+        });
+        request.setTag("GET");
+        SingRequestQueue.getInstance(getActivity()).addToRequestQueue(request);
     }
 }
