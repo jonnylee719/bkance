@@ -50,7 +50,7 @@ public class RandomBookService extends IntentService {
         sendBroadcast(new Intent(EVENT_NEW_RECOMMENDATION));
         Log.d(TAG, "Broadcast intent should be sent.");
     }
-    
+
     public static void setServiceAlarm(Context c, boolean isOn){
         Intent i = new Intent(c, RandomBookService.class);
         PendingIntent pi = PendingIntent.getService(c, 0, i, 0);
