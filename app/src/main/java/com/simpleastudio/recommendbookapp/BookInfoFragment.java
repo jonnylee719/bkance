@@ -48,7 +48,6 @@ public class BookInfoFragment extends VisibleFragment {
     @Bind(R.id.textview_rating_count) protected TextView mTextViewRatingCount;
     @Bind(R.id.textview_description) protected TextView mTextViewDescription;
     @Bind(R.id.imageview_thumbnail) protected ImageView mImageView;
-    private String mSearchTerm;
     private String mNewSearchTerm;
     private JSONObject mSearchResults;
 
@@ -71,12 +70,6 @@ public class BookInfoFragment extends VisibleFragment {
             Intent i = new Intent(getActivity(), BookInputActivity.class);
             startActivityForResult(i, INPUT_BOOK_REQUEST);
         }
-        else {
-            mSearchTerm = storedTitle;
-        }
-
-        Intent i = new Intent(getActivity(), BookSearchService.class);
-        getActivity().startService(i);
     }
 
     @Override
@@ -104,15 +97,6 @@ public class BookInfoFragment extends VisibleFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == INPUT_BOOK_REQUEST){
-            if(resultCode == Activity.RESULT_OK){
-                String storedTitle = PreferenceManager.getDefaultSharedPreferences(getActivity())
-                        .getString(BookInputFragment.PREF_INITIAL_BOOK, null);
-                if(storedTitle != null){
-                    mSearchTerm = storedTitle.replace(" ", "%20");
-                }
-            }
-        }
     }
 
     @Override

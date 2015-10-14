@@ -45,6 +45,10 @@ public class BookInputFragment extends Fragment {
                         .putString(PREF_INITIAL_BOOK, bookInput.getText().toString())
                         .commit();
 
+                //Start service to search recommendations for the new title
+                Intent iService = new Intent(getActivity(), BookSearchService.class);
+                getActivity().startService(iService);
+
                 Intent i = new Intent();
                 getActivity().setResult(Activity.RESULT_OK, i);
                 getActivity().finish();
