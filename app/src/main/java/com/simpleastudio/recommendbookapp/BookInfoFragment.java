@@ -70,6 +70,20 @@ public class BookInfoFragment extends VisibleFragment {
             Intent i = new Intent(getActivity(), BookInputActivity.class);
             startActivityForResult(i, INPUT_BOOK_REQUEST);
         }
+
+        //Initiate mBook
+        int randomBookIndex = PreferenceManager.getDefaultSharedPreferences(getActivity())
+                .getInt(RandomBookService.PREF_RANDOM_BOOK, -1);
+        if(randomBookIndex == -1){
+            Book newRandomBook = BookLab.get(getActivity()).getRandomBook();
+            PreferenceManager.getDefaultSharedPreferences(getActivity())
+                    .edit()
+                    .putInt(RandomBookService.PREF_RANDOM_BOOK, newRandomBook.getTag());
+            mBook = newRandomBook;
+        }
+        else {
+            mBook = BookLab.get(getActivity()).getRecommendBook(randomBookIndex);
+        }
     }
 
     @Override
@@ -91,6 +105,9 @@ public class BookInfoFragment extends VisibleFragment {
         });
 
         mImageView.setImageBitmap(null);
+        
+        //Load mBook book info
+        loadRandomBookInfo();
         return v;
     }
 
