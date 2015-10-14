@@ -134,6 +134,13 @@ public class BookInfoFragment extends VisibleFragment {
     }
 
     @Override
+    public void onPause(){
+        super.onPause();
+        FileWriter writer = new FileWriter(getActivity());
+        writer.saveBookLab(BookLab.get(getActivity()));
+    }
+
+    @Override
     public void onStop(){
         super.onStop();
         SingRequestQueue.getInstance(getActivity()).getRequestQueue().cancelAll("GET");

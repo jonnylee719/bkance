@@ -61,6 +61,10 @@ public class BookSearchService extends IntentService {
                     ArrayList<Book> newRecList = parseJsonResult(response);
                     //Store results in BookLab
                     BookLab.get(getApplicationContext()).setmRecommendList(newRecList);
+                    //Saving searched book list at internal storage
+                    FileWriter writer = new FileWriter(getApplicationContext());
+                    writer.saveBookLab(BookLab.get(getApplicationContext()));
+
                     Log.d(TAG, "Finished searching for similar book list");
                 }
             }, new Response.ErrorListener() {
