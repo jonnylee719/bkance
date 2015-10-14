@@ -9,6 +9,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.io.OptionalDataException;
+import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 
 /**
@@ -60,5 +66,41 @@ public class FileWriter {
         }
 
         return fileString;
+    }
+
+    public void saveBookLab(BookLab bookLab){
+        try{
+            FileOutputStream fos = mAppContext.openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(bookLab);
+            os.close();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, "File not found exception: ", e);
+        } catch (IOException e) {
+            Log.e(TAG, "IOException: ", e);
+        }
+    }
+
+    public BookLab readBookLab(){
+        try{
+            FileInputStream fis = mAppContext.openFileInput(FILE_NAME);
+            ObjectInputStream is = new ObjectInputStream(fis);
+            BookLab bookLab = (BookLab) is.readObject();
+            is.close();
+            fis.close();
+            return bookLab;
+        } catch (ClassNotFoundException e) {
+            Log.e(TAG, "Booklab not found", e);
+        } catch (OptionalDataException e) {
+            Log.e(TAG, "OptionalDataException: ", e);
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, "File not found. Exception: ", e);
+        } catch (StreamCorruptedException e) {
+            Log.e(TAG, "Stream Corrupted. Exception: ", e);
+        } catch (IOException e) {
+            Log.e(TAG, "IOException: ", e);
+        }
+        return null;
     }
 }

@@ -23,9 +23,17 @@ public class BookLab implements Serializable {
         mPastRecList = new ArrayList<Book>();
     }
 
+    private static BookLab newInstance(Context c){
+        BookLab bookLab = loadBookLab(c);
+        if(bookLab == null){
+            bookLab = new BookLab(c);
+        }
+        return bookLab;
+    }
+
     public static BookLab get(Context c){
         if(mLab == null){
-            mLab = new BookLab(c.getApplicationContext());
+            mLab = BookLab.newInstance(c.getApplicationContext());
         }
         return mLab;
     }
@@ -63,5 +71,11 @@ public class BookLab implements Serializable {
         Book randBook = mRecommendList.get(randomIndex);
         randBook.setTag(randomIndex);
         return randBook;
+    }
+
+    private static BookLab loadBookLab(Context c){
+        FileWriter fileWriter = new FileWriter(c);
+        BookLab bookLab = fileWriter.readBookLab();
+        return bookLab;
     }
 }
