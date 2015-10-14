@@ -21,7 +21,6 @@ import com.simpleastudio.recommendbookapp.api.GoodreadsFetcher;
 import com.simpleastudio.recommendbookapp.api.GoogleBooksFetcher;
 import com.simpleastudio.recommendbookapp.api.SingRequestQueue;
 import com.simpleastudio.recommendbookapp.api.TastekBooksFetcher;
-import com.simpleastudio.recommendbookapp.api.ThumbnailAsyncTasker;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -140,67 +139,6 @@ public class BookInfoFragment extends VisibleFragment {
         super.onStop();
         SingRequestQueue.getInstance(getActivity()).getRequestQueue().cancelAll("GET");
         Log.i(TAG, "Canceled all request with GET tag");
-    }
-
-    private class FetchVolumesTask extends AsyncTask<String, Void, JSONObject>{
-        @Override
-        protected JSONObject doInBackground(String... params) {
-            String searchSubject = params[0];
-            if(mSearchTerm.equals(searchSubject)){
-                Log.d(TAG, "Looking up the same term again.");
-                if(mSearchResults==null){
-                    Log.d(TAG, "SearchResults JSONObject is null");
-                    mSearchResults = new TastekBooksFetcher(getActivity()).getRecommendation(mSearchTerm);
-                }
-            }
-            else {      //New search term
-                Log.d(TAG, "New search term");
-                mSearchTerm = searchSubject;
-                mSearchResults = new TastekBooksFetcher(getActivity()).getRecommendation(mSearchTerm);
-            }
-            return mSearchResults;
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject searchResults){
-            JSONObject randItem;
-            try {
-                randItem = getRandomVolume(searchResults);
-
-                //Set up as a new Book
-                mBook = new Book(randItem.getString("Name"));
-                mBook.setmDescription(randItem.getString("wTeaser"));
-                //Loading thumbnail using Picasso
-                new ThumbnailAsyncTasker(mImageView, getActivity()).execute(mBook.getmTitle());
-            } catch (JSONException e) {
-                Log.e(TAG, "JSONException: " + e);
-            }
-
-            mTextViewTitle.setText(mBook.getmTitle());
-            mTextViewDescription.setText(mBook.getmDescription());
-        }
-
-        public JSONObject getRandomVolume(JSONObject searchResults) throws JSONException{
-        JSONObject similar = searchResults.getJSONObject("Similar");
-        JSONArray results = similar.getJSONArray("Results");
-        int totalItems = results.length();
-        int randomItemIndex;
-        if(totalItems >= 50){
-            randomItemIndex = new Random().nextInt(50);
-        }
-        else{
-            randomItemIndex = new Random().nextInt(totalItems);
-        }
-        return results.getJSONObject(randomItemIndex);
-        }
-    }
-
-    public void thumbnailImageRequest(){
-        Log.d(TAG, "Sending thumbnail Image Request");
-        String url = mBook.getmThumbnailUrl();
-        if(url == null || url.equals("")){
-
-        }
     }
 
     public void loadRandomBookInfo(){
