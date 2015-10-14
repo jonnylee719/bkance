@@ -120,8 +120,7 @@ public class BookInfoFragment extends VisibleFragment {
         int randomIndex = PreferenceManager.getDefaultSharedPreferences(getActivity())
                 .getInt(RandomBookService.PREF_RANDOM_BOOK, 0);
         mBook = BookLab.get(getActivity()).getRecommendBook(randomIndex);
-        goodreadsStringRequest();
-        displaymBook();
+        loadRandomBookInfo();
     }
 
     protected void clearTextviews(){
@@ -190,9 +189,7 @@ public class BookInfoFragment extends VisibleFragment {
         String ratingCount = String.format(getResources().getString(R.string.rating_count), NumberFormat.getInstance(Locale.getDefault()).format(mBook.getmRatingCount()));
         mTextViewRatingCount.setText(ratingCount);
         mTextViewGRTitle.setText(getResources().getString(R.string.Goodreads_title));
-        mImageView.setImageBitmap(mBook.getmBitmap());
         mTextViewDescription.setText(mBook.getmDescription());
-
     }
 
 }
