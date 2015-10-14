@@ -140,13 +140,7 @@ public class GoodreadsFetcher {
                     Log.d(TAG, "Rating: " + rating);
                     if (!rating.equals(""))
                         book.setmAvgRating(Double.parseDouble(rating));
-                } else if (eventType == XmlPullParser.START_TAG &&
-                        XML_THUMB.equals(parser.getName())) {
-                    String url = parser.nextText();
-                    Log.d(TAG, "Url: " + url);
-                    if (!url.equals(""))
-                        book.setmThumbnailUrl(url);
-                } else if (eventType == XmlPullParser.START_TAG &&
+                }else if (eventType == XmlPullParser.START_TAG &&
                         XML_AUTHOR.equals(parser.getName())) {
                     String author = parser.nextText();
                     Log.d(TAG, "Author: " + author);

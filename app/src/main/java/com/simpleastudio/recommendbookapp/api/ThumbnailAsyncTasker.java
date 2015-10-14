@@ -23,8 +23,9 @@ public class ThumbnailAsyncTasker extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
         String bookTitle = params[0];
-            String urlString = new GoogleBooksFetcher(mAppContext).getThumbnailUrl(bookTitle);
-            return urlString;
+            //String urlString = new GoogleBooksFetcher(mAppContext).getThumbnailUrl(bookTitle);
+        String urlString = "";
+        return urlString;
     }
 
     @Override

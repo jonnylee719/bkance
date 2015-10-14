@@ -18,6 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.simpleastudio.recommendbookapp.api.GoodreadsFetcher;
+import com.simpleastudio.recommendbookapp.api.GoogleBooksFetcher;
 import com.simpleastudio.recommendbookapp.api.SingRequestQueue;
 import com.simpleastudio.recommendbookapp.api.TastekBooksFetcher;
 import com.simpleastudio.recommendbookapp.api.ThumbnailAsyncTasker;
@@ -91,7 +92,9 @@ public class BookInfoFragment extends VisibleFragment {
                 clearTextviews();
                 mImageView.setImageBitmap(null);
                 mBook = BookLab.get(getActivity()).getRandomBook();
-                goodreadsStringRequest();
+                loadRandomBookInfo();
+                String url = BookLab.get(getActivity()).getmPastRecList().get(0).getmThumbnailUrl();
+                Log.d(TAG, "URL of past book recommendation in BookLab: " + url);
             }
         });
 
@@ -190,6 +193,20 @@ public class BookInfoFragment extends VisibleFragment {
         }
         return results.getJSONObject(randomItemIndex);
         }
+    }
+
+    public void thumbnailImageRequest(){
+        Log.d(TAG, "Sending thumbnail Image Request");
+        String url = mBook.getmThumbnailUrl();
+        if(url == null || url.equals("")){
+
+        }
+    }
+
+    public void loadRandomBookInfo(){
+        goodreadsStringRequest();
+        new GoogleBooksFetcher(getActivity()).setThumbnail(mBook, mImageView);
+        BookLab.get(getActivity()).putToPastRec(mBook.getTag());
     }
 
     public void goodreadsStringRequest(){
