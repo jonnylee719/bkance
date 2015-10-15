@@ -31,7 +31,6 @@ public class Book implements Serializable {
     private int mRatingCount;
     private double mAvgRating;
     private String mThumbnailUrl;
-    private Bitmap mBitmap;
 
     public Book(String title){
         mTitle = title;
@@ -129,11 +128,4 @@ public class Book implements Serializable {
         this.mId = mId;
     }
 
-    public Bitmap getmBitmap() {
-        return mBitmap;
-    }
-
-    public void setmBitmap(Bitmap mBitmap) {
-        this.mBitmap = mBitmap;
-    }
 }

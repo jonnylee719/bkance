@@ -114,8 +114,6 @@ public class BookInfoFragment extends VisibleFragment {
             }
         });
 
-        mImageView.setImageBitmap(null);
-
         //Load mBook book info
         loadRandomBookInfo();
         return v;
