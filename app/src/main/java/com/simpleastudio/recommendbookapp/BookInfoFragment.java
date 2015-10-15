@@ -105,17 +105,29 @@ public class BookInfoFragment extends VisibleFragment {
         mSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clearTextviews();
-                mImageView.setImageBitmap(null);
                 mBook = BookLab.get(getActivity()).getRandomBook();
-                loadRandomBookInfo();
-                String url = BookLab.get(getActivity()).getmPastRecList().get(0).getmThumbnailUrl();
-                Log.d(TAG, "URL of past book recommendation in BookLab: " + url);
+                if(mBook != null){
+                    clearTextviews();
+                    mImageView.setImageBitmap(null);
+                    loadRandomBookInfo();
+                    String url = BookLab.get(getActivity()).getmPastRecList().get(0).getmThumbnailUrl();
+                    Log.d(TAG, "URL of past book recommendation in BookLab: " + url);
+                }
+                else{
+                    //Make a dialogue message
+                    Toast.makeText(getActivity(),
+                            "There are no more recommendations for this particular book.",
+                            Toast.LENGTH_SHORT)
+                            .show();
+                }
+
             }
         });
 
         //Load mBook book info
-        loadRandomBookInfo();
+        if(mBook != null){
+            loadRandomBookInfo();
+        }
         return v;
     }
 
