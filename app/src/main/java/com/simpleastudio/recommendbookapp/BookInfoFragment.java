@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -76,10 +77,19 @@ public class BookInfoFragment extends VisibleFragment {
                 .getInt(RandomBookService.PREF_RANDOM_BOOK, -1);
         if(randomBookIndex == -1){
             Book newRandomBook = BookLab.get(getActivity()).getRandomBook();
-            PreferenceManager.getDefaultSharedPreferences(getActivity())
-                    .edit()
-                    .putInt(RandomBookService.PREF_RANDOM_BOOK, newRandomBook.getTag());
-            mBook = newRandomBook;
+            if(newRandomBook != null){
+                PreferenceManager.getDefaultSharedPreferences(getActivity())
+                        .edit()
+                        .putInt(RandomBookService.PREF_RANDOM_BOOK, newRandomBook.getTag());
+                mBook = newRandomBook;
+            }
+            else{                       //ArrayList of recommendations is 0
+                //Make a dialogue message
+                Toast.makeText(getActivity(),
+                        "There are no more recommendations for this particular book.",
+                        Toast.LENGTH_SHORT)
+                        .show();
+            }
         }
         else {
             mBook = BookLab.get(getActivity()).getRecommendBook(randomBookIndex);
@@ -105,7 +115,7 @@ public class BookInfoFragment extends VisibleFragment {
         });
 
         mImageView.setImageBitmap(null);
-        
+
         //Load mBook book info
         loadRandomBookInfo();
         return v;

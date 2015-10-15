@@ -66,10 +66,16 @@ public class BookLab implements Serializable {
 
     public Book getRandomBook(){
         int size = mRecommendList.size();
-        int randomIndex = new Random().nextInt(size);
+        Book randBook;
+        if(size > 0){
+            int randomIndex = new Random().nextInt(size);
+            randBook = mRecommendList.get(randomIndex);
+            randBook.setTag(randomIndex);
+        }
+        else {
+            randBook = null;
+        }
 
-        Book randBook = mRecommendList.get(randomIndex);
-        randBook.setTag(randomIndex);
         return randBook;
     }
 
