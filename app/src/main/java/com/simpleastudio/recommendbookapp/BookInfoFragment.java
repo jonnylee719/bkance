@@ -93,6 +93,16 @@ public class BookInfoFragment extends VisibleFragment {
         }
         else {
             mBook = BookLab.get(getActivity()).getRecommendBook(randomBookIndex);
+            if(mBook == null){      //This could be because arraylist of recommendations is 0 or random index is outside the size of the arraylit
+                mBook = BookLab.get(getActivity()).getRandomBook();
+                if(mBook == null){
+                    //Make a dialogue message
+                    Toast.makeText(getActivity(),
+                            "There are no more recommendations for this particular book.",
+                            Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
         }
     }
 
