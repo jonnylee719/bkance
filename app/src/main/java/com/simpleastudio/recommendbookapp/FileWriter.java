@@ -17,6 +17,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.OptionalDataException;
+import java.io.OutputStreamWriter;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 
@@ -28,8 +29,7 @@ public class FileWriter {
     private String mFileName;
     private Context mAppContext;
 
-    public FileWriter(Context c, String fileName){
-        mFileName = fileName;
+    public FileWriter(Context c){
         mAppContext = c;
     }
 
@@ -70,6 +70,44 @@ public class FileWriter {
         }
 
         return fileString;
+    }
+
+    public void saveBookList(ArrayList<Book> bookList, String fileName){
+        try{
+            FileOutputStream fos = mAppContext.openFileOutput(fileName, Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(bookList);
+            os.close();
+            fos.close();
+        }catch (FileNotFoundException e){
+            Log.e(TAG,"File not found", e);
+        } catch (IOException e) {
+            Log.e(TAG, "IOException: ", e);
+        }
+    }
+
+    public ArrayList<Book> loadBookList(String fileName){
+        ArrayList<Book> bookList = new ArrayList<Book>();
+        try{
+            File mFile = new File(mAppContext.getFilesDir() + "/" + fileName);
+            if(!mFile.exists()){
+                return bookList;
+            }
+            InputStream fis = mAppContext.openFileInput(mFileName);
+            ObjectInputStream reader = new ObjectInputStream(fis);
+            bookList = (ArrayList<Book>) reader.readObject();
+            fis.close();
+            reader.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (StreamCorruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return bookList;
     }
 
     public void saveBookLab(BookLab bookLab){
