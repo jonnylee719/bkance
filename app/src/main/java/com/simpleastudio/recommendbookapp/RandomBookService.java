@@ -32,23 +32,26 @@ public class RandomBookService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        ConnectivityManager cm = (ConnectivityManager)
+        /*ConnectivityManager cm = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
         @SuppressWarnings("deprecation")
         boolean isNetworkAvailable = cm.getBackgroundDataSetting() &&
                 cm.getActiveNetworkInfo() != null;
         if(!isNetworkAvailable) return;
-
+*/
         Log.i(TAG, "Received an intent: " + intent);
 
-        int randomIndex = BookLab.get(this).getRandomBook().getTag();
-        Log.d(TAG, "Random index: " + randomIndex);
-        PreferenceManager.getDefaultSharedPreferences(this)
-                .edit()
-                .putInt(PREF_RANDOM_BOOK, randomIndex)
-                .commit();
-        sendBroadcast(new Intent(EVENT_NEW_RECOMMENDATION));
-        Log.d(TAG, "Broadcast intent should be sent.");
+        Book randomBook = BookLab.get(this).getRandomBook();
+
+        if(randomBook != null){
+            int randomIndex = randomBook.getTag();
+            PreferenceManager.getDefaultSharedPreferences(this)
+                    .edit()
+                    .putInt(PREF_RANDOM_BOOK, randomIndex)
+                    .commit();
+            sendBroadcast(new Intent(EVENT_NEW_RECOMMENDATION));
+            Log.d(TAG, "Broadcast intent should be sent.");
+        }
     }
 
     public static void setServiceAlarm(Context c, boolean isOn){
