@@ -1,6 +1,7 @@
 package com.simpleastudio.recommendbookapp;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,8 +11,10 @@ import java.util.Random;
  * Created by Jonathan on 9/10/2015.
  */
 public class BookLab implements Serializable {
+    private static final String TAG = "BookLab";
     private static BookLab mLab;
     private Context mAppContext;
+    public static final String FILENAME = "booklab.dat";
 
 
     private ArrayList<Book> mRecommendList;
@@ -23,17 +26,10 @@ public class BookLab implements Serializable {
         mPastRecList = new ArrayList<Book>();
     }
 
-    private static BookLab newInstance(Context c){
-        BookLab bookLab = loadBookLab(c);
-        if(bookLab == null){
-            bookLab = new BookLab(c);
-        }
-        return bookLab;
-    }
-
     public static BookLab get(Context c){
         if(mLab == null){
-            mLab = BookLab.newInstance(c.getApplicationContext());
+            Log.d(TAG, "Trying to load bookLab file");
+            mLab = BookLab.loadBookLab(c.getApplicationContext());
         }
         return mLab;
     }
@@ -43,6 +39,8 @@ public class BookLab implements Serializable {
     }
 
     public Book getRecommendBook(int index){
+        if(mRecommendList.size() < index)
+            return null;
         return mRecommendList.get(index);
     }
 
@@ -80,8 +78,13 @@ public class BookLab implements Serializable {
     }
 
     private static BookLab loadBookLab(Context c){
-        FileWriter fileWriter = new FileWriter(c);
-        BookLab bookLab = fileWriter.readBookLab();
+        BookLab bookLab;
+        FileWriter fileWriter = new FileWriter(c, FILENAME);
+        bookLab = fileWriter.readBookLab();
+        if(bookLab == null){
+            bookLab = new BookLab(c);
+        }
+
         return bookLab;
     }
 }

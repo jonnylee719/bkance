@@ -4,10 +4,13 @@ import android.content.Context;
 import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
@@ -22,16 +25,17 @@ import java.util.ArrayList;
  */
 public class FileWriter {
     private static final String TAG = "FileWriter";
-    private static final String FILE_NAME = "com.simpleastudio.recommendbookapp";
+    private String mFileName;
     private Context mAppContext;
 
-    public FileWriter(Context c){
+    public FileWriter(Context c, String fileName){
+        mFileName = fileName;
         mAppContext = c;
     }
 
     public void saveFile(String fileString){
         try{
-            FileOutputStream fos = mAppContext.openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
+            FileOutputStream fos = mAppContext.openFileOutput(mFileName, Context.MODE_PRIVATE);
             fos.write(fileString.getBytes());
             fos.close();
         } catch (FileNotFoundException fe) {
@@ -44,7 +48,7 @@ public class FileWriter {
     public String readFile(){
         String fileString = "";
         try{
-            FileInputStream inputStream = mAppContext.openFileInput(FILE_NAME);
+            FileInputStream inputStream = mAppContext.openFileInput(mFileName);
 
             if(inputStream != null){
                 InputStreamReader reader = new InputStreamReader(inputStream);
@@ -70,7 +74,7 @@ public class FileWriter {
 
     public void saveBookLab(BookLab bookLab){
         try{
-            FileOutputStream fos = mAppContext.openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
+            FileOutputStream fos = mAppContext.openFileOutput(mFileName, Context.MODE_PRIVATE);
             ObjectOutputStream os = new ObjectOutputStream(fos);
             os.writeObject(bookLab);
             os.close();
@@ -83,24 +87,30 @@ public class FileWriter {
     }
 
     public BookLab readBookLab(){
+        BookLab bookLab = null;
+
         try{
-            FileInputStream fis = mAppContext.openFileInput(FILE_NAME);
+            File mFile = new File(mAppContext.getFilesDir() + "/" + mFileName);
+            if(!mFile.exists()){
+                Log.d(TAG, "File does not exist");
+                return bookLab;
+            }
+            InputStream fis = new FileInputStream(mFile);
             ObjectInputStream is = new ObjectInputStream(fis);
-            BookLab bookLab = (BookLab) is.readObject();
+            bookLab = (BookLab) is.readObject();
             is.close();
             fis.close();
-            return bookLab;
         } catch (ClassNotFoundException e) {
             Log.e(TAG, "Booklab not found", e);
         } catch (OptionalDataException e) {
             Log.e(TAG, "OptionalDataException: ", e);
-        } catch (FileNotFoundException e) {
-            Log.e(TAG, "File not found. Exception: ", e);
+        } catch (FileNotFoundException fe){
+            Log.e(TAG, "File not found.");
         } catch (StreamCorruptedException e) {
             Log.e(TAG, "Stream Corrupted. Exception: ", e);
         } catch (IOException e) {
             Log.e(TAG, "IOException: ", e);
         }
-        return null;
+        return bookLab;
     }
 }

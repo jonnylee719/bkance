@@ -157,7 +157,7 @@ public class BookInfoFragment extends VisibleFragment {
     @Override
     public void onPause(){
         super.onPause();
-        FileWriter writer = new FileWriter(getActivity());
+        FileWriter writer = new FileWriter(getActivity(), BookLab.FILENAME);
         writer.saveBookLab(BookLab.get(getActivity()));
     }
 
