@@ -72,8 +72,10 @@ public class GoogleBooksFetcher {
         String thumbnailLink = "";
         boolean foundThumbnail = false;
         int index = 0;
-        while(!foundThumbnail){
+        int times = 0;
+        while(!foundThumbnail && times<20){
             try {
+                Log.d(TAG, "Number of searches done: " + times);
                 JSONArray items = object.getJSONArray("items");
                 JSONObject item = items.getJSONObject(index);
                 JSONObject volumeInfo = item.getJSONObject("volumeInfo");
@@ -82,6 +84,7 @@ public class GoogleBooksFetcher {
                     thumbnailLink = imageLinks.getString("thumbnail");
                     foundThumbnail = true;
                 }
+                times++;
                 index++;
             } catch (JSONException e) {
                 Log.e(TAG, "JSONException: ", e);

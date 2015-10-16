@@ -14,8 +14,8 @@ public class BookLab implements Serializable {
     private static final String TAG = "BookLab";
     private static BookLab mLab;
     private Context mAppContext;
-    private static final String FILENAME_REC_LIST = "recommendationList.dat";
-    private static final String FILENAME_REC_LIST_PAST = "pastRecommendationList.dat";
+    private static final String FILENAME_REC_LIST = "recommendationList.ser";
+    private static final String FILENAME_REC_LIST_PAST = "pastRecommendationList.ser";
 
 
     private ArrayList<Book> mRecommendList;
@@ -30,7 +30,7 @@ public class BookLab implements Serializable {
     public static BookLab get(Context c){
         if(mLab == null){
             Log.d(TAG, "Trying to load bookLab file");
-            mLab = BookLab.loadBookLab(c.getApplicationContext());
+            mLab = new BookLab(c.getApplicationContext());
         }
         return mLab;
     }
@@ -81,17 +81,6 @@ public class BookLab implements Serializable {
     private ArrayList<Book> loadList(String fileName){
         ArrayList<Book> bookList = new FileWriter(mAppContext).loadBookList(fileName);
         return bookList;
-    }
-
-    private static BookLab loadBookLab(Context c){
-        BookLab bookLab;
-        FileWriter fileWriter = new FileWriter(c);
-        bookLab = fileWriter.readBookLab();
-        if(bookLab == null){
-            bookLab = new BookLab(c);
-        }
-
-        return bookLab;
     }
 
     public void save(){

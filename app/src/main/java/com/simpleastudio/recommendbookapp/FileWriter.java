@@ -33,45 +33,6 @@ public class FileWriter {
         mAppContext = c;
     }
 
-    public void saveFile(String fileString){
-        try{
-            FileOutputStream fos = mAppContext.openFileOutput(mFileName, Context.MODE_PRIVATE);
-            fos.write(fileString.getBytes());
-            fos.close();
-        } catch (FileNotFoundException fe) {
-            Log.e(TAG, "File not found. Exception: ", fe);
-        } catch (IOException ioe) {
-            Log.e(TAG, "IOException: ", ioe);
-        }
-    }
-
-    public String readFile(){
-        String fileString = "";
-        try{
-            FileInputStream inputStream = mAppContext.openFileInput(mFileName);
-
-            if(inputStream != null){
-                InputStreamReader reader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(reader);
-                String line = "";
-                StringBuilder stringBuilder = new StringBuilder();
-
-                while((line = bufferedReader.readLine()) != null){
-                    stringBuilder.append(line);
-                }
-
-                inputStream.close();
-                fileString = stringBuilder.toString();
-            }
-        } catch (FileNotFoundException fe){
-            Log.e(TAG, "File not found. Exception: ", fe);
-        } catch (IOException ioe){
-            Log.e(TAG, "IOException: ", ioe);
-        }
-
-        return fileString;
-    }
-
     public void saveBookList(ArrayList<Book> bookList, String fileName){
         try{
             FileOutputStream fos = mAppContext.openFileOutput(fileName, Context.MODE_PRIVATE);
@@ -79,6 +40,7 @@ public class FileWriter {
             os.writeObject(bookList);
             os.close();
             fos.close();
+            Log.d(TAG, "Arraylist is saved in " + fileName + ".");
         }catch (FileNotFoundException e){
             Log.e(TAG,"File not found", e);
         } catch (IOException e) {
@@ -91,6 +53,7 @@ public class FileWriter {
         try{
             File mFile = new File(mAppContext.getFilesDir() + "/" + fileName);
             if(!mFile.exists()){
+                Log.d(TAG, "arraylist file does not exist.");
                 return bookList;
             }
             InputStream fis = mAppContext.openFileInput(mFileName);
@@ -106,49 +69,10 @@ public class FileWriter {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+        } catch (Exception e){
+            Log.e(TAG, "Exception: ", e);
+            return bookList;
         }
         return bookList;
-    }
-
-    public void saveBookLab(BookLab bookLab){
-        try{
-            FileOutputStream fos = mAppContext.openFileOutput(mFileName, Context.MODE_PRIVATE);
-            ObjectOutputStream os = new ObjectOutputStream(fos);
-            os.writeObject(bookLab);
-            os.close();
-            fos.close();
-        } catch (FileNotFoundException e) {
-            Log.e(TAG, "File not found exception: ", e);
-        } catch (IOException e) {
-            Log.e(TAG, "IOException: ", e);
-        }
-    }
-
-    public BookLab readBookLab(){
-        BookLab bookLab = null;
-
-        try{
-            File mFile = new File(mAppContext.getFilesDir() + "/" + mFileName);
-            if(!mFile.exists()){
-                Log.d(TAG, "File does not exist");
-                return bookLab;
-            }
-            InputStream fis = new FileInputStream(mFile);
-            ObjectInputStream is = new ObjectInputStream(fis);
-            bookLab = (BookLab) is.readObject();
-            is.close();
-            fis.close();
-        } catch (ClassNotFoundException e) {
-            Log.e(TAG, "Booklab not found", e);
-        } catch (OptionalDataException e) {
-            Log.e(TAG, "OptionalDataException: ", e);
-        } catch (FileNotFoundException fe){
-            Log.e(TAG, "File not found.");
-        } catch (StreamCorruptedException e) {
-            Log.e(TAG, "Stream Corrupted. Exception: ", e);
-        } catch (IOException e) {
-            Log.e(TAG, "IOException: ", e);
-        }
-        return bookLab;
     }
 }

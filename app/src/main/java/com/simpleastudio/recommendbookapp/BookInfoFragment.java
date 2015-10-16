@@ -40,6 +40,7 @@ import butterknife.ButterKnife;
 public class BookInfoFragment extends VisibleFragment {
     private static final String TAG = "BookInfoFragment";
     public static final int INPUT_BOOK_REQUEST = 1;
+    private static final int SETTING_REQUEST = 2;
     @Bind(R.id.toolbar_search_button) protected Button mSearchButton;
     @Bind(R.id.textview_title) protected TextView mTextViewTitle;
     @Bind(R.id.textview_author) protected TextView mTextViewAuthor;
@@ -49,6 +50,7 @@ public class BookInfoFragment extends VisibleFragment {
     @Bind(R.id.textview_rating_count) protected TextView mTextViewRatingCount;
     @Bind(R.id.textview_description) protected TextView mTextViewDescription;
     @Bind(R.id.imageview_thumbnail) protected ImageView mImageView;
+    @Bind(R.id.toolbar_setting_button) protected Button mSettingButton;
     private String mNewSearchTerm;
     private JSONObject mSearchResults;
 
@@ -116,14 +118,13 @@ public class BookInfoFragment extends VisibleFragment {
             @Override
             public void onClick(View v) {
                 mBook = BookLab.get(getActivity()).getRandomBook();
-                if(mBook != null){
+                if (mBook != null) {
                     clearTextviews();
                     mImageView.setImageBitmap(null);
                     loadRandomBookInfo();
-                    String url = BookLab.get(getActivity()).getmPastRecList().get(0).getmThumbnailUrl();
+                    String url = mBook.getmThumbnailUrl();
                     Log.d(TAG, "URL of past book recommendation in BookLab: " + url);
-                }
-                else{
+                } else {
                     //Make a dialogue message
                     Toast.makeText(getActivity(),
                             "There are no more recommendations for this particular book.",
@@ -131,6 +132,14 @@ public class BookInfoFragment extends VisibleFragment {
                             .show();
                 }
 
+            }
+        });
+        
+        mSettingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), SettingActivity.class);
+                startActivityForResult(i, SETTING_REQUEST);
             }
         });
 
@@ -180,7 +189,6 @@ public class BookInfoFragment extends VisibleFragment {
     public void loadRandomBookInfo(){
         goodreadsStringRequest();
         new GoogleBooksFetcher(getActivity()).setThumbnail(mBook, mImageView);
-        BookLab.get(getActivity()).putToPastRec(mBook.getTag());
     }
 
     public void goodreadsStringRequest(){
@@ -227,6 +235,7 @@ public class BookInfoFragment extends VisibleFragment {
         mTextViewRatingCount.setText(ratingCount);
         mTextViewGRTitle.setText(getResources().getString(R.string.Goodreads_title));
         mTextViewDescription.setText(mBook.getmDescription());
+        BookLab.get(getActivity()).putToPastRec(mBook.getTag());
     }
 
 }
