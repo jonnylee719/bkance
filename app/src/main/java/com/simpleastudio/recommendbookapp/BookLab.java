@@ -43,9 +43,16 @@ public class BookLab implements Serializable {
     }
 
     public Book getRecommendBook(int index){
-        if(mRecommendList.size() < index)
+        if(mRecommendList.size() < index || mRecommendList.size() == 0)
             return null;
-        return mRecommendList.get(index);
+        Book recommendBook;
+        try{             //Because of thread problem, index might no longer be accurate
+            recommendBook = mRecommendList.get(index);
+        } catch (Exception e){
+            recommendBook = null;
+            Log.e(TAG, "Exception: ", e);
+        }
+        return recommendBook;
     }
 
     public void setmRecommendList(ArrayList<Book> mRecommendList) {
