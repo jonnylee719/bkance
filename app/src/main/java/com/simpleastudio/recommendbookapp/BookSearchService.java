@@ -60,7 +60,10 @@ public class BookSearchService extends IntentService {
                 public void onResponse(JSONObject response) {
                     ArrayList<Book> newRecList = parseJsonResult(response);
                     //Store results in BookLab
-                    BookLab.get(getApplicationContext()).setmRecommendList(newRecList);
+                    for(int i = 0; i< newRecList.size(); i++){
+                        Book b = newRecList.get(i);
+                        BookLab.get(getApplicationContext()).addBook(b);
+                    }
                     //Saving searched book list at internal storage
                     BookLab.get(getApplicationContext()).save();
 
@@ -90,7 +93,7 @@ public class BookSearchService extends IntentService {
             JSONObject similar = object.getJSONObject("Similar");
             JSONArray results = similar.getJSONArray("Results");
             int totalItems = results.length();
-            int parseItems = 0;
+            int parseItems;
             if(totalItems >= 50){
                 parseItems = 50;
             }

@@ -5,16 +5,8 @@ import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.ConnectivityManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
-
-import com.simpleastudio.recommendbookapp.api.GoodreadsFetcher;
-import com.simpleastudio.recommendbookapp.api.GoogleBooksFetcher;
-
-import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Created by Jonathan on 10/10/2015.
@@ -25,6 +17,7 @@ public class RandomBookService extends IntentService {
     private static final int RAND_INTERVAL = 1000*15;
     public static final String EVENT_NEW_RECOMMENDATION =
             "com.simpleastudio.recommendbookapp.NEW_RANDOM";
+    public static final String PREF_RANDOM_REC = "randomRecTitle";
 
     public RandomBookService(){
         super(TAG);
@@ -41,14 +34,9 @@ public class RandomBookService extends IntentService {
 */
         Log.i(TAG, "Received an intent: " + intent);
 
-        Book randomBook = BookLab.get(this).getRandomBook();
+        Book recommendation = BookLab.get(this).getRandomBook();
 
-        if(randomBook != null){
-            int randomIndex = randomBook.getTag();
-            PreferenceManager.getDefaultSharedPreferences(this)
-                    .edit()
-                    .putInt(PREF_RANDOM_BOOK, randomIndex)
-                    .commit();
+        if(recommendation != null){
             sendBroadcast(new Intent(EVENT_NEW_RECOMMENDATION));
             Log.d(TAG, "Broadcast intent should be sent.");
         }
