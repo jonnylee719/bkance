@@ -3,6 +3,9 @@ package com.simpleastudio.recommendbookapp;
 import android.content.Context;
 import android.util.Log;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
@@ -14,8 +17,8 @@ public class BookLab implements Serializable {
     private static final String TAG = "BookLab";
     private static BookLab mLab;
     private Context mAppContext;
-    private static final String FILENAME_REC_LIST = "recommendationList.ser";
-    private static final String FILENAME_REC_LIST_PAST = "pastRecommendationList.ser";
+    private static final String FILENAME_REC_LIST = "recommendationList.json";
+    private static final String FILENAME_REC_LIST_PAST = "pastRecommendationList.json";
 
 
     private ArrayList<Book> mRecommendList;
@@ -79,13 +82,26 @@ public class BookLab implements Serializable {
     }
 
     private ArrayList<Book> loadList(String fileName){
-        ArrayList<Book> bookList = new FileWriter(mAppContext).loadBookList(fileName);
+        ArrayList<Book> bookList = null;
+        try {
+            bookList = new FileWriter(mAppContext).loadBooks(fileName);
+        } catch (Exception e) {
+            bookList = new ArrayList<Book>();
+            Log.e(TAG, "Error loading booklists.");
+        }
         return bookList;
     }
 
-    public void save(){
+    public boolean save(){
         FileWriter fileWriter = new FileWriter(mAppContext);
-        fileWriter.saveBookList(mRecommendList, FILENAME_REC_LIST);
-        fileWriter.saveBookList(mPastRecList, FILENAME_REC_LIST_PAST);
+        try {
+            fileWriter.saveBooks(mRecommendList, FILENAME_REC_LIST);
+            fileWriter.saveBooks(mPastRecList, FILENAME_REC_LIST_PAST);
+            Log.d(TAG, "Arraylists are saved.");
+            return true;
+        } catch (Exception e) {
+            Log.e(TAG, "Error in saving lists.: ", e);
+            return false;
+        }
     }
 }
