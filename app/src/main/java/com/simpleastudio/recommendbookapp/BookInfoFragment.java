@@ -111,6 +111,7 @@ public class BookInfoFragment extends VisibleFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView.");
         View v = inflater.inflate(R.layout.fragment_book_info, container, false);
         ButterKnife.bind(this, v);
 
@@ -153,6 +154,7 @@ public class BookInfoFragment extends VisibleFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "OnActivityResult.");
     }
 
     @Override
@@ -199,16 +201,14 @@ public class BookInfoFragment extends VisibleFragment {
                     @Override
                     public void onResponse(String response) {
                         Book resultBook = GoodreadsFetcher.parseXmlResponse(response);
-                        Book book = BookLab.get(getActivity()).getRecommendBook(mBook.getTag());
-                        book.setmDay(resultBook.getmDay());
-                        book.setmMonth(resultBook.getmMonth());
-                        book.setmYear(resultBook.getmYear());
-                        book.setmRatingCount(resultBook.getmRatingCount());
-                        book.setmAvgRating(resultBook.getmAvgRating());
-                        book.setmAuthors(resultBook.getmAuthors());
-                        book.setmThumbnailUrl(resultBook.getmThumbnailUrl());
-                        book.setmId(resultBook.getmId());
-                        mBook = book;
+                        mBook.setmDay(resultBook.getmDay());
+                        mBook.setmMonth(resultBook.getmMonth());
+                        mBook.setmYear(resultBook.getmYear());
+                        mBook.setmRatingCount(resultBook.getmRatingCount());
+                        mBook.setmAvgRating(resultBook.getmAvgRating());
+                        mBook.setmAuthors(resultBook.getmAuthors());
+                        mBook.setmThumbnailUrl(resultBook.getmThumbnailUrl());
+                        mBook.setmId(resultBook.getmId());
 
                         BookLab.get(getActivity()).putToPastRec(mBook.getTag());
 
@@ -235,7 +235,6 @@ public class BookInfoFragment extends VisibleFragment {
         mTextViewRatingCount.setText(ratingCount);
         mTextViewGRTitle.setText(getResources().getString(R.string.Goodreads_title));
         mTextViewDescription.setText(mBook.getmDescription());
-        BookLab.get(getActivity()).putToPastRec(mBook.getTag());
     }
 
 }

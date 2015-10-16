@@ -1,5 +1,6 @@
 package com.simpleastudio.recommendbookapp;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -55,5 +56,17 @@ public class SettingFragment extends Fragment {
             }
         });
         return v;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == INPUT_BOOK_REQUEST){
+            if(resultCode == Activity.RESULT_OK){
+                String newTitle = PreferenceManager.getDefaultSharedPreferences(getActivity())
+                        .getString(BookInputFragment.PREF_INITIAL_BOOK, null);
+                mTitleInputButton.setText(newTitle);
+            }
+        }
     }
 }
