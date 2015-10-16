@@ -54,8 +54,12 @@ public class BookLab implements Serializable {
 
     public void putToPastRec(int index){
         Book pastRecommendation = mRecommendList.get(index);
+        //Take away tag since it's no longer in recList,
+        //TODO: Add new tag according to its place in pastRecList
+        pastRecommendation.setTag(-1);
         mPastRecList.add(pastRecommendation);
         mRecommendList.remove(index);
+        Log.d(TAG, pastRecommendation.getmTitle() + " is put to PastRecList.");
     }
 
     public ArrayList<Book> getmRecommendList(){

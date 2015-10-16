@@ -118,6 +118,10 @@ public class BookInfoFragment extends VisibleFragment {
         mSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Puts current mBook item to pastRecList
+                if(mBook != null){
+                    BookLab.get(getActivity()).putToPastRec(mBook.getTag());
+                }
                 mBook = BookLab.get(getActivity()).getRandomBook();
                 if (mBook != null) {
                     clearTextviews();
@@ -159,6 +163,9 @@ public class BookInfoFragment extends VisibleFragment {
 
     @Override
     public void actionOnReceive(){
+        if(mBook != null){
+            BookLab.get(getActivity()).putToPastRec(mBook.getTag());
+        }
         int randomIndex = PreferenceManager.getDefaultSharedPreferences(getActivity())
                 .getInt(RandomBookService.PREF_RANDOM_BOOK, 0);
         mBook = BookLab.get(getActivity()).getRecommendBook(randomIndex);
@@ -210,7 +217,6 @@ public class BookInfoFragment extends VisibleFragment {
                         mBook.setmThumbnailUrl(resultBook.getmThumbnailUrl());
                         mBook.setmId(resultBook.getmId());
 
-                        BookLab.get(getActivity()).putToPastRec(mBook.getTag());
 
                         displaymBook();
                     }
