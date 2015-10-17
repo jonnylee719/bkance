@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Button;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,6 +29,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StreamCorruptedException;
 import java.io.Writer;
+import java.lang.reflect.Type;
 import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -110,18 +112,14 @@ public class FileWriter {
 
     public void saveBooks(Hashtable<String, Book> table, String fileName) throws JSONException,
             IOException{
-        JSONArray array = new JSONArray();
         Gson gson = new Gson();
-        Enumeration e = table.keys();
-        while(e.hasMoreElements()){
-            array.put(gson.toJson(e.nextElement()));
-        }
+        String json = gson.toJson(table);
 
         Writer writer = null;
         try{
             OutputStream out = mAppContext.openFileOutput(fileName, Context.MODE_PRIVATE);
             writer = new OutputStreamWriter(out);
-            writer.write(array.toString());
+            writer.write(json);
         }finally {
             if(writer!=null){
                 writer.close();
@@ -140,12 +138,11 @@ public class FileWriter {
             while((line = reader.readLine()) != null){
                 jsonString.append(line);
             }
-            JSONArray array = (JSONArray) new JSONTokener(jsonString.toString()).nextValue();
+
+            Type hashTableType = new TypeToken<Hashtable<String, Book>>(){}.getType();
             Gson gson = new Gson();
-            for(int i = 0; i < array.length(); i++){
-                Book book = gson.fromJson(array.getString(i), Book.class);
-                hashtable.put(book.getmTitle(), book);
-            }
+            hashtable = gson.fromJson(jsonString.toString(), hashTableType);
+
         }catch (FileNotFoundException fe){}
         finally {
             if(reader!= null){

@@ -64,7 +64,7 @@ public class BookLab implements Serializable {
             hashtable = new FileWriter(mAppContext).loadBooks(fileName);
         } catch (Exception e) {
             hashtable = new Hashtable<String, Book>();
-            Log.e(TAG, "Error loading booklists.");
+            Log.e(TAG, "Error loading booklists.", e);
         }
         return hashtable;
     }
