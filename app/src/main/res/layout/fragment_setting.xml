@@ -42,6 +42,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/textview_current_book_title"
+        android:textAllCaps="false"
+        android:gravity="left|center_vertical"
         />
 
 
