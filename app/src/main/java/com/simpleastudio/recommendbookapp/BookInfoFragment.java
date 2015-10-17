@@ -134,9 +134,9 @@ public class BookInfoFragment extends VisibleFragment {
         mSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Think about if the person keeps pressing search button
-                //TODO prevent him from clicking again until book is loaded?
-                SingRequestQueue.getInstance(getActivity()).getRequestQueue().cancelAll("GET");
+                //Stops the user from clicking continuously
+                //TODO Add animation to show loading
+               mSearchButton.setClickable(false);
 
                 mBook = BookLab.get(getActivity()).getRandomBook();
                 if (mBook != null) {
@@ -261,6 +261,11 @@ public class BookInfoFragment extends VisibleFragment {
         mTextViewRatingCount.setText(ratingCount);
         mTextViewGRTitle.setText(getResources().getString(R.string.Goodreads_title));
         mTextViewDescription.setText(mBook.getmDescription());
+
+        //Enable search button to be clickable if it's not currently
+        if(!mSearchButton.isClickable()){
+            mSearchButton.setClickable(true);
+        }
     }
 
 }
