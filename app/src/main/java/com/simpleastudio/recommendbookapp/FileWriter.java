@@ -1,6 +1,7 @@
 package com.simpleastudio.recommendbookapp;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -63,7 +64,7 @@ public class FileWriter {
             Type hashTableType = new TypeToken<Hashtable<String, Book>>(){}.getType();
             Gson gson = new Gson();
             hashtable = gson.fromJson(jsonString.toString(), hashTableType);
-
+            Log.d(TAG, "File loaded.");
         }catch (FileNotFoundException fe){}
         finally {
             if(reader!= null){

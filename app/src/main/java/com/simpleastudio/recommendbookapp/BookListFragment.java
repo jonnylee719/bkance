@@ -7,9 +7,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+import com.simpleastudio.recommendbookapp.api.SingRequestQueue;
 import com.simpleastudio.recommendbookapp.model.Book;
 import com.simpleastudio.recommendbookapp.model.BookLab;
 
@@ -47,6 +49,7 @@ public class BookListFragment extends Fragment {
 
     public class BookCardAdaptor extends RecyclerView.Adapter<BookCardAdaptor.ViewHolder>{
         private ArrayList<Book> mList;
+        ImageLoader imageLoader = SingRequestQueue.getInstance(getActivity()).getImageLoader();
 
         public ArrayList<Book> tableToList(Hashtable<String, Book> table){
             ArrayList<Book> list = new ArrayList<Book>();
@@ -82,10 +85,12 @@ public class BookListFragment extends Fragment {
             String avgRating = String.format(getResources().getString(R.string.book_rating), b.getmAvgRating());
             holder.mTextviewRating.setText(avgRating);
             holder.mTextviewDescription.setText(b.getmDescription());
+            holder.mNetworkImageView.setImageUrl(b.getmThumbnailUrl(), imageLoader);
+
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder{
-            protected ImageView mImageView;
+            protected NetworkImageView mNetworkImageView;
             protected TextView mTextviewTitle;
             protected TextView mTextviewAuthor;
             protected TextView mTextviewRating;
@@ -93,7 +98,7 @@ public class BookListFragment extends Fragment {
 
             public ViewHolder(View itemView) {
                 super(itemView);
-                mImageView = (ImageView) itemView.findViewById(R.id.card_imageview_thumbnail);
+                mNetworkImageView = (NetworkImageView) itemView.findViewById(R.id.card_imageview_thumbnail);
                 mTextviewTitle = (TextView) itemView.findViewById(R.id.card_textview_title);
                 mTextviewAuthor = (TextView) itemView.findViewById(R.id.card_textview_author);
                 mTextviewRating = (TextView) itemView.findViewById(R.id.card_textview_rating);
