@@ -68,7 +68,7 @@ public class GoogleBooksFetcher {
         return in.replace(" ", SPACE_ENCODED);
     }
 
-    public String getThumbnailUrl(JSONObject object){
+    public String getThumbnailUrl(JSONObject object, String title){
         String thumbnailLink = "";
         boolean foundThumbnail = false;
         int index = 0;
@@ -79,28 +79,31 @@ public class GoogleBooksFetcher {
                 JSONArray items = object.getJSONArray("items");
                 JSONObject item = items.getJSONObject(index);
                 JSONObject volumeInfo = item.getJSONObject("volumeInfo");
-                JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
-                if(imageLinks != null){
-                    thumbnailLink = imageLinks.getString("thumbnail");
-                    foundThumbnail = true;
+                String bookTitle = volumeInfo.getString("title");
+                if(bookTitle.toLowerCase().equals(title.toLowerCase())){
+                    JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
+                    if(imageLinks != null){
+                        thumbnailLink = imageLinks.getString("thumbnail");
+                        foundThumbnail = true;
+                    }
                 }
-                times++;
                 index++;
             } catch (JSONException e) {
                 Log.e(TAG, "JSONException: ", e);
             }
+            times++;
         }
         return thumbnailLink;
     }
 
     public void setThumbnail(final Book b, final ImageView iv){
-        String title = b.getmTitle();
+        final String title = b.getmTitle();
         //Getting the thumbnail url using Json request
         String url = searchBookUrl(title);
         JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                String thumbnailUrl = getThumbnailUrl(response);
+                String thumbnailUrl = getThumbnailUrl(response, title);
                 b.setmThumbnailUrl(thumbnailUrl);
                 setImageView(b.getmThumbnailUrl(), iv);
             }
