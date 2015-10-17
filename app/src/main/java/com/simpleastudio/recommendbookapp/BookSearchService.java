@@ -59,6 +59,8 @@ public class BookSearchService extends IntentService {
                 @Override
                 public void onResponse(JSONObject response) {
                     ArrayList<Book> newRecList = parseJsonResult(response);
+                    //Clears recommendations of the previous book
+                    BookLab.get(getApplicationContext()).clearRecTable();
                     //Store results in BookLab
                     for(int i = 0; i< newRecList.size(); i++){
                         Book b = newRecList.get(i);

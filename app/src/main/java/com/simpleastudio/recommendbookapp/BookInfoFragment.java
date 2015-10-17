@@ -1,5 +1,6 @@
 package com.simpleastudio.recommendbookapp;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
@@ -142,6 +143,7 @@ public class BookInfoFragment extends VisibleFragment {
                     clearTextviews();
                     mImageView.setImageBitmap(null);
                     loadRandomBookInfo();
+                    //For checking flow
                     String url = mBook.getmThumbnailUrl();
                     Log.d(TAG, "URL of past book recommendation in BookLab: " + url);
                 } else {

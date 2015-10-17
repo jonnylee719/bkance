@@ -102,7 +102,7 @@ public class TastekBooksFetcher {
                 line = responseReader.readLine();
             }
             String responseString = builder.toString();
-            Log.d(TAG, "Response String: " + responseString);
+            //Log.d(TAG, "Response String: " + responseString);
             return new JSONObject(responseString);
         } catch (JSONException e) {
             Log.e(TAG, "Json exception: " + e);

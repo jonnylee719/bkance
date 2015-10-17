@@ -69,6 +69,10 @@ public class BookLab implements Serializable {
         return hashtable;
     }
 
+    public void clearRecTable(){
+        mRecTable.clear();
+    }
+
     public Book getRecommendedBook(String title){
         if(mPastRecTable.containsKey(title)){
             return mPastRecTable.get(title);
