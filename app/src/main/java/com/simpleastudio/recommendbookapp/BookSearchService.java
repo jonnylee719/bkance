@@ -85,8 +85,6 @@ public class BookSearchService extends IntentService {
                     .putBoolean(PREF_SEARCHED_TITLE, true)
                     .commit();
         }
-
-        RandomBookService.setServiceAlarm(this, true);
     }
 
     private ArrayList<Book> parseJsonResult(JSONObject object) {
@@ -108,7 +106,6 @@ public class BookSearchService extends IntentService {
                 JSONObject item = results.getJSONObject(i);
                 Book b = new Book(item.getString("Name"));
                 b.setmDescription(item.getString("wTeaser"));
-                Log.d(TAG, "Book description: " + b.getmDescription());
                 bookList.add(b);
             }
 

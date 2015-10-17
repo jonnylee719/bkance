@@ -32,7 +32,8 @@ public class VisibleFragment extends Fragment {
     public void onResume(){
         super.onResume();
         IntentFilter filter = new IntentFilter(RandomBookService.EVENT_NEW_RECOMMENDATION);
-        getActivity().registerReceiver(mOnRandomBookNotification, filter);
+        getActivity().registerReceiver(mOnRandomBookNotification, filter,
+                RandomBookService.PERM_PRIVATE, null);
     }
 
     @Override

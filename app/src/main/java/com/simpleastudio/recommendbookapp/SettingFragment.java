@@ -22,6 +22,7 @@ import butterknife.ButterKnife;
  */
 public class SettingFragment extends Fragment {
     private static final String TAG = "SettingFragment";
+    private static final String PREF_CHECKBOX = "checkboxboolean";
     private static final int INPUT_BOOK_REQUEST = 1;
     @Bind(R.id.button_current_book)
     Button mTitleInputButton;
@@ -58,10 +59,17 @@ public class SettingFragment extends Fragment {
             }
         });
 
+        boolean checkboxState = PreferenceManager.getDefaultSharedPreferences(getActivity())
+                .getBoolean(PREF_CHECKBOX, false);
+        mDailyRecCheckbox.setChecked(checkboxState);
         mDailyRecCheckbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkBoxTick = mDailyRecCheckbox.isChecked();
+                if (mDailyRecCheckbox.isChecked()) {
+                    RandomBookService.setServiceAlarm(getActivity(), true);
+                } else {
+                    RandomBookService.setServiceAlarm(getActivity(), false);
+                }
             }
         });
 
@@ -80,5 +88,16 @@ public class SettingFragment extends Fragment {
                 mTitleInputButton.setText(newTitle);
             }
         }
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+
+        //Saves state of checkbox
+        PreferenceManager.getDefaultSharedPreferences(getActivity())
+                .edit()
+                .putBoolean(PREF_CHECKBOX, mDailyRecCheckbox.isChecked())
+                .commit();
     }
 }
