@@ -1,4 +1,4 @@
-package com.simpleastudio.recommendbookapp;
+package com.simpleastudio.recommendbookapp.service;
 
 import android.app.IntentService;
 import android.content.Context;
@@ -11,6 +11,9 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.simpleastudio.recommendbookapp.Book;
+import com.simpleastudio.recommendbookapp.BookInputFragment;
+import com.simpleastudio.recommendbookapp.BookLab;
 import com.simpleastudio.recommendbookapp.api.SingRequestQueue;
 import com.simpleastudio.recommendbookapp.api.TastekBooksFetcher;
 

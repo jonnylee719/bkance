@@ -1,6 +1,5 @@
 package com.simpleastudio.recommendbookapp;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
@@ -20,6 +19,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.simpleastudio.recommendbookapp.api.GoodreadsFetcher;
 import com.simpleastudio.recommendbookapp.api.GoogleBooksFetcher;
 import com.simpleastudio.recommendbookapp.api.SingRequestQueue;
+import com.simpleastudio.recommendbookapp.service.RandomBookService;
 
 import org.json.JSONObject;
 

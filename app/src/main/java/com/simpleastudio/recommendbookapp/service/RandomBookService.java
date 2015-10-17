@@ -1,4 +1,4 @@
-package com.simpleastudio.recommendbookapp;
+package com.simpleastudio.recommendbookapp.service;
 
 import android.app.AlarmManager;
 import android.app.IntentService;
@@ -8,6 +8,9 @@ import android.content.Intent;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.simpleastudio.recommendbookapp.Book;
+import com.simpleastudio.recommendbookapp.BookLab;
 
 /**
  * Created by Jonathan on 10/10/2015.

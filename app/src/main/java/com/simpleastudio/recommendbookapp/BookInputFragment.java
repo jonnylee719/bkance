@@ -11,11 +11,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.util.zip.Inflater;
+import com.simpleastudio.recommendbookapp.service.BookSearchService;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by Jonathan on 9/10/2015.
