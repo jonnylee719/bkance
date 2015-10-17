@@ -35,8 +35,13 @@ public class RandomBookService extends IntentService {
         Log.i(TAG, "Received an intent: " + intent);
 
         Book recommendation = BookLab.get(this).getRandomBook();
+        Log.d(TAG, "recommended book: " + recommendation.getmTitle());
 
         if(recommendation != null){
+            PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                    .edit()
+                    .putString(PREF_RANDOM_REC, recommendation.getmTitle())
+                    .commit();
             sendBroadcast(new Intent(EVENT_NEW_RECOMMENDATION));
             Log.d(TAG, "Broadcast intent should be sent.");
         }

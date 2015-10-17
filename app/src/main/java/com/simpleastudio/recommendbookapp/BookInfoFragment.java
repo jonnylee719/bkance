@@ -70,7 +70,7 @@ public class BookInfoFragment extends VisibleFragment {
 
         //Initiate mBook
         String recBookTitle = PreferenceManager.getDefaultSharedPreferences(getActivity())
-                .getString(RandomBookService.PREF_RANDOM_REC, null);
+                .getString(BookLab.PREF_REC, null);
         if(recBookTitle == null){
             Book newRecBook = BookLab.get(getActivity()).getRandomBook();
             if(newRecBook != null){
@@ -87,18 +87,7 @@ public class BookInfoFragment extends VisibleFragment {
         }
         else{
             //Get recommendation stored in Shared Pref to start with
-            mBook = BookLab.get(getActivity()).getBook(recBookTitle);
-            if(mBook == null){
-                //The book stored in Shared Pref no longer exists, get new recommendation
-                //This situation should not exist normally
-                mBook = BookLab.get(getActivity()).getRandomBook();
-                if(mBook == null){  //There's no more recommendation for this book
-                    Toast.makeText(getActivity(),
-                            "There are no more recommendations for this particular book.",
-                            Toast.LENGTH_SHORT)
-                            .show();
-                }
-            }
+            mBook = BookLab.get(getActivity()).getRecommendedBook(recBookTitle);
         }
 
         /*int randomBookIndex = PreferenceManager.getDefaultSharedPreferences(getActivity())
@@ -120,7 +109,7 @@ public class BookInfoFragment extends VisibleFragment {
             }
         }
         else {
-            mBook = BookLab.get(getActivity()).getBook(randomBookIndex);
+            mBook = BookLab.get(getActivity()).getook(randomBookIndex);
             if(mBook == null){      //This could be because arraylist of recommendations is 0 or random index is outside the size of the arraylit
                 mBook = BookLab.get(getActivity()).getRandomBook();
                 if(mBook == null){
@@ -147,10 +136,7 @@ public class BookInfoFragment extends VisibleFragment {
                 //Think about if the person keeps pressing search button
                 //TODO prevent him from clicking again until book is loaded?
                 SingRequestQueue.getInstance(getActivity()).getRequestQueue().cancelAll("GET");
-                //Puts current mBook item to pastRecList
-                if(mBook != null){
-                    BookLab.get(getActivity()).putToPastRecTable(mBook.getmTitle());
-                }
+
                 mBook = BookLab.get(getActivity()).getRandomBook();
                 if (mBook != null) {
                     clearTextviews();
@@ -192,12 +178,17 @@ public class BookInfoFragment extends VisibleFragment {
 
     @Override
     public void actionOnReceive(){
-        if(mBook != null){
-            BookLab.get(getActivity()).putToPastRecTable(mBook.getmTitle());
-        }
         String recBookTitle = PreferenceManager.getDefaultSharedPreferences(getActivity())
                 .getString(RandomBookService.PREF_RANDOM_REC, null);
-        mBook = BookLab.get(getActivity()).getBook(recBookTitle);
+        Log.d(TAG, "RecBookTitle: " + recBookTitle);
+
+        PreferenceManager.getDefaultSharedPreferences(getActivity())
+                .edit()
+                .putString(BookLab.PREF_REC, recBookTitle)
+                .commit();
+
+        mBook = BookLab.get(getActivity()).getRecommendedBook(recBookTitle);
+        Log.d(TAG, "Book fetched: " + mBook.getmTitle());
         loadRandomBookInfo();
     }
 

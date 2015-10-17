@@ -4,13 +4,10 @@ import android.content.Context;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Random;
 
 /**
  * Created by Jonathan on 9/10/2015.
@@ -21,7 +18,7 @@ public class BookLab implements Serializable {
     private Context mAppContext;
     private static final String FILENAME_REC_LIST = "recommendationList.json";
     private static final String FILENAME_REC_LIST_PAST = "pastRecommendationList.json";
-    public static final String PREF_RANDOM_REC = "randomRecTitle";
+    public static final String PREF_REC = "randomRecTitle";
 
 
     private ArrayList<Book> mRecommendList;
@@ -72,9 +69,9 @@ public class BookLab implements Serializable {
         return hashtable;
     }
 
-    public Book getBook(String title){
-        if(mRecTable.containsKey(title)){
-            return mRecTable.get(title);
+    public Book getRecommendedBook(String title){
+        if(mPastRecTable.containsKey(title)){
+            return mPastRecTable.get(title);
         }
         else {
             return null;
@@ -128,8 +125,11 @@ public class BookLab implements Serializable {
             //Everytime random book is fetched, immediately update Shared Preference
             PreferenceManager.getDefaultSharedPreferences(mAppContext)
                     .edit()
-                    .putString(BookLab.PREF_RANDOM_REC, bookRec.getmTitle())
+                    .putString(BookLab.PREF_REC, bookRec.getmTitle())
                     .commit();
+
+            //Puts the book to PastRecList immediately to prevent multi-thread problem
+            this.putToPastRecTable(bookRec.getmTitle());
         }
         return bookRec;
     }
