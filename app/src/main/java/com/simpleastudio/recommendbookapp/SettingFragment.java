@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -55,7 +57,17 @@ public class SettingFragment extends Fragment {
                 startActivityForResult(i, INPUT_BOOK_REQUEST);
             }
         });
+
+        mDailyRecCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkBoxTick = mDailyRecCheckbox.isChecked();
+            }
+        });
+
         return v;
+
+
     }
 
     @Override
