@@ -47,69 +47,6 @@ public class FileWriter {
         mAppContext = c;
     }
 
-    public void saveBookList(ArrayList<Book> bookList, String fileName){
-        try{
-            FileOutputStream fos = mAppContext.openFileOutput(fileName, Context.MODE_PRIVATE);
-            ObjectOutputStream os = new ObjectOutputStream(fos);
-            os.writeObject(bookList);
-            os.close();
-            fos.close();
-            Log.d(TAG, "Arraylist is saved in " + fileName + ".");
-        }catch (FileNotFoundException e){
-            Log.e(TAG,"File not found", e);
-        } catch (IOException e) {
-            Log.e(TAG, "IOException: ", e);
-        }
-    }
-
-    public ArrayList<Book> loadBookList(String fileName){
-        ArrayList<Book> bookList = new ArrayList<Book>();
-        try{
-            File mFile = new File(mAppContext.getFilesDir() + "/" + fileName);
-            if(!mFile.exists()){
-                Log.d(TAG, "arraylist file does not exist.");
-                return bookList;
-            }
-            InputStream fis = mAppContext.openFileInput(mFileName);
-            ObjectInputStream reader = new ObjectInputStream(fis);
-            bookList = (ArrayList<Book>) reader.readObject();
-            fis.close();
-            reader.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (StreamCorruptedException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (Exception e){
-            Log.e(TAG, "Exception: ", e);
-            return bookList;
-        }
-        return bookList;
-    }
-
-    /*
-    public void saveBooks(ArrayList<Book> bookList, String fileName) throws JSONException, IOException{
-        JSONArray array = new JSONArray();
-        Gson gson = new Gson();
-        for(Book book : bookList){
-            array.put(gson.toJson(book));
-        }
-
-        Writer writer = null;
-        try{
-            OutputStream out = mAppContext.openFileOutput(fileName, Context.MODE_PRIVATE);
-            writer = new OutputStreamWriter(out);
-            writer.write(array.toString());
-        }finally {
-            if(writer!=null){
-                writer.close();
-            }
-        }
-    }*/
-
     public void saveBooks(Hashtable<String, Book> table, String fileName) throws JSONException,
             IOException{
         Gson gson = new Gson();
@@ -151,30 +88,4 @@ public class FileWriter {
         }
         return hashtable;
     }
-
-    /*public ArrayList<Book> loadBooks(String fileName) throws JSONException, IOException{
-        ArrayList<Book> bookList = new ArrayList<Book>();
-        BufferedReader reader = null;
-        try{
-            InputStream in = mAppContext.openFileInput(fileName);
-            reader = new BufferedReader(new InputStreamReader(in));
-            StringBuilder jsonString = new StringBuilder();
-            String line = null;
-            while((line = reader.readLine()) != null){
-                jsonString.append(line);
-            }
-            JSONArray array = (JSONArray) new JSONTokener(jsonString.toString()).nextValue();
-            Gson gson = new Gson();
-            for(int i = 0; i < array.length(); i++){
-                Book book = gson.fromJson(array.getString(i), Book.class);
-                bookList.add(book);
-            }
-        }catch (FileNotFoundException fe){}
-        finally {
-            if(reader!= null){
-                reader.close();
-            }
-        }
-        return bookList;
-    }*/
 }

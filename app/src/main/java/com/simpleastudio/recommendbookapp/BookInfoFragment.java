@@ -90,38 +90,6 @@ public class BookInfoFragment extends VisibleFragment {
             //Get recommendation stored in Shared Pref to start with
             mBook = BookLab.get(getActivity()).getRecommendedBook(recBookTitle);
         }
-
-        /*int randomBookIndex = PreferenceManager.getDefaultSharedPreferences(getActivity())
-                .getInt(RandomBookService.PREF_RANDOM_BOOK, -1);
-        if(randomBookIndex == -1){
-            Book newRandomBook = BookLab.get(getActivity()).getRandomBook();
-            if(newRandomBook != null){
-                PreferenceManager.getDefaultSharedPreferences(getActivity())
-                        .edit()
-                        .putInt(RandomBookService.PREF_RANDOM_BOOK, newRandomBook.getTag()).commit();
-                mBook = newRandomBook;
-            }
-            else{                       //ArrayList of recommendations is 0
-                //Make a dialogue message
-                Toast.makeText(getActivity(),
-                        "There are no more recommendations for this particular book.",
-                        Toast.LENGTH_SHORT)
-                        .show();
-            }
-        }
-        else {
-            mBook = BookLab.get(getActivity()).getook(randomBookIndex);
-            if(mBook == null){      //This could be because arraylist of recommendations is 0 or random index is outside the size of the arraylit
-                mBook = BookLab.get(getActivity()).getRandomBook();
-                if(mBook == null){
-                    //Make a dialogue message
-                    Toast.makeText(getActivity(),
-                            "There are no more recommendations for this particular book.",
-                            Toast.LENGTH_SHORT)
-                            .show();
-                }
-            }
-        }*/
     }
 
     @Override
@@ -152,7 +120,7 @@ public class BookInfoFragment extends VisibleFragment {
                             "There are no more recommendations for this particular book.",
                             Toast.LENGTH_SHORT)
                             .show();
-                    
+
                     //Enable search button to be clickable if it's not currently
                     if(!mSearchButton.isClickable()){
                         mSearchButton.setClickable(true);

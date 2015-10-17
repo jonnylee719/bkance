@@ -10,15 +10,6 @@ import java.util.Date;
  * Created by Jonathan on 4/10/2015.
  */
 public class Book implements Serializable {
-    public int getTag() {
-        return tag;
-    }
-
-    public void setTag(int tag) {
-        this.tag = tag;
-    }
-
-    private int tag;
     private String mTitle;
     private String mId;
     private String mDescription;
