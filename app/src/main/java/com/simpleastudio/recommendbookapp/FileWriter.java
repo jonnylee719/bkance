@@ -1,38 +1,22 @@
 package com.simpleastudio.recommendbookapp;
 
 import android.content.Context;
-import android.util.Log;
-import android.widget.Button;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.simpleastudio.recommendbookapp.model.Book;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONTokener;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
-import java.io.OptionalDataException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.StreamCorruptedException;
 import java.io.Writer;
 import java.lang.reflect.Type;
-import java.nio.Buffer;
-import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Hashtable;
 
 /**

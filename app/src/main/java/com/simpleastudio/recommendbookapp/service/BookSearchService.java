@@ -11,9 +11,9 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.simpleastudio.recommendbookapp.Book;
+import com.simpleastudio.recommendbookapp.model.Book;
 import com.simpleastudio.recommendbookapp.BookInputFragment;
-import com.simpleastudio.recommendbookapp.BookLab;
+import com.simpleastudio.recommendbookapp.model.BookLab;
 import com.simpleastudio.recommendbookapp.api.SingRequestQueue;
 import com.simpleastudio.recommendbookapp.api.TastekBooksFetcher;
 

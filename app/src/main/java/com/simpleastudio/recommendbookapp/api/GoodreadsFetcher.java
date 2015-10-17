@@ -2,27 +2,21 @@ package com.simpleastudio.recommendbookapp.api;
 
 import android.content.Context;
 import android.util.Log;
-import android.util.Xml;
 
-import com.simpleastudio.recommendbookapp.Book;
+import com.simpleastudio.recommendbookapp.model.Book;
 import com.simpleastudio.recommendbookapp.R;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
-
-import javax.xml.parsers.FactoryConfigurationError;
 
 /**
  * Created by Jonathan on 7/10/2015.

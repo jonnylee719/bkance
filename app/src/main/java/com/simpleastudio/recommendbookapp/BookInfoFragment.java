@@ -19,6 +19,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.simpleastudio.recommendbookapp.api.GoodreadsFetcher;
 import com.simpleastudio.recommendbookapp.api.GoogleBooksFetcher;
 import com.simpleastudio.recommendbookapp.api.SingRequestQueue;
+import com.simpleastudio.recommendbookapp.model.Book;
+import com.simpleastudio.recommendbookapp.model.BookLab;
 import com.simpleastudio.recommendbookapp.service.RandomBookService;
 
 import org.json.JSONObject;

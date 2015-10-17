@@ -9,8 +9,8 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.simpleastudio.recommendbookapp.Book;
-import com.simpleastudio.recommendbookapp.BookLab;
+import com.simpleastudio.recommendbookapp.model.Book;
+import com.simpleastudio.recommendbookapp.model.BookLab;
 
 /**
  * Created by Jonathan on 10/10/2015.

@@ -1,11 +1,12 @@
-package com.simpleastudio.recommendbookapp;
+package com.simpleastudio.recommendbookapp.model;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.simpleastudio.recommendbookapp.FileWriter;
+
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 

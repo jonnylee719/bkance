@@ -1,8 +1,6 @@
 package com.simpleastudio.recommendbookapp.api;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -10,24 +8,13 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.simpleastudio.recommendbookapp.Book;
-import com.simpleastudio.recommendbookapp.BookLab;
+import com.simpleastudio.recommendbookapp.model.Book;
 import com.simpleastudio.recommendbookapp.R;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.SocketTimeoutException;
-import java.net.URL;
 
 /**
  * Purpose: To search for books results using Google Books API

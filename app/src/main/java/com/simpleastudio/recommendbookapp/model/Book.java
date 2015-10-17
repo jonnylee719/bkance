@@ -1,4 +1,4 @@
-package com.simpleastudio.recommendbookapp;
+package com.simpleastudio.recommendbookapp.model;
 
 import android.graphics.Bitmap;
 
