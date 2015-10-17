@@ -152,6 +152,11 @@ public class BookInfoFragment extends VisibleFragment {
                             "There are no more recommendations for this particular book.",
                             Toast.LENGTH_SHORT)
                             .show();
+                    
+                    //Enable search button to be clickable if it's not currently
+                    if(!mSearchButton.isClickable()){
+                        mSearchButton.setClickable(true);
+                    }
                 }
 
             }
