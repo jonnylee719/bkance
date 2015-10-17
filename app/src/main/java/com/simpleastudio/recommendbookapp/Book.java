@@ -32,6 +32,11 @@ public class Book implements Serializable {
     private double mAvgRating;
     private String mThumbnailUrl;
 
+    @Override
+    public String toString(){
+        return this.getmTitle();
+    }
+
     public Book(String title){
         mTitle = title;
     }
