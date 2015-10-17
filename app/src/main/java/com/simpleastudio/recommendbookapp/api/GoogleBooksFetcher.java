@@ -127,7 +127,7 @@ public class GoogleBooksFetcher {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                //Should load default bitmap here
+                iv.setImageResource(R.drawable.default_book_cover);
                 error.printStackTrace();
             }
         });
