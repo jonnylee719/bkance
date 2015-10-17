@@ -112,4 +112,8 @@ public class BookLab implements Serializable {
         }
     }
 
+    public Hashtable<String, Book> getmPastRecTable(){
+        return mPastRecTable;
+    }
+
 }

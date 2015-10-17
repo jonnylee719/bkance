@@ -12,15 +12,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by Jonathan on 9/10/2015.
  */
 public class BookListFragment extends Fragment {
     private static final String TAG = "BookListFragment";
-    @Bind(R.id.book_recycler_view) protected RecyclerView mRecyclerView;
+    @Bind(R.id.book_recycler_view)
+    protected RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
@@ -28,12 +32,13 @@ public class BookListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_book_list, container, false);
+        ButterKnife.bind(this, v);
 
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        //mAdapter = new BookCardAdaptor(BookLab.get(getActivity()).getmRecommendList());
+        mAdapter = new BookCardAdaptor(BookLab.get(getActivity()).getmPastRecTable());
         mRecyclerView.setAdapter(mAdapter);
         return v;
     }
@@ -41,8 +46,17 @@ public class BookListFragment extends Fragment {
     public class BookCardAdaptor extends RecyclerView.Adapter<BookCardAdaptor.ViewHolder>{
         private ArrayList<Book> mList;
 
-        public BookCardAdaptor(ArrayList<Book> mBookList){
-            mList = mBookList;
+        public ArrayList<Book> tableToList(Hashtable<String, Book> table){
+            ArrayList<Book> list = new ArrayList<Book>();
+            Enumeration<Book> books = table.elements();
+            while(books.hasMoreElements()){
+                list.add(books.nextElement());
+            }
+            return list;
+        }
+
+        public BookCardAdaptor(Hashtable<String, Book> bookTable){
+            mList = tableToList(bookTable);
         }
 
         @Override
@@ -65,7 +79,7 @@ public class BookListFragment extends Fragment {
             holder.mTextviewAuthor.setText(b.getmAuthors());
             String avgRating = String.format(getResources().getString(R.string.book_rating), b.getmAvgRating());
             holder.mTextviewRating.setText(avgRating);
-            //holder.mTextviewDescription.setText(b.getmDescription());
+            holder.mTextviewDescription.setText(b.getmDescription());
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder{
