@@ -110,6 +110,7 @@ public class GoogleBooksFetcher {
                 error.printStackTrace();
             }
         });
+        jsonRequest.setTag("THUMBNAIL");
         SingRequestQueue.getInstance(mAppContext).addToRequestQueue(jsonRequest);
     }
 }

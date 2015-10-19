@@ -107,6 +107,9 @@ public class BookInfoFragment extends VisibleFragment {
         mSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Cancel currently loading thumbnail image
+                SingRequestQueue.getInstance(getActivity()).getRequestQueue().cancelAll("THUMBNAIL");
+
                 //Stops the user from clicking continuously
                 //TODO Add animation to show loading
                mSearchButton.setClickable(false);
@@ -192,7 +195,8 @@ public class BookInfoFragment extends VisibleFragment {
     public void onStop(){
         super.onStop();
         SingRequestQueue.getInstance(getActivity()).getRequestQueue().cancelAll("GET");
-        Log.i(TAG, "Canceled all request with GET tag");
+        SingRequestQueue.getInstance(getActivity()).getRequestQueue().cancelAll("THUMBNAIL");
+        Log.i(TAG, "Canceled all request with GET and THUMBNAIL tag");
     }
 
     public void loadRandomBookInfo(){
