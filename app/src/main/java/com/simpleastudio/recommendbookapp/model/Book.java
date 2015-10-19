@@ -96,8 +96,8 @@ public class Book implements Serializable {
         return mThumbnailUrl;
     }
 
-    public void setmThumbnailUrl(String mThumbnailUrl) {
-        this.mThumbnailUrl = mThumbnailUrl;
+    public void setmThumbnailUrl(String url) {
+        mThumbnailUrl = url;
     }
 
     public int getmRatingCount() {

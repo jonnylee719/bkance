@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.simpleastudio.recommendbookapp.api.GoodreadsFetcher;
 import com.simpleastudio.recommendbookapp.api.GoogleBooksFetcher;
@@ -26,6 +27,8 @@ import com.simpleastudio.recommendbookapp.service.RandomBookService;
 import org.json.JSONObject;
 
 import java.text.NumberFormat;
+import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Locale;
 
 import butterknife.Bind;
@@ -46,7 +49,7 @@ public class BookInfoFragment extends VisibleFragment {
     @Bind(R.id.textview_rating) protected TextView mTextViewRating;
     @Bind(R.id.textview_rating_count) protected TextView mTextViewRatingCount;
     @Bind(R.id.textview_description) protected TextView mTextViewDescription;
-    @Bind(R.id.imageview_thumbnail) protected ImageView mImageView;
+    @Bind(R.id.imageview_thumbnail) protected NetworkImageView mImageView;
     @Bind(R.id.toolbar_setting_button) protected Button mSettingButton;
     private String mNewSearchTerm;
     private JSONObject mSearchResults;
@@ -193,8 +196,9 @@ public class BookInfoFragment extends VisibleFragment {
     }
 
     public void loadRandomBookInfo(){
+        //TODO Try to put image fetching request here, so that thumbnail is always loaded after the info
+        new GoogleBooksFetcher(getActivity()).setThumbnail(mBook.getmTitle(), mImageView);
         goodreadsStringRequest();
-        new GoogleBooksFetcher(getActivity()).setThumbnail(mBook, mImageView);
     }
 
     public void goodreadsStringRequest(){

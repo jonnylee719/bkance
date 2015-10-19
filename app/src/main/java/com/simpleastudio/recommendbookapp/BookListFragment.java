@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,7 +86,13 @@ public class BookListFragment extends Fragment {
             String avgRating = String.format(getResources().getString(R.string.book_rating), b.getmAvgRating());
             holder.mTextviewRating.setText(avgRating);
             holder.mTextviewDescription.setText(b.getmDescription());
-            holder.mNetworkImageView.setImageUrl(b.getmThumbnailUrl(), imageLoader);
+
+            //Getting the thumbnail url from hashtable
+            //TODO consider situation where title does not exist in the thumbnail hashtable,
+            //TODO perhaps create new GooglebooksFetcher request?
+            String url = BookLab.get(getActivity()).getThumbnailUrl(b.getmTitle());
+            holder.mNetworkImageView.setErrorImageResId(R.drawable.default_book_cover);
+            holder.mNetworkImageView.setImageUrl(url, imageLoader);
 
         }
 

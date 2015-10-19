@@ -19,15 +19,18 @@ public class BookLab implements Serializable {
     private Context mAppContext;
     private static final String FILENAME_REC_LIST = "recommendationList.json";
     private static final String FILENAME_REC_LIST_PAST = "pastRecommendationList.json";
+    private static final String FILENAME_THUMBNAIL_URL = "thumbnailurlList.json";
     public static final String PREF_REC = "randomRecTitle";
 
     private Hashtable<String, Book> mRecTable;
     private Hashtable<String, Book> mPastRecTable;
+    private Hashtable<String, String> mThumbnailUrlTable;
 
     private BookLab(Context c){
         mAppContext = c;
         mRecTable = loadTable(FILENAME_REC_LIST);
         mPastRecTable = loadTable(FILENAME_REC_LIST_PAST);
+        mThumbnailUrlTable = loadThumbnailUrl(FILENAME_THUMBNAIL_URL);
     }
 
     public static BookLab get(Context c){
@@ -41,6 +44,25 @@ public class BookLab implements Serializable {
     public void addBook(Book b){
         //Use book title as key
         mRecTable.put(b.getmTitle(), b);
+    }
+
+    public Hashtable<String, String> getmThumbnailUrlTable(){
+        return mThumbnailUrlTable;
+    }
+
+    public void addThumbnailUrl(String title, String url){
+        mThumbnailUrlTable.put(title, url);
+    }
+
+    public String getThumbnailUrl(String title){
+        String url;
+        if(mThumbnailUrlTable.containsKey(title)){
+            url = mThumbnailUrlTable.get(title);
+        }
+        else{
+            url = null;
+        }
+        return url;
     }
 
     public boolean putToPastRecTable(String title){
@@ -66,6 +88,17 @@ public class BookLab implements Serializable {
         return hashtable;
     }
 
+    private Hashtable<String, String> loadThumbnailUrl(String fileName){
+        Hashtable<String, String> hashtable;
+        try{
+            hashtable = new FileWriter(mAppContext).loadThumbnailURL(fileName);
+        }catch (Exception e){
+            hashtable = new Hashtable<String, String>();
+            Log.e(TAG, "Error loading booklists.", e);
+        }
+        return hashtable;
+   }
+
     public void clearRecTable(){
         mRecTable.clear();
     }
@@ -77,6 +110,16 @@ public class BookLab implements Serializable {
         else {
             return null;
         }
+    }
+
+    public void removePastRec(String title){
+        if(mPastRecTable.containsKey(title)){
+            mPastRecTable.remove(title);
+        }
+    }
+
+    public void addPastRec(Book book){
+        mPastRecTable.put(book.getmTitle(), book);
     }
 
     public Book getRandomBook(){
@@ -105,6 +148,7 @@ public class BookLab implements Serializable {
         try{
             mFileWriter.saveBooks(mRecTable, FILENAME_REC_LIST);
             mFileWriter.saveBooks(mPastRecTable, FILENAME_REC_LIST_PAST);
+            mFileWriter.saveThumbnailURL(mThumbnailUrlTable, FILENAME_THUMBNAIL_URL);
             Log.d(TAG, "Hashtables are saved.");
             return true;
         }catch (Exception e){

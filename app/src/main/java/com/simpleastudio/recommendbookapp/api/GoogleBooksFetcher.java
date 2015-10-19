@@ -4,13 +4,16 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.NetworkImageView;
 import com.simpleastudio.recommendbookapp.model.Book;
 import com.simpleastudio.recommendbookapp.R;
+import com.simpleastudio.recommendbookapp.model.BookLab;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,43 +59,50 @@ public class GoogleBooksFetcher {
     }
 
     public String getThumbnailUrl(JSONObject object, String title){
-        String thumbnailLink = "";
-        boolean foundThumbnail = false;
-        int index = 0;
-        int times = 0;
-        while(!foundThumbnail && times<20){
-            try {
-                Log.d(TAG, "Number of searches done: " + times);
-                JSONArray items = object.getJSONArray("items");
-                JSONObject item = items.getJSONObject(index);
-                JSONObject volumeInfo = item.getJSONObject("volumeInfo");
-                String bookTitle = volumeInfo.getString("title");
-                if(bookTitle.toLowerCase().equals(title.toLowerCase())){
-                    JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
-                    if(imageLinks != null){
-                        thumbnailLink = imageLinks.getString("thumbnail");
-                        foundThumbnail = true;
+        String thumbnailLink = "wwww.throwexception.com";
+        if(BookLab.get(mAppContext).getThumbnailUrl(title) != null){
+            thumbnailLink = BookLab.get(mAppContext).getThumbnailUrl(title);
+        }
+        else {
+            boolean foundThumbnail = false;
+            int index = 0;
+            int times = 0;
+            while(!foundThumbnail && times<20){
+                try {
+                    Log.d(TAG, "Number of searches done: " + times);
+                    JSONArray items = object.getJSONArray("items");
+                    JSONObject item = items.getJSONObject(index);
+                    JSONObject volumeInfo = item.getJSONObject("volumeInfo");
+                    String bookTitle = volumeInfo.getString("title");
+                    if(bookTitle.toLowerCase().equals(title.toLowerCase())){
+                        JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
+                        if(imageLinks != null){
+                            thumbnailLink = imageLinks.getString("thumbnail");
+                            foundThumbnail = true;
+                        }
                     }
+                    index++;
+                } catch (JSONException e) {
+                    Log.e(TAG, "JSONException: ", e);
                 }
-                index++;
-            } catch (JSONException e) {
-                Log.e(TAG, "JSONException: ", e);
+                times++;
             }
-            times++;
+            //Saving the thumbnail
+            BookLab.get(mAppContext).addThumbnailUrl(title, thumbnailLink);
         }
         return thumbnailLink;
     }
 
-    public void setThumbnail(final Book b, final ImageView iv){
-        final String title = b.getmTitle();
+    public void setThumbnail(final String bookTitle, final NetworkImageView networkImageView){
         //Getting the thumbnail url using Json request
-        String url = searchBookUrl(title);
+        String url = searchBookUrl(bookTitle);
         JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                String thumbnailUrl = getThumbnailUrl(response, title);
-                b.setmThumbnailUrl(thumbnailUrl);
-                setImageView(b.getmThumbnailUrl(), iv);
+                String thumbnailUrl = getThumbnailUrl(response, bookTitle);
+                ImageLoader imageLoader = SingRequestQueue.getInstance(mAppContext).getImageLoader();
+                networkImageView.setErrorImageResId(R.drawable.default_book_cover);
+                networkImageView.setImageUrl(thumbnailUrl, imageLoader);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -101,22 +111,5 @@ public class GoogleBooksFetcher {
             }
         });
         SingRequestQueue.getInstance(mAppContext).addToRequestQueue(jsonRequest);
-    }
-
-    private void setImageView(final String url, final ImageView iv){
-        ImageLoader imageLoader = SingRequestQueue.getInstance(mAppContext).getImageLoader();
-        imageLoader.get(url, new ImageLoader.ImageListener() {
-            @Override
-            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-                iv.setImageBitmap(response.getBitmap());
-                Log.d(TAG, "Image loaded into bitmap.");
-            }
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                iv.setImageResource(R.drawable.default_book_cover);
-                error.printStackTrace();
-            }
-        });
     }
 }
