@@ -17,10 +17,17 @@
             android:text="@string/button_search_book"/>
 
         <Button
+            android:id="@+id/toolbar_list_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/button_past_list"/>
+
+        <Button
             android:id="@+id/toolbar_setting_button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="@string/action_settings"/>
+
 
     </LinearLayout>
 

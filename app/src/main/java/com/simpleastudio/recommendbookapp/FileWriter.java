@@ -81,14 +81,14 @@ public class FileWriter {
         Gson gson = new Gson();
         String json = gson.toJson(table);
 
-        //For testing and debugging
+/*        //For testing and debugging
         Enumeration<String> urls = table.elements();
         Enumeration<String> titles = table.keys();
         while(urls.hasMoreElements()){
             String url = urls.nextElement();
             String title = titles.nextElement();
             Log.i(TAG, title + "'s thumbnail url: " + url);
-        }
+        }*/
 
         Writer writer = null;
         try{

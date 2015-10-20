@@ -48,6 +48,12 @@ public class BookListFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onPause(){
+        super.onPause();
+        mAdapter.notifyDataSetChanged();
+    }
+
     public class BookCardAdaptor extends RecyclerView.Adapter<BookCardAdaptor.ViewHolder>{
         private ArrayList<Book> mList;
         ImageLoader imageLoader = SingRequestQueue.getInstance(getActivity()).getImageLoader();
