@@ -48,9 +48,17 @@ public class BookInputFragment extends NavigationFragment {
                 Intent iService = new Intent(getActivity(), BookSearchService.class);
                 getActivity().startService(iService);
 
-                Intent i = new Intent();
-                getActivity().setResult(Activity.RESULT_OK, i);
-                getActivity().finish();
+                //InputActivity can be started from SettingFragment as well,
+                //if it's by SettingFragment, it should return to the SettingFragment
+                if (getActivity().getCallingActivity() != null) {
+                    Intent i = new Intent();
+                    getActivity().setResult(Activity.RESULT_OK, i);
+                    getActivity().finish();
+                } else {
+                    Intent i = new Intent(getActivity(), BookInfoActivity.class);
+                    startActivity(i);
+                }
+
             }
         });
 

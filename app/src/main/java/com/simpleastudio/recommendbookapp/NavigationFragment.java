@@ -91,7 +91,7 @@ public class NavigationFragment extends Fragment {
                 default:
                     menuItem.setChecked(true);
                     mDrawerLayout.closeDrawers();
-                    return this.onNavigationItemSelected(menuItem);
+                    return true;
             }
         }
     }
