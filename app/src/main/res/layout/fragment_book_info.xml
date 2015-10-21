@@ -98,7 +98,7 @@
         </RelativeLayout>
     </ScrollView>
 
-    <include layout="@layout/toolbar"/>
+    <include layout="@layout/toolbar_bottom"/>
 
     </LinearLayout>
 
