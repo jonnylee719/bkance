@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Jonathan on 15/10/2015.
  */
-public class SettingFragment extends Fragment {
+public class SettingFragment extends NavigationFragment {
     private static final String TAG = "SettingFragment";
     private static final String PREF_CHECKBOX = "checkboxboolean";
     private static final int INPUT_BOOK_REQUEST = 1;

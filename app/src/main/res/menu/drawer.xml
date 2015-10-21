@@ -5,7 +5,6 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/navigation_main"
-            android:checked="true"
             android:title="@string/navigation_main"/>
         <item
             android:id="@+id/navigation_past"
@@ -13,6 +12,9 @@
         <item
             android:id="@+id/navigation_saved"
             android:title="@string/navigation_saved"/>
+        <item
+            android:id="@+id/navigation_input"
+            android:title="@string/navigation_input"/>
 
     </group>
     <group
