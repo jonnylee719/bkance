@@ -62,7 +62,6 @@ public class BookInfoFragment extends VisibleFragment {
     }
 
     private Book mBook;
-
     public BookInfoFragment() {
     }
 
