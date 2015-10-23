@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Jonathan on 9/10/2015.
  */
-public class BookInputFragment extends NavigationFragment {
+public class BookInputFragment extends Fragment {
     private static final String TAG = "BookInputFragment";
     public static final String PREF_INITIAL_BOOK = "initialBook";
     @Bind(R.id.editText_book) protected EditText bookInput;

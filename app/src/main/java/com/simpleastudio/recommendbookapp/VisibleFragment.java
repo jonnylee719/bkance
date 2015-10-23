@@ -24,7 +24,7 @@ import com.simpleastudio.recommendbookapp.service.RandomBookService;
 /**
  * Created by Jonathan on 10/10/2015.
  */
-public class VisibleFragment extends NavigationFragment {
+public class VisibleFragment extends Fragment {
     public static final String TAG = "VisibleFragment";
 
 

@@ -19,7 +19,7 @@
     </group>
     <group
         android:id="@+id/menu_bottom"
-        android:checkableBehavior="none">
+        android:checkableBehavior="single">
         <item
             android:id="@+id/navigation_setting"
             android:title="@string/navigation_setting"/>

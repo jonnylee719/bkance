@@ -26,7 +26,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Jonathan on 9/10/2015.
  */
-public class BookListFragment extends NavigationFragment {
+public class BookListFragment extends Fragment {
     private static final String TAG = "BookListFragment";
     @Bind(R.id.book_recycler_view)
     protected RecyclerView mRecyclerView;

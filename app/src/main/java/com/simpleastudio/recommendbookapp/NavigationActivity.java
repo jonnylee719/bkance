@@ -35,6 +35,9 @@ public class NavigationActivity extends AppCompatActivity{
 
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerToggle = setUpDrawerToggle();
+
+        //Tie DrawerLayout events to the ActionToggle
+        mDrawer.setDrawerListener(drawerToggle);
     }
 
     private ActionBarDrawerToggle setUpDrawerToggle(){
