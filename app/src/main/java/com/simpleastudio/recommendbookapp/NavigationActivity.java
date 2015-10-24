@@ -18,12 +18,17 @@ import java.util.Set;
 /**
  * Created by Jonathan on 22/10/2015.
  */
-public class NavigationActivity extends AppCompatActivity{
+public class NavigationActivity extends SingleFragmentActivity{
     private static final String TAG = "NavigationActivity";
     private Toolbar mToolbar;
     private DrawerLayout mDrawer;
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
+
+    @Override
+    protected Fragment createFragment() {
+        return new BookInfoFragment();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
