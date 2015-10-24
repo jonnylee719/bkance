@@ -25,7 +25,7 @@
     <string name="card_add_button">Add</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="navigation_main">Main</string>
-    <string name="navigation_past">Past</string>
+    <string name="navigation_previous">Previous</string>
     <string name="navigation_saved">Saved</string>
     <string name="navigation_setting">Setting</string>
     <string name="navigation_feedback">Send feedback</string>

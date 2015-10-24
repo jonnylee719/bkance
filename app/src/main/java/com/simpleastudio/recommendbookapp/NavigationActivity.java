@@ -10,7 +10,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
+
+import java.util.Set;
 
 /**
  * Created by Jonathan on 22/10/2015.
@@ -38,6 +41,7 @@ public class NavigationActivity extends AppCompatActivity{
 
         //Tie DrawerLayout events to the ActionToggle
         mDrawer.setDrawerListener(drawerToggle);
+
     }
 
     private ActionBarDrawerToggle setUpDrawerToggle(){
@@ -62,10 +66,7 @@ public class NavigationActivity extends AppCompatActivity{
             case R.id.navigation_main:
                 fragmentClass = BookInfoFragment.class;
                 break;
-            case R.id.navigation_past:
-                fragmentClass = BookListFragment.class;
-                break;
-            case R.id.navigation_saved:
+            case R.id.navigation_previous:
                 fragmentClass = BookListFragment.class;
                 break;
             case R.id.navigation_input:
@@ -89,7 +90,6 @@ public class NavigationActivity extends AppCompatActivity{
         fragmentManager.beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
 
         item.setChecked(true);
-        setTitle(item.getTitle());
         mDrawer.closeDrawers();
     }
 

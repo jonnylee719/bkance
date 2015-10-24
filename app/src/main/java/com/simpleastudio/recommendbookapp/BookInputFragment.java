@@ -1,13 +1,19 @@
 package com.simpleastudio.recommendbookapp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -36,6 +42,10 @@ public class BookInputFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_book_input, container, false);
         ButterKnife.bind(this, v);
 
+        //Making title as Book input
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.navigation_input);
+
+
         enterBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,20 +58,25 @@ public class BookInputFragment extends Fragment {
                 Intent iService = new Intent(getActivity(), BookSearchService.class);
                 getActivity().startService(iService);
 
-                //InputActivity can be started from SettingFragment as well,
-                //if it's by SettingFragment, it should return to the SettingFragment
-                if (getActivity().getCallingActivity() != null) {
-                    Intent i = new Intent();
-                    getActivity().setResult(Activity.RESULT_OK, i);
-                    getActivity().finish();
-                } else {
-                    Intent i = new Intent(getActivity(), BookInfoActivity.class);
-                    startActivity(i);
-                }
+                closeKeyboard(getActivity(), bookInput.getWindowToken());
 
+                NavigationView nv = (NavigationView)((AppCompatActivity) getActivity()).findViewById(R.id.navigation_view);
+                nv.getMenu().getItem(0).setChecked(true);
+
+
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                BookInfoFragment fragment = new BookInfoFragment();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainer, fragment)
+                        .commit();
             }
         });
 
         return v;
+    }
+
+    public static void closeKeyboard(Context c, IBinder windowToken) {
+        InputMethodManager mgr = (InputMethodManager) c.getSystemService(Context.INPUT_METHOD_SERVICE);
+        mgr.hideSoftInputFromWindow(windowToken, 0);
     }
 }

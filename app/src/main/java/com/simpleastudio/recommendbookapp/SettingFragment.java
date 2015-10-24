@@ -1,13 +1,21 @@
 package com.simpleastudio.recommendbookapp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 
@@ -32,13 +40,16 @@ public class SettingFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_setting, container, false);
         ButterKnife.bind(this, v);
+
+        //Making title as Setting
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.navigation_setting);
+
 
         String currentTitle = PreferenceManager.getDefaultSharedPreferences(getActivity())
                 .getString(BookInputFragment.PREF_INITIAL_BOOK, null);
@@ -53,8 +64,13 @@ public class SettingFragment extends Fragment {
         mTitleInputButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getActivity(), BookInputActivity.class);
-                startActivityForResult(i, INPUT_BOOK_REQUEST);
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                BookInputFragment fragment = new BookInputFragment();
+                fragmentManager.beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+
+
+                NavigationView nv = (NavigationView)((AppCompatActivity) getActivity()).findViewById(R.id.navigation_view);
+                nv.getMenu().getItem(2).setChecked(true);
             }
         });
 
@@ -73,8 +89,6 @@ public class SettingFragment extends Fragment {
         });
 
         return v;
-
-
     }
 
     @Override

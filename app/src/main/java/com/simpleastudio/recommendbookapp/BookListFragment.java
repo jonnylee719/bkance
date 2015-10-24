@@ -2,6 +2,7 @@ package com.simpleastudio.recommendbookapp;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -38,6 +39,10 @@ public class BookListFragment extends Fragment {
                              Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_book_list, container, false);
         ButterKnife.bind(this, v);
+
+        //Making title as Book list
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.navigation_previous);
+
 
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());

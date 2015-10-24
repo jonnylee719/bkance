@@ -52,16 +52,7 @@ public class NavigationFragment extends Fragment {
                     menuItem.setChecked(true);
                     mDrawerLayout.closeDrawers();
                     return true;
-                case R.id.navigation_past:
-                    if(currentActivity instanceof BookListActivity){}
-                    else {
-                        Intent i = new Intent(getActivity(), BookListActivity.class);
-                        startActivity(i);
-                    }
-                    menuItem.setChecked(true);
-                    mDrawerLayout.closeDrawers();
-                    return true;
-                case R.id.navigation_saved:
+                case R.id.navigation_previous:
                     if(currentActivity instanceof BookListActivity){}
                     else {
                         Intent i = new Intent(getActivity(), BookListActivity.class);

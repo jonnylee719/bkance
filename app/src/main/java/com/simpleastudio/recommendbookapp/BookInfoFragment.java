@@ -3,6 +3,7 @@ package com.simpleastudio.recommendbookapp;
 import android.content.Intent;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -105,6 +106,9 @@ public class BookInfoFragment extends VisibleFragment {
         Log.d(TAG, "onCreateView.");
         View v = inflater.inflate(R.layout.fragment_book_info, container, false);
         ButterKnife.bind(this, v);
+
+        //Making title as Book info
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.navigation_main);
 
         mSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
