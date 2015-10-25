@@ -97,9 +97,6 @@
                 android:layout_below="@id/textview_description_title"/>
         </RelativeLayout>
     </ScrollView>
-
-    <include layout="@layout/toolbar_bottom"/>
-
     </LinearLayout>
 
 

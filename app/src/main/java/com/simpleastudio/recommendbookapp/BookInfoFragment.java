@@ -46,7 +46,6 @@ public class BookInfoFragment extends VisibleFragment {
     public static final int INPUT_BOOK_REQUEST = 1;
     private static final int SETTING_REQUEST = 2;
     private static final int LIST_REQUEST = 3;
-    @Bind(R.id.toolbar_search_button) protected Button mSearchButton;
     @Bind(R.id.textview_title) protected TextView mTextViewTitle;
     @Bind(R.id.textview_author) protected TextView mTextViewAuthor;
     @Bind(R.id.textview_date) protected TextView mTextViewDate;
@@ -55,8 +54,7 @@ public class BookInfoFragment extends VisibleFragment {
     @Bind(R.id.textview_rating_count) protected TextView mTextViewRatingCount;
     @Bind(R.id.textview_description) protected TextView mTextViewDescription;
     @Bind(R.id.imageview_thumbnail) protected NetworkImageView mImageView;
-    @Bind(R.id.toolbar_setting_button) protected Button mSettingButton;
-    @Bind(R.id.toolbar_list_button) protected Button mListButton;
+
     private String mNewSearchTerm;
     private JSONObject mSearchResults;
     protected FloatingActionButton mFAB;
@@ -149,7 +147,7 @@ public class BookInfoFragment extends VisibleFragment {
 
                 //Stops the user from clicking continuously
                 //TODO Add animation to show loading
-                mSearchButton.setClickable(false);
+                mFAB.setClickable(false);
 
                 mBook = BookLab.get(getActivity()).getRandomBook();
                 if (mBook != null) {
@@ -167,8 +165,8 @@ public class BookInfoFragment extends VisibleFragment {
                             .show();
 
                     //Enable search button to be clickable if it's not currently
-                    if (!mSearchButton.isClickable()) {
-                        mSearchButton.setClickable(true);
+                    if (!mFAB.isClickable()) {
+                        mFAB.setClickable(true);
                     }
                 }
             }
@@ -176,23 +174,6 @@ public class BookInfoFragment extends VisibleFragment {
 
         //Making title as Book info
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.navigation_main);
-
-        mSettingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getActivity(), SettingActivity.class);
-                startActivityForResult(i, SETTING_REQUEST);
-            }
-        });
-
-        mListButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO add if on result to display the content of the past recommendation
-                Intent i = new Intent(getActivity(), BookListActivity.class);
-                startActivityForResult(i, LIST_REQUEST);
-            }
-        });
 
         //Load mBook book info
         if(mBook != null){
@@ -294,8 +275,8 @@ public class BookInfoFragment extends VisibleFragment {
         mTextViewDescription.setText(mBook.getmDescription());
 
         //Enable search button to be clickable if it's not currently
-        if(!mSearchButton.isClickable()){
-            mSearchButton.setClickable(true);
+        if(!mFAB.isClickable()){
+            mFAB.setClickable(true);
         }
     }
 
