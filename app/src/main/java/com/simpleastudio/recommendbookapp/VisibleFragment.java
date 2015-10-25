@@ -35,11 +35,7 @@ public class VisibleFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG, "Received a broadcast intent.");
             actionOnReceive();
-            Snackbar.make(getView(), R.string.new_recommendation, Snackbar.LENGTH_LONG);
-            Toast.makeText(getActivity(),
-                    "Got a broadcast: " + intent.getAction(),
-                    Toast.LENGTH_LONG)
-                    .show();
+            Snackbar.make(getView(), R.string.new_recommendation, Snackbar.LENGTH_LONG).show();
         }
     };
 

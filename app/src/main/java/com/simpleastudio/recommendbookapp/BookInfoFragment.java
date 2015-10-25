@@ -3,6 +3,7 @@ package com.simpleastudio.recommendbookapp;
 import android.content.Intent;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -57,6 +58,7 @@ public class BookInfoFragment extends VisibleFragment {
     @Bind(R.id.toolbar_list_button) protected Button mListButton;
     private String mNewSearchTerm;
     private JSONObject mSearchResults;
+    protected FloatingActionButton mFAB;
 
     public void setmBook(Book mBook) {
         this.mBook = mBook;
@@ -107,10 +109,10 @@ public class BookInfoFragment extends VisibleFragment {
         View v = inflater.inflate(R.layout.fragment_book_info, container, false);
         ButterKnife.bind(this, v);
 
-        //Making title as Book info
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.navigation_main);
-
-        mSearchButton.setOnClickListener(new View.OnClickListener() {
+        //FAB
+        mFAB = (FloatingActionButton)getActivity().findViewById(R.id.fab);
+        mFAB.show();
+        mFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Cancel currently loading thumbnail image
@@ -140,10 +142,12 @@ public class BookInfoFragment extends VisibleFragment {
                         mSearchButton.setClickable(true);
                     }
                 }
-
             }
         });
-        
+
+        //Making title as Book info
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.navigation_main);
+
         mSettingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

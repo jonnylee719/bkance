@@ -1,6 +1,7 @@
 package com.simpleastudio.recommendbookapp;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,6 +44,9 @@ public class BookListFragment extends Fragment {
         //Making title as Book list
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.navigation_previous);
 
+
+        //Hiding the floating action button
+        ((FloatingActionButton)getActivity().findViewById(R.id.fab)).hide();
 
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());

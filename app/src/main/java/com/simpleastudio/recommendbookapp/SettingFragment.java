@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -50,6 +51,9 @@ public class SettingFragment extends Fragment {
         //Making title as Setting
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.navigation_setting);
 
+
+        //Hiding the floating action button
+        ((FloatingActionButton)getActivity().findViewById(R.id.fab)).hide();
 
         String currentTitle = PreferenceManager.getDefaultSharedPreferences(getActivity())
                 .getString(BookInputFragment.PREF_INITIAL_BOOK, null);
