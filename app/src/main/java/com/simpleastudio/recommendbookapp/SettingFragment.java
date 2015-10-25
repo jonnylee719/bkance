@@ -50,7 +50,8 @@ public class SettingFragment extends Fragment {
 
         //Making title as Setting
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.navigation_setting);
-
+        NavigationView nv = (NavigationView)((AppCompatActivity) getActivity()).findViewById(R.id.navigation_view);
+        nv.getMenu().getItem(3).setChecked(true);
 
         //Hiding the floating action button
         ((FloatingActionButton)getActivity().findViewById(R.id.fab)).hide();
@@ -72,9 +73,6 @@ public class SettingFragment extends Fragment {
                 BookInputFragment fragment = new BookInputFragment();
                 fragmentManager.beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
 
-
-                NavigationView nv = (NavigationView)((AppCompatActivity) getActivity()).findViewById(R.id.navigation_view);
-                nv.getMenu().getItem(2).setChecked(true);
             }
         });
 

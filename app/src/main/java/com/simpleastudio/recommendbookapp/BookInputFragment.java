@@ -51,6 +51,8 @@ public class BookInputFragment extends Fragment {
 
         //Making title as Book input
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.navigation_input);
+        NavigationView nv = (NavigationView)((AppCompatActivity) getActivity()).findViewById(R.id.navigation_view);
+        nv.getMenu().getItem(2).setChecked(true);
 
         enterBook.setOnClickListener(new View.OnClickListener() {
             @Override

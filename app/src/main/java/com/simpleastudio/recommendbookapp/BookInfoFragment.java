@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -136,6 +137,11 @@ public class BookInfoFragment extends VisibleFragment {
         View v = inflater.inflate(R.layout.fragment_book_info, container, false);
         ButterKnife.bind(this, v);
 
+        //Making title as Book info
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.navigation_main);
+        NavigationView nv = (NavigationView)((AppCompatActivity) getActivity()).findViewById(R.id.navigation_view);
+        nv.getMenu().getItem(0).setChecked(true);
+
         //FAB
         mFAB = (FloatingActionButton)getActivity().findViewById(R.id.fab);
         mFAB.show();
@@ -171,9 +177,6 @@ public class BookInfoFragment extends VisibleFragment {
                 }
             }
         });
-
-        //Making title as Book info
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.navigation_main);
 
         //Load mBook book info
         if(mBook != null){

@@ -2,6 +2,7 @@ package com.simpleastudio.recommendbookapp;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -53,7 +54,8 @@ public class BookListFragment extends Fragment {
 
         //Making title as Book list
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.navigation_previous);
-
+        NavigationView nv = (NavigationView)((AppCompatActivity) getActivity()).findViewById(R.id.navigation_view);
+        nv.getMenu().getItem(1).setChecked(true);
 
         //Hiding the floating action button
         ((FloatingActionButton)getActivity().findViewById(R.id.fab)).hide();
@@ -78,12 +80,7 @@ public class BookListFragment extends Fragment {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         Fragment fragment;
         switch (item.getItemId()){
-            case R.id.action_previous_input:
-                fragment = new BookListFragment();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, fragment).commit();
-                return true;
-            case R.id.action_setting_input:
+            case R.id.action_setting_list:
                 fragment = new SettingFragment();
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragmentContainer, fragment).commit();

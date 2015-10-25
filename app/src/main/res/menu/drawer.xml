@@ -5,13 +5,16 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/navigation_main"
-            android:title="@string/navigation_main"/>
+            android:title="@string/navigation_main"
+            android:icon="@drawable/ic_book"/>
         <item
             android:id="@+id/navigation_previous"
-            android:title="@string/navigation_previous"/>
+            android:title="@string/navigation_previous"
+            android:icon="@drawable/ic_view_list"/>
         <item
             android:id="@+id/navigation_input"
-            android:title="@string/navigation_input"/>
+            android:title="@string/navigation_input"
+            android:icon="@drawable/ic_input"/>
 
     </group>
     <group
@@ -19,9 +22,11 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/navigation_setting"
-            android:title="@string/navigation_setting"/>
+            android:title="@string/navigation_setting"
+            android:icon="@drawable/ic_setting"/>
         <item
             android:id="@+id/navigation_feedback"
-            android:title="@string/navigation_feedback"/>
+            android:title="@string/navigation_feedback"
+            android:icon="@drawable/ic_feedback"/>
     </group>
 </menu>

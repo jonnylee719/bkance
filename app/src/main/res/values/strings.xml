@@ -24,7 +24,7 @@
     <string name="card_more_button">Learn more</string>
     <string name="card_add_button">Add</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="navigation_main">Bookance</string>
+    <string name="navigation_main">Book Info</string>
     <string name="navigation_previous">Previous</string>
     <string name="navigation_saved">Saved</string>
     <string name="navigation_setting">Setting</string>
@@ -35,4 +35,5 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="Header">Header</string>
     <string name="new_recommendation">You have a new bookance</string>
+    <string name="bookinfo_search">Search</string>
 </resources>
