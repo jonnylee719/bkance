@@ -34,4 +34,5 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="Header">Header</string>
+    <string name="new_recommendation">You have a new bookance</string>
 </resources>
