@@ -3,11 +3,15 @@ package com.simpleastudio.recommendbookapp;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -36,6 +40,12 @@ public class BookListFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_book_list, container, false);
@@ -55,6 +65,32 @@ public class BookListFragment extends Fragment {
         mAdapter = new BookCardAdaptor(BookLab.get(getActivity()).getmPastRecTable());
         mRecyclerView.setAdapter(mAdapter);
         return v;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.booklist_actionbar_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        Fragment fragment;
+        switch (item.getItemId()){
+            case R.id.action_previous_input:
+                fragment = new BookListFragment();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainer, fragment).commit();
+                return true;
+            case R.id.action_setting_input:
+                fragment = new SettingFragment();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainer, fragment).commit();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

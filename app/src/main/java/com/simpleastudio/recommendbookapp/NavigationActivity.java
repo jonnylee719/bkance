@@ -103,6 +103,7 @@ public class NavigationActivity extends SingleFragmentActivity{
         if(drawerToggle.onOptionsItemSelected(item)){
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 

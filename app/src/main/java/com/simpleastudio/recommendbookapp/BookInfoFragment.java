@@ -4,13 +4,17 @@ import android.content.Intent;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,13 +33,10 @@ import com.simpleastudio.recommendbookapp.service.RandomBookService;
 import org.json.JSONObject;
 
 import java.text.NumberFormat;
-import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -79,6 +80,8 @@ public class BookInfoFragment extends VisibleFragment {
             startActivityForResult(i, INPUT_BOOK_REQUEST);
         }
 
+        setHasOptionsMenu(true);
+
         //Initiate mBook
         String recBookTitle = PreferenceManager.getDefaultSharedPreferences(getActivity())
                 .getString(BookLab.PREF_REC, null);
@@ -99,6 +102,32 @@ public class BookInfoFragment extends VisibleFragment {
         else{
             //Get recommendation stored in Shared Pref to start with
             mBook = BookLab.get(getActivity()).getRecommendedBook(recBookTitle);
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.bookinfo_actionbar_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        Fragment fragment;
+        switch (item.getItemId()){
+            case R.id.action_previous_info:
+                fragment = new BookListFragment();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainer, fragment).commit();
+                return true;
+            case R.id.action_setting_info:
+                fragment = new SettingFragment();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainer, fragment).commit();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 

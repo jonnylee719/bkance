@@ -1,6 +1,5 @@
 package com.simpleastudio.recommendbookapp;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +11,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -35,6 +37,7 @@ public class BookInputFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -48,7 +51,6 @@ public class BookInputFragment extends Fragment {
 
         //Making title as Book input
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.navigation_input);
-
 
         enterBook.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,6 +79,32 @@ public class BookInputFragment extends Fragment {
         });
 
         return v;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.bookinput_actionbar_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        Fragment fragment;
+        switch (item.getItemId()){
+            case R.id.action_previous_input:
+                fragment = new BookListFragment();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainer, fragment).commit();
+                return true;
+            case R.id.action_setting_input:
+                fragment = new SettingFragment();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainer, fragment).commit();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public static void closeKeyboard(Context c, IBinder windowToken) {
