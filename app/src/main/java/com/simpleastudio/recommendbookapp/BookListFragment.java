@@ -115,7 +115,6 @@ public class BookListFragment extends Fragment {
             holder.mTextviewAuthor.setText(b.getmAuthors());
             String avgRating = String.format(getResources().getString(R.string.book_rating), b.getmAvgRating());
             holder.mTextviewRating.setText(avgRating);
-            holder.mTextviewDescription.setText(b.getmDescription());
 
             //Getting the thumbnail url from hashtable
             //TODO consider situation where title does not exist in the thumbnail hashtable,
@@ -131,7 +130,6 @@ public class BookListFragment extends Fragment {
             protected TextView mTextviewTitle;
             protected TextView mTextviewAuthor;
             protected TextView mTextviewRating;
-            protected TextView mTextviewDescription;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -139,7 +137,6 @@ public class BookListFragment extends Fragment {
                 mTextviewTitle = (TextView) itemView.findViewById(R.id.card_textview_title);
                 mTextviewAuthor = (TextView) itemView.findViewById(R.id.card_textview_author);
                 mTextviewRating = (TextView) itemView.findViewById(R.id.card_textview_rating);
-                mTextviewDescription = (TextView) itemView.findViewById(R.id.card_textview_description);
             }
         }
     }
