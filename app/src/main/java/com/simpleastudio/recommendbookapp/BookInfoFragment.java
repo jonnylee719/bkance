@@ -247,6 +247,28 @@ public class BookInfoFragment extends VisibleFragment {
         SingRequestQueue.getInstance(getActivity()).addToRequestQueue(request);
     }
 
+    private String paraBreak(String text){
+        String resultText = "";
+        Log.d(TAG, "Text: " + text);
+        String[] textArray = text.split("\\. ");
+        for(int i = 0; i < textArray.length; i++){
+            if(i == 0){
+                resultText = resultText + textArray[i];
+                Log.d(TAG, "textArray (first line): " + textArray[i]);
+            } else if(i%3 == 0 && i!=(textArray.length-1)){
+                resultText = resultText + textArray[i] + ". " + "\n" + "\n";
+                Log.d(TAG, "textArray (with new para): " + textArray[i]);
+            } else if(i%3 != 0 && i!=(textArray.length-1)){
+                Log.d(TAG, "textArray (mid body): " + textArray[i]);
+                resultText = resultText + textArray[i] + ". ";
+            } else if (i == (textArray.length -1)){
+                Log.d(TAG, "textArray (last sentence): " + textArray[i]);
+                resultText = resultText + textArray[i];
+            }
+        }
+        return resultText;
+    }
+
     public void displaymBook(){
         mTextViewTitle.setText(mBook.getmTitle());
         mTextViewAuthor.setText(mBook.getmAuthors());
@@ -257,7 +279,7 @@ public class BookInfoFragment extends VisibleFragment {
         String ratingCount = String.format(getResources().getString(R.string.rating_count), NumberFormat.getInstance(Locale.getDefault()).format(mBook.getmRatingCount()));
         mTextViewRatingCount.setText(ratingCount);
         mTextViewGRTitle.setText(getResources().getString(R.string.Goodreads_title));
-        mTextViewDescription.setText(mBook.getmDescription());
+        mTextViewDescription.setText(paraBreak(mBook.getmDescription()));
 
         //Enable search button to be clickable if it's not currently
         //if(!mFAB.isClickable()){

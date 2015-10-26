@@ -72,7 +72,7 @@ public class BookSearchService extends IntentService {
                     //Saving searched book list at internal storage
                     BookLab.get(getApplicationContext()).save();
 
-                    Log.d(TAG, "Finished searching for similar book list");
+                    //Log.d(TAG, "Finished searching for similar book list");
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -109,6 +109,7 @@ public class BookSearchService extends IntentService {
                 JSONObject item = results.getJSONObject(i);
                 Book b = new Book(item.getString("Name"));
                 b.setmDescription(item.getString("wTeaser"));
+                //Log.d(TAG, "Description: " + "\n" + item.getString("wTeaser"));
                 bookList.add(b);
             }
 
