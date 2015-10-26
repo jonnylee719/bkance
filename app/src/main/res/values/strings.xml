@@ -36,4 +36,5 @@
     <string name="Header">Header</string>
     <string name="new_recommendation">You have a new bookance</string>
     <string name="bookinfo_search">Search</string>
+    <string name="action_refresh">Refresh</string>
 </resources>

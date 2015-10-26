@@ -115,6 +115,9 @@ public class BookInfoFragment extends VisibleFragment {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         Fragment fragment;
         switch (item.getItemId()){
+            case R.id.action_refresh:
+                getRecommendation();
+                return true;
             case R.id.action_previous_info:
                 fragment = new BookListFragment();
                 fragmentManager.beginTransaction()
@@ -127,6 +130,32 @@ public class BookInfoFragment extends VisibleFragment {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void getRecommendation(){
+        //Cancel currently loading thumbnail image
+        SingRequestQueue.getInstance(getActivity()).getRequestQueue().cancelAll("THUMBNAIL");
+
+        //Stops the user from clicking continuously
+        //TODO Add animation to show loading
+        mFAB.setClickable(false);
+
+        mBook = BookLab.get(getActivity()).getRandomBook();
+        if (mBook != null) {
+            clearTextviews();
+            mImageView.setImageBitmap(null);
+            loadRandomBookInfo();
+            //For checking flow
+            String url = mBook.getmThumbnailUrl();
+            Log.d(TAG, "URL of past book recommendation in BookLab: " + url);
+        } else {
+            //Make a dialogue message
+            Toast.makeText(getActivity(),
+                    "There are no more recommendations for this particular book.",
+                    Toast.LENGTH_SHORT)
+                    .show();
+
         }
     }
 
@@ -144,7 +173,7 @@ public class BookInfoFragment extends VisibleFragment {
 
         //FAB
         mFAB = (FloatingActionButton)getActivity().findViewById(R.id.fab);
-        mFAB.show();
+        mFAB.hide();
         mFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
