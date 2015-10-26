@@ -46,9 +46,6 @@ public class BookInputFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_book_input, container, false);
         ButterKnife.bind(this, v);
 
-        //Hiding the floating action button
-        ((FloatingActionButton)getActivity().findViewById(R.id.fab)).hide();
-
         //Making title as Book input
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.navigation_input);
         NavigationView nv = (NavigationView)((AppCompatActivity) getActivity()).findViewById(R.id.navigation_view);

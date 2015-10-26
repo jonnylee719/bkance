@@ -53,9 +53,6 @@ public class SettingFragment extends Fragment {
         NavigationView nv = (NavigationView)((AppCompatActivity) getActivity()).findViewById(R.id.navigation_view);
         nv.getMenu().getItem(3).setChecked(true);
 
-        //Hiding the floating action button
-        ((FloatingActionButton)getActivity().findViewById(R.id.fab)).hide();
-
         String currentTitle = PreferenceManager.getDefaultSharedPreferences(getActivity())
                 .getString(BookInputFragment.PREF_INITIAL_BOOK, null);
 

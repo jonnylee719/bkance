@@ -57,9 +57,6 @@ public class BookListFragment extends Fragment {
         NavigationView nv = (NavigationView)((AppCompatActivity) getActivity()).findViewById(R.id.navigation_view);
         nv.getMenu().getItem(1).setChecked(true);
 
-        //Hiding the floating action button
-        ((FloatingActionButton)getActivity().findViewById(R.id.fab)).hide();
-
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);

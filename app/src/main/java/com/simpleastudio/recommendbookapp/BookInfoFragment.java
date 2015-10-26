@@ -58,7 +58,6 @@ public class BookInfoFragment extends VisibleFragment {
 
     private String mNewSearchTerm;
     private JSONObject mSearchResults;
-    protected FloatingActionButton mFAB;
 
     public void setmBook(Book mBook) {
         this.mBook = mBook;
@@ -129,7 +128,7 @@ public class BookInfoFragment extends VisibleFragment {
 
         //Stops the user from clicking continuously
         //TODO Add animation to show loading
-        mFAB.setClickable(false);
+        //mFAB.setClickable(false);
 
         mBook = BookLab.get(getActivity()).getRandomBook();
         if (mBook != null) {
@@ -160,42 +159,6 @@ public class BookInfoFragment extends VisibleFragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.navigation_main);
         NavigationView nv = (NavigationView)((AppCompatActivity) getActivity()).findViewById(R.id.navigation_view);
         nv.getMenu().getItem(0).setChecked(true);
-
-        //FAB
-        mFAB = (FloatingActionButton)getActivity().findViewById(R.id.fab);
-        mFAB.hide();
-        mFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Cancel currently loading thumbnail image
-                SingRequestQueue.getInstance(getActivity()).getRequestQueue().cancelAll("THUMBNAIL");
-
-                //Stops the user from clicking continuously
-                //TODO Add animation to show loading
-                mFAB.setClickable(false);
-
-                mBook = BookLab.get(getActivity()).getRandomBook();
-                if (mBook != null) {
-                    clearTextviews();
-                    mImageView.setImageBitmap(null);
-                    loadRandomBookInfo();
-                    //For checking flow
-                    String url = mBook.getmThumbnailUrl();
-                    Log.d(TAG, "URL of past book recommendation in BookLab: " + url);
-                } else {
-                    //Make a dialogue message
-                    Toast.makeText(getActivity(),
-                            "There are no more recommendations for this particular book.",
-                            Toast.LENGTH_SHORT)
-                            .show();
-
-                    //Enable search button to be clickable if it's not currently
-                    if (!mFAB.isClickable()) {
-                        mFAB.setClickable(true);
-                    }
-                }
-            }
-        });
 
         //Load mBook book info
         if(mBook != null){
@@ -297,9 +260,9 @@ public class BookInfoFragment extends VisibleFragment {
         mTextViewDescription.setText(mBook.getmDescription());
 
         //Enable search button to be clickable if it's not currently
-        if(!mFAB.isClickable()){
-            mFAB.setClickable(true);
-        }
+        //if(!mFAB.isClickable()){
+          //  mFAB.setClickable(true);
+        //}
     }
 
 }
