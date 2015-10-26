@@ -11,90 +11,96 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_weight="1"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
         >
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin">
 
             <TextView
                 android:id="@+id/textview_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"/>
+                android:layout_alignParentTop="true"
+                style="@style/TextAppearance.AppCompat.Headline"/>
 
             <TextView
                 android:id="@+id/textview_author"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/textview_title"/>
+                android:layout_below="@id/textview_title"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:paddingBottom="16dp"/>
 
-            <RelativeLayout
-                android:id="@+id/relativelayout_imageview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/textview_author">
-
-                <com.android.volley.toolbox.NetworkImageView
-                    android:contentDescription="@string/thumbnail_description"
-                    android:layout_width="wrap_content"
-                    android:layout_height="183dp"
-                    android:padding="4dp"
-                    android:id="@+id/imageview_thumbnail"
-                    android:scaleType="fitXY"
-                    android:adjustViewBounds="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"/>
-
-                <TextView
-                    android:id="@+id/textView_goodreads_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/imageview_thumbnail"/>
-
-                <TextView
-                    android:id="@+id/textview_rating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/imageview_thumbnail"
-                    android:layout_below="@id/textView_goodreads_title"/>
-
-                <TextView
-                    android:id="@+id/textview_rating_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/imageview_thumbnail"
-                    android:layout_below="@id/textview_rating"/>
-
-                <TextView
-                    android:id="@+id/textview_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:layout_below="@id/textview_rating_count"
-                    android:layout_toRightOf="@id/imageview_thumbnail"/>
-
-            </RelativeLayout>
-
-
+            <com.android.volley.toolbox.NetworkImageView
+                android:contentDescription="@string/thumbnail_description"
+                android:layout_width="0dp"
+                android:layout_height="183dp"
+                android:id="@+id/imageview_thumbnail"
+                android:scaleType="fitXY"
+                android:adjustViewBounds="true"
+                android:layout_below="@id/textview_author"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                />
 
             <TextView
-                android:id="@+id/textview_description_title"
-                android:layout_width="match_parent"
+                android:id="@+id/textView_goodreads_title"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/relativelayout_imageview"
-                />
+                android:layout_below="@id/textview_author"
+                android:layout_toRightOf="@id/imageview_thumbnail"
+                android:layout_toEndOf="@id/imageview_thumbnail"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:paddingLeft="16dp"
+                android:paddingStart="16dp"/>
+
+            <TextView
+                android:id="@+id/textview_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/imageview_thumbnail"
+                android:layout_toEndOf="@id/imageview_thumbnail"
+                android:layout_below="@id/textView_goodreads_title"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:paddingTop="8dp"
+                android:paddingLeft="16dp"
+                android:paddingStart="16dp"/>
+
+            <TextView
+                android:id="@+id/textview_rating_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/imageview_thumbnail"
+                android:layout_toEndOf="@id/imageview_thumbnail"
+                android:layout_below="@id/textview_rating"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:paddingLeft="16dp"
+                android:paddingStart="16dp"/>
+
+            <TextView
+                android:id="@+id/textview_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textview_rating_count"
+                android:layout_toRightOf="@id/imageview_thumbnail"
+                android:layout_toEndOf="@id/imageview_thumbnail"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:paddingLeft="16dp"
+                android:paddingStart="16dp"/>
 
             <TextView
                 android:id="@+id/textview_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/textview_description_title"/>
+                android:layout_below="@id/imageview_thumbnail"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:paddingTop="16dp"/>
+
         </RelativeLayout>
     </ScrollView>
     </LinearLayout>

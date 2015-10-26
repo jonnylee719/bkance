@@ -18,7 +18,7 @@
     <string name="hint_enter_book">Book title</string>
     <string name="title_setting">Setting</string>
     <string name="title_current_book">Current book title</string>
-    <string name="text_daily_rec">Receive daily book recommendation</string>
+    <string name="text_daily_rec">Receive daily recommendations</string>
     <string name="default_book_title">No current book title</string>
     <string name="button_past_list">Old Recs</string>
     <string name="card_more_button">Learn more</string>
@@ -37,4 +37,6 @@
     <string name="new_recommendation">You have a new bookance</string>
     <string name="bookinfo_search">Search</string>
     <string name="action_refresh">Refresh</string>
+
+    <string name="test_des">In The Unbearable Lightness of Being, Milan Kundera tells the story of a young woman in love with a man torn between his love for her and his incorrigible womanizing and one of his mistresses and her humbly faithful lover. This magnificent novel juxtaposes geographically distant places, brilliant and playful reflections, and a variety of styles to take its place as perhaps the major achievement of one of the world’s truly great writers.</string>
 </resources>
