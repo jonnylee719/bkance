@@ -76,21 +76,6 @@ public class BookListFragment extends Fragment {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        Fragment fragment;
-        switch (item.getItemId()){
-            case R.id.action_setting_list:
-                fragment = new SettingFragment();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, fragment).commit();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
     public void onPause(){
         super.onPause();
         mAdapter.notifyDataSetChanged();

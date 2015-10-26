@@ -89,26 +89,6 @@ public class BookInputFragment extends Fragment {
         inflater.inflate(R.menu.bookinput_actionbar_menu, menu);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        Fragment fragment;
-        switch (item.getItemId()){
-            case R.id.action_previous_input:
-                fragment = new BookListFragment();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, fragment).commit();
-                return true;
-            case R.id.action_setting_input:
-                fragment = new SettingFragment();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, fragment).commit();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
     public static void closeKeyboard(Context c, IBinder windowToken) {
         InputMethodManager mgr = (InputMethodManager) c.getSystemService(Context.INPUT_METHOD_SERVICE);
         mgr.hideSoftInputFromWindow(windowToken, 0);

@@ -118,16 +118,6 @@ public class BookInfoFragment extends VisibleFragment {
             case R.id.action_refresh:
                 getRecommendation();
                 return true;
-            case R.id.action_previous_info:
-                fragment = new BookListFragment();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, fragment).commit();
-                return true;
-            case R.id.action_setting_info:
-                fragment = new SettingFragment();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, fragment).commit();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
