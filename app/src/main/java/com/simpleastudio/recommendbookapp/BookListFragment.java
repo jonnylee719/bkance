@@ -25,6 +25,7 @@ import com.simpleastudio.recommendbookapp.api.SingRequestQueue;
 import com.simpleastudio.recommendbookapp.model.Book;
 import com.simpleastudio.recommendbookapp.model.BookLab;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -177,7 +178,8 @@ public class BookListFragment extends Fragment {
             Book b = mList.get(position);
             holder.mTextviewTitle.setText(b.getmTitle());
             holder.mTextviewAuthor.setText(b.getmAuthors());
-            String avgRating = String.format(getResources().getString(R.string.book_rating), b.getmAvgRating());
+            String ratingCount = NumberFormat.getInstance().format(b.getmRatingCount());
+            String avgRating = String.format(getResources().getString(R.string.card_rating), b.getmAvgRating(), ratingCount);
             holder.mTextviewRating.setText(avgRating);
 
             //Getting the thumbnail url from hashtable

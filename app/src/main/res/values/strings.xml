@@ -43,4 +43,5 @@
     <string name="snackbar_undo">Undo</string>
 
     <string name="snackbar_delete_text">%1$d marked as Deleted</string>
+    <string name="card_rating">%1$s avg rating by %2$s</string>
 </resources>
