@@ -120,4 +120,5 @@ public class NavigationActivity extends SingleFragmentActivity{
         //Pass any configuration change to the drawer toggle
         drawerToggle.onConfigurationChanged(newConfig);
     }
+
 }

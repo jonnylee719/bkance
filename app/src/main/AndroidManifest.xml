@@ -41,6 +41,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".BookDetailActivity"
+            android:label="@string/app_name">
+
+        </activity>
 
         <service android:name=".service.BookSearchService" />
         <service android:name=".service.RandomBookService" />

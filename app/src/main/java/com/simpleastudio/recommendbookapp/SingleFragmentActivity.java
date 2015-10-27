@@ -13,15 +13,13 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-public abstract class SingleFragmentActivity extends AppCompatActivity {
+public abstract class SingleFragmentActivity extends AppCompatActivity{
     private static final String TAG = "SingleFragmentActivity";
 
     protected abstract Fragment createFragment();
     protected int getLayoutResId(){
         return R.layout.activity_fragment;
     }
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,5 +36,7 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
                     .commit();
         }
     }
+
+
 
 }

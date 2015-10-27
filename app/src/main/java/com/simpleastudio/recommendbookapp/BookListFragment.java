@@ -1,6 +1,7 @@
 package com.simpleastudio.recommendbookapp;
 
-import android.graphics.Color;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -15,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
@@ -182,16 +184,21 @@ public class BookListFragment extends Fragment {
             //TODO consider situation where title does not exist in the thumbnail hashtable,
             //TODO perhaps create new GooglebooksFetcher request?
             String url = BookLab.get(getActivity()).getThumbnailUrl(b.getmTitle());
-            holder.mNetworkImageView.setErrorImageResId(R.drawable.default_book_cover);
-            holder.mNetworkImageView.setImageUrl(url, imageLoader);
+            if(url == null || url.equals("www.throwexception.com")){
+                holder.mNetworkImageView.setImageResource(R.drawable.default_book_cover);
+            } else {
+                holder.mNetworkImageView.setErrorImageResId(R.drawable.default_book_cover);
+                holder.mNetworkImageView.setImageUrl(url, imageLoader);
+            }
 
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder{
+        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
             protected NetworkImageView mNetworkImageView;
             protected TextView mTextviewTitle;
             protected TextView mTextviewAuthor;
             protected TextView mTextviewRating;
+            protected Button mMoreButton;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -199,6 +206,17 @@ public class BookListFragment extends Fragment {
                 mTextviewTitle = (TextView) itemView.findViewById(R.id.card_textview_title);
                 mTextviewAuthor = (TextView) itemView.findViewById(R.id.card_textview_author);
                 mTextviewRating = (TextView) itemView.findViewById(R.id.card_textview_rating);
+                mMoreButton = (Button) itemView.findViewById(R.id.card_button_more);
+                mMoreButton.setOnClickListener(this);
+            }
+
+            @Override
+            public void onClick(View v) {
+                int position = getAdapterPosition();
+                Book b = mList.get(position);
+                Intent i = new Intent(getContext(), BookDetailActivity.class);
+                i.putExtra(BookDetailFragment.ARGS_BOOK_TITLE, b.getmTitle());
+                startActivity(i);
             }
         }
     }
