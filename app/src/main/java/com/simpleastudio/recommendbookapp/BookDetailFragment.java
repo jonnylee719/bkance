@@ -2,6 +2,7 @@ package com.simpleastudio.recommendbookapp;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -73,6 +74,9 @@ public class BookDetailFragment extends Fragment {
         ButterKnife.bind(this, v);
         displaymBook();
         setThumbnailImage();
+        //Lock navigation drawer
+        DrawerLayout mDrawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         return v;
     }
 
@@ -81,6 +85,9 @@ public class BookDetailFragment extends Fragment {
         switch (menuItem.getItemId()){
             case android.R.id.home:
                 getActivity().onBackPressed();
+                //Unlock navigation drawer
+                DrawerLayout mDrawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
+                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                 return true;
             default:
                 return super.onOptionsItemSelected(menuItem);
