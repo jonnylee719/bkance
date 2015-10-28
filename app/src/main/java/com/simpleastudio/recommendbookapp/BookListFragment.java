@@ -19,8 +19,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.android.volley.toolbox.StringRequest;
+import com.simpleastudio.recommendbookapp.api.GoodreadsFetcher;
+import com.simpleastudio.recommendbookapp.api.GoogleBooksFetcher;
 import com.simpleastudio.recommendbookapp.api.SingRequestQueue;
 import com.simpleastudio.recommendbookapp.model.Book;
 import com.simpleastudio.recommendbookapp.model.BookLab;
@@ -88,8 +94,8 @@ public class BookListFragment extends Fragment {
     }
 
     @Override
-    public void onPause(){
-        super.onPause();
+    public void onResume(){
+        super.onResume();
         mAdapter.notifyDataSetChanged();
     }
 
@@ -180,19 +186,23 @@ public class BookListFragment extends Fragment {
             holder.mTextviewAuthor.setText(b.getmAuthors());
             String ratingCount = NumberFormat.getInstance().format(b.getmRatingCount());
             String avgRating = String.format(getResources().getString(R.string.card_rating), b.getmAvgRating(), ratingCount);
-            holder.mTextviewRating.setText(avgRating);
+            if(b.getmRatingCount() != 0 || b.getmAvgRating() != 0){
+                holder.mTextviewRating.setText(avgRating);
+            } else {
+                holder.mTextviewRating.setText("");
+            }
 
             //Getting the thumbnail url from hashtable
             //TODO consider situation where title does not exist in the thumbnail hashtable,
             //TODO perhaps create new GooglebooksFetcher request?
             String url = BookLab.get(getActivity()).getThumbnailUrl(b.getmTitle());
-            if(url == null || url.equals("www.throwexception.com")){
-                holder.mNetworkImageView.setImageResource(R.drawable.default_book_cover);
-            } else {
+            holder.mNetworkImageView.setDefaultImageResId(R.drawable.default_book_cover);
+            if(url == null){
+                new GoogleBooksFetcher(getActivity()).setThumbnail(b.getmTitle(), holder.mNetworkImageView);
+            } else if(!url.equals("www.throwexception.com")){
                 holder.mNetworkImageView.setErrorImageResId(R.drawable.default_book_cover);
                 holder.mNetworkImageView.setImageUrl(url, imageLoader);
             }
-
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -222,5 +232,4 @@ public class BookListFragment extends Fragment {
             }
         }
     }
-
 }

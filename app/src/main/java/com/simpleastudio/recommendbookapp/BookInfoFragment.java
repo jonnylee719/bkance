@@ -3,7 +3,6 @@ package com.simpleastudio.recommendbookapp;
 import android.content.Intent;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,7 +14,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -123,12 +121,10 @@ public class BookInfoFragment extends VisibleFragment {
     }
 
     private void getRecommendation(){
-        //Cancel currently loading thumbnail image
-        SingRequestQueue.getInstance(getActivity()).getRequestQueue().cancelAll("THUMBNAIL");
-
         //Stops the user from clicking continuously
         //TODO Add animation to show loading
-        //mFAB.setClickable(false);
+        //Cancel all current GET request from volley
+        SingRequestQueue.getInstance(getActivity()).getRequestQueue().cancelAll("GET");
 
         mBook = BookLab.get(getActivity()).getRandomBook();
         if (mBook != null) {
@@ -136,8 +132,8 @@ public class BookInfoFragment extends VisibleFragment {
             mImageView.setImageBitmap(null);
             loadRandomBookInfo();
             //For checking flow
-            String url = mBook.getmThumbnailUrl();
-            Log.d(TAG, "URL of past book recommendation in BookLab: " + url);
+            //String url = mBook.getmThumbnailUrl();
+            //Log.d(TAG, "URL of past book recommendation in BookLab: " + url);
         } else {
             //Make a dialogue message
             Toast.makeText(getActivity(),
@@ -157,7 +153,7 @@ public class BookInfoFragment extends VisibleFragment {
 
         //Making title as Book info
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.navigation_main);
-        NavigationView nv = (NavigationView)((AppCompatActivity) getActivity()).findViewById(R.id.navigation_view);
+        NavigationView nv = (NavigationView) getActivity().findViewById(R.id.navigation_view);
         nv.getMenu().getItem(0).setChecked(true);
 
         //Load mBook book info
@@ -209,14 +205,15 @@ public class BookInfoFragment extends VisibleFragment {
     public void onStop(){
         super.onStop();
         SingRequestQueue.getInstance(getActivity()).getRequestQueue().cancelAll("GET");
-        SingRequestQueue.getInstance(getActivity()).getRequestQueue().cancelAll("THUMBNAIL");
-        Log.i(TAG, "Canceled all request with GET and THUMBNAIL tag");
+        Log.i(TAG, "Canceled all request with GET tag");
     }
 
     public void loadRandomBookInfo(){
-        //TODO Try to put image fetching request here, so that thumbnail is always loaded after the info
-        new GoogleBooksFetcher(getActivity()).setThumbnail(mBook.getmTitle(), mImageView);
+        //Load title and description first, then do the fetching
+        mTextViewTitle.setText(mBook.getmTitle());
+        mTextViewDescription.setText(paraBreak(mBook.getmDescription()));
         goodreadsStringRequest();
+        new GoogleBooksFetcher(getActivity()).setThumbnail(mBook.getmTitle(), mImageView);
     }
 
     public void goodreadsStringRequest(){
@@ -235,7 +232,7 @@ public class BookInfoFragment extends VisibleFragment {
                         mBook.setmAuthors(resultBook.getmAuthors());
                         mBook.setmThumbnailUrl(resultBook.getmThumbnailUrl());
                         mBook.setmId(resultBook.getmId());
-                        displaymBook();
+                        displayInfoFromGoodreads();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -245,6 +242,17 @@ public class BookInfoFragment extends VisibleFragment {
         });
         request.setTag("GET");
         SingRequestQueue.getInstance(getActivity()).addToRequestQueue(request);
+    }
+
+    public void displayInfoFromGoodreads(){
+        mTextViewAuthor.setText(mBook.getmAuthors());
+        String date = String.format(getResources().getString(R.string.book_date), mBook.getmYear());
+        mTextViewDate.setText(date);
+        String avgRating = String.format(getResources().getString(R.string.book_rating), mBook.getmAvgRating());
+        mTextViewRating.setText(avgRating);
+        String ratingCount = String.format(getResources().getString(R.string.rating_count), NumberFormat.getInstance(Locale.getDefault()).format(mBook.getmRatingCount()));
+        mTextViewRatingCount.setText(ratingCount);
+        mTextViewGRTitle.setText(getResources().getString(R.string.Goodreads_title));
     }
 
     private String paraBreak(String text){
@@ -269,22 +277,5 @@ public class BookInfoFragment extends VisibleFragment {
         return resultText;
     }
 
-    public void displaymBook(){
-        mTextViewTitle.setText(mBook.getmTitle());
-        mTextViewAuthor.setText(mBook.getmAuthors());
-        String date = String.format(getResources().getString(R.string.book_date), mBook.getmYear());
-        mTextViewDate.setText(date);
-        String avgRating = String.format(getResources().getString(R.string.book_rating), mBook.getmAvgRating());
-        mTextViewRating.setText(avgRating);
-        String ratingCount = String.format(getResources().getString(R.string.rating_count), NumberFormat.getInstance(Locale.getDefault()).format(mBook.getmRatingCount()));
-        mTextViewRatingCount.setText(ratingCount);
-        mTextViewGRTitle.setText(getResources().getString(R.string.Goodreads_title));
-        mTextViewDescription.setText(paraBreak(mBook.getmDescription()));
-
-        //Enable search button to be clickable if it's not currently
-        //if(!mFAB.isClickable()){
-          //  mFAB.setClickable(true);
-        //}
-    }
 
 }

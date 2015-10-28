@@ -12,8 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.android.volley.toolbox.StringRequest;
+import com.simpleastudio.recommendbookapp.api.GoodreadsFetcher;
+import com.simpleastudio.recommendbookapp.api.GoogleBooksFetcher;
 import com.simpleastudio.recommendbookapp.api.SingRequestQueue;
 import com.simpleastudio.recommendbookapp.model.Book;
 import com.simpleastudio.recommendbookapp.model.BookLab;
@@ -94,10 +100,19 @@ public class BookDetailFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onPause(){
+        super.onPause();
+        BookLab.get(getActivity()).save();
+    }
+
     public void setThumbnailImage(){
         String url = BookLab.get(getActivity()).getThumbnailUrl(mBook.getmTitle());
-        if(url == null || url.equals("www.throwexception.com")){
-            mImageView.setImageResource(R.drawable.default_book_cover);
+        Log.d(TAG, "url: " + url);
+        if(url == null){
+            new GoogleBooksFetcher(getActivity()).setThumbnail(mBook.getmTitle(), mImageView);
+        } else if(url.equals("www.throwexception.com")){
+            mImageView.setDefaultImageResId(R.drawable.default_book_cover);
         } else {
             mImageView.setErrorImageResId(R.drawable.default_book_cover);
             mImageView.setImageUrl(url, imageLoader);
@@ -106,6 +121,51 @@ public class BookDetailFragment extends Fragment {
 
     public void displaymBook(){
         mTextViewTitle.setText(mBook.getmTitle());
+        mTextViewDescription.setText(paraBreak(mBook.getmDescription()));
+        if(mBook.getmAuthors() == null || mBook.getmYear() == 0
+                || mBook.getmRatingCount() == 0 || mBook.getmAvgRating() == 0){
+            goodreadsStringRequest();
+        } else{
+            mTextViewAuthor.setText(mBook.getmAuthors());
+            String date = String.format(getResources().getString(R.string.book_date), mBook.getmYear());
+            mTextViewDate.setText(date);
+            String avgRating = String.format(getResources().getString(R.string.book_rating), mBook.getmAvgRating());
+            mTextViewRating.setText(avgRating);
+            String ratingCount = String.format(getResources().getString(R.string.rating_count), NumberFormat.getInstance(Locale.getDefault()).format(mBook.getmRatingCount()));
+            mTextViewRatingCount.setText(ratingCount);
+            mTextViewGRTitle.setText(getResources().getString(R.string.Goodreads_title));
+        }
+    }
+
+    public void goodreadsStringRequest(){
+        Log.d(TAG, "Sending Goodreads String request");
+        String url = new GoodreadsFetcher(getActivity()).getUrl(mBook.getmTitle());
+        StringRequest request = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Book resultBook = GoodreadsFetcher.parseXmlResponse(response);
+                        mBook.setmDay(resultBook.getmDay());
+                        mBook.setmMonth(resultBook.getmMonth());
+                        mBook.setmYear(resultBook.getmYear());
+                        mBook.setmRatingCount(resultBook.getmRatingCount());
+                        mBook.setmAvgRating(resultBook.getmAvgRating());
+                        mBook.setmAuthors(resultBook.getmAuthors());
+                        mBook.setmThumbnailUrl(resultBook.getmThumbnailUrl());
+                        mBook.setmId(resultBook.getmId());
+                        displayInfoFromGoodreads();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "Something went wrong at goodreads StringRequest.");
+            }
+        });
+        request.setTag("GET");
+        SingRequestQueue.getInstance(getActivity()).addToRequestQueue(request);
+    }
+
+    public void displayInfoFromGoodreads(){
         mTextViewAuthor.setText(mBook.getmAuthors());
         String date = String.format(getResources().getString(R.string.book_date), mBook.getmYear());
         mTextViewDate.setText(date);
@@ -114,7 +174,6 @@ public class BookDetailFragment extends Fragment {
         String ratingCount = String.format(getResources().getString(R.string.rating_count), NumberFormat.getInstance(Locale.getDefault()).format(mBook.getmRatingCount()));
         mTextViewRatingCount.setText(ratingCount);
         mTextViewGRTitle.setText(getResources().getString(R.string.Goodreads_title));
-        mTextViewDescription.setText(paraBreak(mBook.getmDescription()));
     }
 
     private String paraBreak(String text){

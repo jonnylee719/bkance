@@ -59,9 +59,10 @@ public class GoogleBooksFetcher {
     }
 
     public String getThumbnailUrl(JSONObject object, String title){
-        String thumbnailLink = "wwww.throwexception.com";
-        if(BookLab.get(mAppContext).getThumbnailUrl(title) != null){
+        String thumbnailLink = "www.throwexception.com";
+        if(BookLab.get(mAppContext).getThumbnailUrl(title) != null ){
             thumbnailLink = BookLab.get(mAppContext).getThumbnailUrl(title);
+            Log.d(TAG, "URL from storage: " + thumbnailLink);
         }
         else {
             boolean foundThumbnail = false;
@@ -100,9 +101,14 @@ public class GoogleBooksFetcher {
             @Override
             public void onResponse(JSONObject response) {
                 String thumbnailUrl = getThumbnailUrl(response, bookTitle);
-                ImageLoader imageLoader = SingRequestQueue.getInstance(mAppContext).getImageLoader();
-                networkImageView.setErrorImageResId(R.drawable.default_book_cover);
-                networkImageView.setImageUrl(thumbnailUrl, imageLoader);
+                Log.d(TAG, "URL: " + thumbnailUrl);
+                if(thumbnailUrl.equals("www.throwexception.com")){
+                    networkImageView.setDefaultImageResId(R.drawable.default_book_cover);
+                } else {
+                    ImageLoader imageLoader = SingRequestQueue.getInstance(mAppContext).getImageLoader();
+                    networkImageView.setErrorImageResId(R.drawable.default_book_cover);
+                    networkImageView.setImageUrl(thumbnailUrl, imageLoader);
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -110,7 +116,7 @@ public class GoogleBooksFetcher {
                 error.printStackTrace();
             }
         });
-        jsonRequest.setTag("THUMBNAIL");
+        jsonRequest.setTag("GET");
         SingRequestQueue.getInstance(mAppContext).addToRequestQueue(jsonRequest);
     }
 }
