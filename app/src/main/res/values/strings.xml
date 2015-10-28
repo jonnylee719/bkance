@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">Bookance</string>
-    <string name="title_activity_book_info">BookInfoActivity</string>
+    <string name="app_name">Bkance</string>
 
     <string name="book_title">Book title</string>
     <string name="book_author">Author</string>
@@ -13,7 +12,6 @@
     <string name="thumbnail_description">Book Cover</string>
     <string name="rating_count">%1$s ratings</string>
     <string name="Goodreads_title">Goodreads</string>
-    <string name="title_activity_single_fragment">SingleFragmentActivity</string>
     <string name="input_book">Enter</string>
     <string name="hint_enter_book">Book title</string>
     <string name="title_setting">Setting</string>
@@ -24,7 +22,7 @@
     <string name="card_more_button">Learn more</string>
     <string name="card_add_button">Add</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="navigation_main">Book Info</string>
+    <string name="navigation_main">Books</string>
     <string name="navigation_previous">Previous</string>
     <string name="navigation_saved">Saved</string>
     <string name="navigation_setting">Setting</string>
@@ -44,4 +42,5 @@
 
     <string name="snackbar_delete_text">%1$d marked as Deleted</string>
     <string name="card_rating">%1$s avg rating by %2$s</string>
+    <string name="title_activity_book_detail">Book Detail</string>
 </resources>
