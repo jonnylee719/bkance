@@ -14,12 +14,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.simpleastudio.recommendbookapp.api.GoodreadsFetcher;
@@ -131,8 +133,6 @@ public class BookInfoFragment extends VisibleFragment {
 
         mBook = BookLab.get(getActivity()).getRandomBook();
         if (mBook != null) {
-            clearTextviews();
-            mImageView.setImageBitmap(null);
             loadRandomBookInfo();
             //For checking flow
             //String url = mBook.getmThumbnailUrl();
@@ -212,11 +212,27 @@ public class BookInfoFragment extends VisibleFragment {
     }
 
     public void loadRandomBookInfo(){
+        //Clear current view
+        clearTextviews();
+        mImageView.setImageBitmap(null);
         //Load title and description first, then do the fetching
         mTextViewTitle.setText(mBook.getmTitle());
         mTextViewDescription.setText(paraBreak(mBook.getmDescription()));
         goodreadsStringRequest();
-        new GoogleBooksFetcher(getActivity()).setThumbnail(mBook.getmTitle(), mImageView);
+        setThumbnailImage();
+    }
+
+    public void setThumbnailImage(){
+        String url = BookLab.get(getActivity()).getThumbnailUrl(mBook.getmTitle());
+        Log.d(TAG, "url: " + url);
+        if(url == null){
+            new GoogleBooksFetcher(getActivity()).setThumbnail(mBook.getmTitle(), mImageView);
+        } else if(url.equals("www.throwexception.com")){
+            Log.d(TAG, "Equals to throwexception.com");
+            mImageView.setDefaultImageResId(R.drawable.default_book_cover);
+        } else{
+            new GoogleBooksFetcher(getActivity()).setThumbnail(mBook.getmTitle(), mImageView);
+        }
     }
 
     public void goodreadsStringRequest(){

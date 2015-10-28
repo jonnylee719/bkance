@@ -103,11 +103,14 @@ public class GoogleBooksFetcher {
                 String thumbnailUrl = getThumbnailUrl(response, bookTitle);
                 Log.d(TAG, "URL: " + thumbnailUrl);
                 if(thumbnailUrl.equals("www.throwexception.com")){
+                    Log.d(TAG, "Equals to exception url");
+                    networkImageView.setImageResource(R.drawable.default_book_cover);
                     networkImageView.setDefaultImageResId(R.drawable.default_book_cover);
                 } else {
                     ImageLoader imageLoader = SingRequestQueue.getInstance(mAppContext).getImageLoader();
-                    networkImageView.setErrorImageResId(R.drawable.default_book_cover);
                     networkImageView.setImageUrl(thumbnailUrl, imageLoader);
+                    networkImageView.setErrorImageResId(R.drawable.default_book_cover);
+                    networkImageView.setImageBitmap(null);
                 }
             }
         }, new Response.ErrorListener() {

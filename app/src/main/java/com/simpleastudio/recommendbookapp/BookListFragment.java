@@ -199,7 +199,7 @@ public class BookListFragment extends Fragment {
             holder.mNetworkImageView.setDefaultImageResId(R.drawable.default_book_cover);
             if(url == null){
                 new GoogleBooksFetcher(getActivity()).setThumbnail(b.getmTitle(), holder.mNetworkImageView);
-            } else if(!url.equals("www.throwexception.com")){
+            } else {
                 holder.mNetworkImageView.setErrorImageResId(R.drawable.default_book_cover);
                 holder.mNetworkImageView.setImageUrl(url, imageLoader);
             }
