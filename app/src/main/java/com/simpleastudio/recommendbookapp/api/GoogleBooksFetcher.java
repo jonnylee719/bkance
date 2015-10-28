@@ -110,7 +110,6 @@ public class GoogleBooksFetcher {
                     ImageLoader imageLoader = SingRequestQueue.getInstance(mAppContext).getImageLoader();
                     networkImageView.setImageUrl(thumbnailUrl, imageLoader);
                     networkImageView.setErrorImageResId(R.drawable.default_book_cover);
-                    networkImageView.setImageBitmap(null);
                 }
             }
         }, new Response.ErrorListener() {
