@@ -3,7 +3,8 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="192dp"
     android:padding="16dp"
-    android:gravity="bottom">
+    android:gravity="bottom"
+    android:background="@color/divider">
 
 
 </LinearLayout>
