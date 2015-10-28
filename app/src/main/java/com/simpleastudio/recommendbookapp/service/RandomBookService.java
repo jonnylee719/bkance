@@ -80,7 +80,8 @@ public class RandomBookService extends IntentService {
                 new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(getString(R.string.notification_new_book))
-                .setContentText(String.format(getString(R.string.notification_content_text), title));
+                .setContentText(String.format(getString(R.string.notification_content_text), title))
+                .setAutoCancel(true);
         Intent resultIntent = new Intent(this, NavigationActivity.class);
 
         //Task stack builder allows backward navigation from opened activity to home
