@@ -2,13 +2,19 @@ package com.simpleastudio.recommendbookapp.service;
 
 import android.app.AlarmManager;
 import android.app.IntentService;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationBuilderWithBuilderAccessor;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.simpleastudio.recommendbookapp.NavigationActivity;
+import com.simpleastudio.recommendbookapp.R;
 import com.simpleastudio.recommendbookapp.model.Book;
 import com.simpleastudio.recommendbookapp.model.BookLab;
 
@@ -23,6 +29,8 @@ public class RandomBookService extends IntentService {
     public static final String PERM_PRIVATE =
             "com.simpleastudio.recommendbookapp.PRIVATE";
     public static final String PREF_RANDOM_REC = "randomRecTitle";
+    public static final int notificationID = 1;
+    private NotificationManager mNotificationManager;
 
     public RandomBookService(){
         super(TAG);
@@ -41,6 +49,7 @@ public class RandomBookService extends IntentService {
                     .putString(PREF_RANDOM_REC, recommendation.getmTitle())
                     .commit();
             sendBroadcast(new Intent(EVENT_NEW_RECOMMENDATION), PERM_PRIVATE);
+            sendNotification(recommendation.getmTitle());
             Log.d(TAG, "Broadcast intent should be sent.");
         }
     }
@@ -64,5 +73,28 @@ public class RandomBookService extends IntentService {
             //Show that random book is turned off
             Toast.makeText(c, "Daily recommendation is off", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void sendNotification(String title){
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setContentTitle(getString(R.string.notification_new_book))
+                .setContentText(String.format(getString(R.string.notification_content_text), title));
+        Intent resultIntent = new Intent(this, NavigationActivity.class);
+
+        //Task stack builder allows backward navigation from opened activity to home
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(NavigationActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
+
+        PendingIntent pendingIntent =
+                stackBuilder.getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        mBuilder.setContentIntent(pendingIntent);
+        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(notificationID, mBuilder.build());
     }
 }
