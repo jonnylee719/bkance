@@ -54,6 +54,15 @@ public class BookInputFragment extends VisibleFragment {
         NavigationView nv = (NavigationView)((AppCompatActivity) getActivity()).findViewById(R.id.navigation_view);
         nv.getMenu().getItem(2).setChecked(true);
 
+        bookInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus){
+                    closeKeyboard(getActivity(), bookInput.getWindowToken());
+                }
+            }
+        });
+
         enterBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,12 +94,6 @@ public class BookInputFragment extends VisibleFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.bookinput_actionbar_menu, menu);
-    }
-
-    @Override
-    public void onPause(){
-        super.onPause();
-        closeKeyboard(getActivity(), bookInput.getWindowToken());
     }
 
     @Override
