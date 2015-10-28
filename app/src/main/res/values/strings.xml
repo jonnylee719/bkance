@@ -6,7 +6,7 @@
     <string name="book_author">Author</string>
     <string name="book_description">Description</string>
     <string name="book_date">First published: %1$s</string>
-    <string name="book_rating">Rating: %1$s</string>
+    <string name="book_rating">%1$s avg rating</string>
     <string name="button_search_book">Search book</string>
     <string name="action_settings">Settings</string>
 
