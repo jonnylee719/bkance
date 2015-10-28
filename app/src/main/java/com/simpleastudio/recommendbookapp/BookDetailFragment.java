@@ -111,7 +111,7 @@ public class BookDetailFragment extends Fragment {
         Log.d(TAG, "url: " + url);
         if(url == null){
             new GoogleBooksFetcher(getActivity()).setThumbnail(mBook.getmTitle(), mImageView);
-        } else if(url.equals("www.throwexception.com")){
+        } else if(url.equals("throwexception")){
             mImageView.setDefaultImageResId(R.drawable.default_book_cover);
         } else {
             mImageView.setErrorImageResId(R.drawable.default_book_cover);

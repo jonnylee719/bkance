@@ -59,7 +59,7 @@ public class GoogleBooksFetcher {
     }
 
     public String getThumbnailUrl(JSONObject object, String title){
-        String thumbnailLink = "www.throwexception.com";
+        String thumbnailLink = "throwexception";
         if(BookLab.get(mAppContext).getThumbnailUrl(title) != null ){
             thumbnailLink = BookLab.get(mAppContext).getThumbnailUrl(title);
             Log.d(TAG, "URL from storage: " + thumbnailLink);
@@ -102,7 +102,7 @@ public class GoogleBooksFetcher {
             public void onResponse(JSONObject response) {
                 String thumbnailUrl = getThumbnailUrl(response, bookTitle);
                 Log.d(TAG, "URL: " + thumbnailUrl);
-                if(thumbnailUrl.equals("www.throwexception.com")){
+                if(thumbnailUrl.equals("throwexception")){
                     Log.d(TAG, "Equals to exception url");
                     networkImageView.setImageResource(R.drawable.default_book_cover);
                     networkImageView.setDefaultImageResId(R.drawable.default_book_cover);
