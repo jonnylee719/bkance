@@ -3,9 +3,11 @@ package com.simpleastudio.recommendbookapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +32,7 @@ import com.simpleastudio.recommendbookapp.api.GoogleBooksFetcher;
 import com.simpleastudio.recommendbookapp.api.SingRequestQueue;
 import com.simpleastudio.recommendbookapp.model.Book;
 import com.simpleastudio.recommendbookapp.model.BookLab;
+import com.simpleastudio.recommendbookapp.service.RandomBookService;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -42,7 +45,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Jonathan on 9/10/2015.
  */
-public class BookListFragment extends Fragment {
+public class BookListFragment extends VisibleFragment {
     private static final String TAG = "BookListFragment";
     @Bind(R.id.book_recycler_view)
     protected RecyclerView mRecyclerView;
@@ -97,6 +100,25 @@ public class BookListFragment extends Fragment {
     public void onResume(){
         super.onResume();
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void actionOnReceive(){
+        //Putting the recommended title into current recommended title
+        String recBookTitle = PreferenceManager.getDefaultSharedPreferences(getActivity())
+                .getString(RandomBookService.PREF_RANDOM_REC, null);
+        Log.d(TAG, "RecBookTitle: " + recBookTitle);
+
+        PreferenceManager.getDefaultSharedPreferences(getActivity())
+                .edit()
+                .putString(BookLab.PREF_REC, recBookTitle)
+                .commit();
+
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        BookInfoFragment fragment = new BookInfoFragment();
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, fragment)
+                .commit();
     }
 
     public class BookCardAdaptor extends RecyclerView.Adapter<BookCardAdaptor.ViewHolder>{

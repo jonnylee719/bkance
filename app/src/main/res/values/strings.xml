@@ -32,7 +32,7 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="Header">Header</string>
-    <string name="new_recommendation">You have a new bookance</string>
+    <string name="new_recommendation">You have a new book</string>
     <string name="bookinfo_search">Search</string>
     <string name="action_refresh">Refresh</string>
 
@@ -45,4 +45,5 @@
     <string name="title_activity_book_detail">Book Detail</string>
     <string name="setting_current_title">Current title</string>
     <string name="setting_notification">Notifications</string>
+    <string name="snackbar_open">Open</string>
 </resources>

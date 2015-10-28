@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.simpleastudio.recommendbookapp.service.RandomBookService;
@@ -34,8 +35,17 @@ public class VisibleFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG, "Received a broadcast intent.");
+            Snackbar.make(getView(), R.string.new_recommendation, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.snackbar_open, snackbarClickListener).show();
+        }
+    };
+
+    final View.OnClickListener snackbarClickListener = new View.OnClickListener(){
+
+        @Override
+        public void onClick(View v) {
+            Log.d(TAG, "Opened book recommendation.");
             actionOnReceive();
-            Snackbar.make(getView(), R.string.new_recommendation, Snackbar.LENGTH_SHORT).show();
         }
     };
 

@@ -20,6 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 
+import com.simpleastudio.recommendbookapp.model.BookLab;
 import com.simpleastudio.recommendbookapp.service.RandomBookService;
 
 import butterknife.Bind;
@@ -28,7 +29,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Jonathan on 15/10/2015.
  */
-public class SettingFragment extends Fragment {
+public class SettingFragment extends VisibleFragment {
     private static final String TAG = "SettingFragment";
     private static final String PREF_CHECKBOX = "checkboxboolean";
     private static final int INPUT_BOOK_REQUEST = 1;
@@ -110,6 +111,25 @@ public class SettingFragment extends Fragment {
         PreferenceManager.getDefaultSharedPreferences(getActivity())
                 .edit()
                 .putBoolean(PREF_CHECKBOX, mDailyRecCheckbox.isChecked())
+                .commit();
+    }
+
+    @Override
+    public void actionOnReceive(){
+        //Putting the recommended title into current recommended title
+        String recBookTitle = PreferenceManager.getDefaultSharedPreferences(getActivity())
+                .getString(RandomBookService.PREF_RANDOM_REC, null);
+        Log.d(TAG, "RecBookTitle: " + recBookTitle);
+
+        PreferenceManager.getDefaultSharedPreferences(getActivity())
+                .edit()
+                .putString(BookLab.PREF_REC, recBookTitle)
+                .commit();
+
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        BookInfoFragment fragment = new BookInfoFragment();
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, fragment)
                 .commit();
     }
 }
