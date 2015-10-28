@@ -72,8 +72,11 @@ public class BookInfoFragment extends VisibleFragment {
         String storedTitle = PreferenceManager.getDefaultSharedPreferences(getActivity())
                 .getString(BookInputFragment.PREF_INITIAL_BOOK, null);
         if(storedTitle == null || storedTitle.equals("")){
-            Intent i = new Intent(getActivity(), BookInputActivity.class);
-            startActivityForResult(i, INPUT_BOOK_REQUEST);
+            BookInputFragment fragment = new BookInputFragment();
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainer, fragment)
+                    .commit();
         }
 
         setHasOptionsMenu(true);
