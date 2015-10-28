@@ -31,6 +31,7 @@ public class RandomBookService extends IntentService {
     public static final String PREF_RANDOM_REC = "randomRecTitle";
     public static final int notificationID = 1;
     private NotificationManager mNotificationManager;
+    public static final String PREF_IS_ALARM_ON = "isAlarmOn";
 
     public RandomBookService(){
         super(TAG);
@@ -73,6 +74,12 @@ public class RandomBookService extends IntentService {
             //Show that random book is turned off
             Toast.makeText(c, "Daily recommendation is off", Toast.LENGTH_SHORT).show();
         }
+
+        //Saving if alarm manager should be on or off
+        PreferenceManager.getDefaultSharedPreferences(c)
+                .edit()
+                .putBoolean(RandomBookService.PREF_IS_ALARM_ON, isOn)
+                .commit();
     }
 
     public void sendNotification(String title){
