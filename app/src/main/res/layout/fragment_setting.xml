@@ -15,47 +15,75 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:text="@string/title_setting"
+        android:paddingLeft="4dp"
+        android:paddingStart="4dp"
+        android:text="@string/setting_current_title"
+        style="@style/TextAppearance.AppCompat.Body1"
+        android:textStyle="bold"
+        android:textSize="13sp"
+        android:textAllCaps="true"
         />
 
     <View
-        android:id="@+id/view_underline"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="8dp"
+        android:id="@+id/view_underline_title"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@id/textview_setting"
         android:background="@android:color/black"
         />
 
-    <TextView
-        android:id="@+id/textview_current_book_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/view_underline"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:text="@string/title_current_book"
-
-        />
-
     <Button
         android:id="@+id/button_current_book"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textview_current_book_title"
+        android:layout_below="@id/view_underline_title"
         android:textAllCaps="false"
-        android:gravity="left|center_vertical"
-        />
+        android:text="The sun also rises"
+        android:textStyle="italic"
+        android:gravity="center_horizontal|center_vertical"
+        style="@style/Base.TextAppearance.AppCompat.Body1"
+        android:textSize="16sp"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:ellipsize="end"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textview_notification"
+        android:text="@string/setting_notification"
+        android:layout_below="@id/button_current_book"
+        android:paddingStart="4dp"
+        android:paddingLeft="4dp"
+        android:paddingTop="16dp"
+        android:textAllCaps="true"
+        style="@style/TextAppearance.AppCompat.Body1"
+        android:textStyle="bold"
+        android:textSize="13sp"/>
+
+    <View
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="8dp"
+        android:id="@+id/view_underline_notification"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/textview_notification"
+        android:background="@android:color/black"
+        />
 
     <CheckBox
         android:id="@+id/checkbox_daily_rec"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/button_current_book"
+        android:layout_below="@id/view_underline_notification"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:checked="false"
-        android:text="@string/text_daily_rec"/>
+        style="@style/TextAppearance.AppCompat.Body1"
+        android:text="@string/text_daily_rec"
+        android:textSize="16sp"/>
 
 
 

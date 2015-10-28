@@ -43,4 +43,6 @@
     <string name="snackbar_delete_text">%1$d marked as Deleted</string>
     <string name="card_rating">%1$s avg rating by %2$s</string>
     <string name="title_activity_book_detail">Book Detail</string>
+    <string name="setting_current_title">Current title</string>
+    <string name="setting_notification">Notifications</string>
 </resources>
