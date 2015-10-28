@@ -56,13 +56,13 @@ public class RandomBookService extends IntentService {
             alarmManager.setRepeating(AlarmManager.RTC,
                     System.currentTimeMillis(), RAND_INTERVAL, pi);
             //Show that random book is turned on
-            Toast.makeText(c, "Random Book Service is on", Toast.LENGTH_SHORT).show();
+            Toast.makeText(c, "Daily recommendation is on", Toast.LENGTH_SHORT).show();
         }
         else {
             alarmManager.cancel(pi);
             pi.cancel();
             //Show that random book is turned off
-            Toast.makeText(c, "Random Book Service is off", Toast.LENGTH_SHORT).show();
+            Toast.makeText(c, "Daily recommendation is off", Toast.LENGTH_SHORT).show();
         }
     }
 }
