@@ -35,6 +35,10 @@ public class VisibleFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG, "Received a broadcast intent.");
+            //Send result to random book service so no notification will be send
+            setResultCode(Activity.RESULT_CANCELED);
+
+            //Give user the option to open the new book recommendation
             Snackbar.make(getView(), R.string.new_recommendation, Snackbar.LENGTH_LONG)
                     .setAction(R.string.snackbar_open, snackbarClickListener).show();
         }

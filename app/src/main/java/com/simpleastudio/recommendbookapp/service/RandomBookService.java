@@ -1,13 +1,14 @@
 package com.simpleastudio.recommendbookapp.service;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.IntentService;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationBuilderWithBuilderAccessor;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
@@ -29,7 +30,7 @@ public class RandomBookService extends IntentService {
     public static final String PERM_PRIVATE =
             "com.simpleastudio.recommendbookapp.PRIVATE";
     public static final String PREF_RANDOM_REC = "randomRecTitle";
-    public static final int notificationID = 1;
+    public static final int NOTIFICATION_ID = 1;
     private NotificationManager mNotificationManager;
     public static final String PREF_IS_ALARM_ON = "isAlarmOn";
 
@@ -49,8 +50,8 @@ public class RandomBookService extends IntentService {
                     .edit()
                     .putString(PREF_RANDOM_REC, recommendation.getmTitle())
                     .commit();
-            sendBroadcast(new Intent(EVENT_NEW_RECOMMENDATION), PERM_PRIVATE);
-            sendNotification(recommendation.getmTitle());
+            Notification notification = buildNotification(recommendation.getmTitle());
+            showBackgroundNotification(NOTIFICATION_ID, notification);
             Log.d(TAG, "Broadcast intent should be sent.");
         }
     }
@@ -82,7 +83,16 @@ public class RandomBookService extends IntentService {
                 .commit();
     }
 
-    public void sendNotification(String title){
+    void showBackgroundNotification(int requestCode, Notification notification){
+        Intent i = new Intent(EVENT_NEW_RECOMMENDATION);
+        i.putExtra("REQUEST_CODE", requestCode);
+        i.putExtra("NOTIFICATION", notification);
+
+        sendOrderedBroadcast(i, PERM_PRIVATE, null, null,
+                Activity.RESULT_OK, null, null);
+    }
+
+    public Notification buildNotification(String title){
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_notification)
@@ -102,7 +112,7 @@ public class RandomBookService extends IntentService {
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
         mBuilder.setContentIntent(pendingIntent);
-        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(notificationID, mBuilder.build());
+        Notification notification = mBuilder.build();
+        return notification;
     }
 }
