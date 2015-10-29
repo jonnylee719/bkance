@@ -28,7 +28,7 @@ import java.util.ArrayList;
  */
 public class BookSearchService extends IntentService {
     private static final String TAG = "BookSearchService";
-    public static final String PREF_SEARCHED_TITLE = "searchedTitle";
+    public static final String PREF_HAVE_NEW_TITLE = "searchedTitle";
 
     public BookSearchService(){
         super(TAG);
@@ -45,17 +45,14 @@ public class BookSearchService extends IntentService {
 
         Log.i(TAG, "Received an intent: " + intent);
 
-        PreferenceManager.getDefaultSharedPreferences(this)
-                .edit()
-                .putBoolean(PREF_SEARCHED_TITLE, false)
-                .commit();
 
-        boolean searchedTitle = PreferenceManager.getDefaultSharedPreferences(this)
-                .getBoolean(PREF_SEARCHED_TITLE, false);
+
+        boolean haveNewTitle = PreferenceManager.getDefaultSharedPreferences(this)
+                .getBoolean(PREF_HAVE_NEW_TITLE, false);
         String inputTitle = PreferenceManager.getDefaultSharedPreferences(this)
                 .getString(BookInputFragment.PREF_INITIAL_BOOK, null);
 
-        if(!searchedTitle){
+        if(haveNewTitle){
             //Get search results using SingRequestQueue
             String url = new TastekBooksFetcher(this).getRecommedationUrl(inputTitle);
             JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -82,10 +79,10 @@ public class BookSearchService extends IntentService {
             });
             SingRequestQueue.getInstance(this).addToRequestQueue(jsonRequest);
 
-            //Change searched title boolean to true
+            //Change have new title boolean to false
             PreferenceManager.getDefaultSharedPreferences(this)
                     .edit()
-                    .putBoolean(PREF_SEARCHED_TITLE, true)
+                    .putBoolean(PREF_HAVE_NEW_TITLE, false)
                     .commit();
         }
     }

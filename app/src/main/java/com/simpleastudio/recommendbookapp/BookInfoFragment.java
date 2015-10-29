@@ -92,12 +92,19 @@ public class BookInfoFragment extends VisibleFragment {
                 mBook = newRecBook;
             }
             else {
-                //Hashtable of recommendations is 0
-                //Make a dialogue message
-                Toast.makeText(getActivity(),
-                        "There are no more recommendations for this particular book.",
-                        Toast.LENGTH_SHORT)
-                        .show();
+                if(storedTitle == null || storedTitle.equals("")){
+                    Toast.makeText(getActivity(),
+                            getString(R.string.no_search_title_message),
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    //Hashtable of recommendations is 0
+                    //Make a dialogue message
+                    Toast.makeText(getActivity(),
+                            getString(R.string.no_recommendations_message),
+                            Toast.LENGTH_SHORT)
+                            .show();
+                }
+
             }
         }
         else{
@@ -140,7 +147,7 @@ public class BookInfoFragment extends VisibleFragment {
         } else {
             //Make a dialogue message
             Toast.makeText(getActivity(),
-                    "There are no more recommendations for this particular book.",
+                    getString(R.string.no_recommendations_message),
                     Toast.LENGTH_SHORT)
                     .show();
 

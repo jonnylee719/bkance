@@ -5,16 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -66,6 +63,16 @@ public class BookInputFragment extends VisibleFragment {
         enterBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(bookInput.getText() == null ||
+                        bookInput.getText().toString().equals("")){
+                    return;
+                }
+
+                PreferenceManager.getDefaultSharedPreferences(getActivity())
+                        .edit()
+                        .putBoolean(BookSearchService.PREF_HAVE_NEW_TITLE, true)
+                        .commit();
+
                 PreferenceManager.getDefaultSharedPreferences(getActivity())
                         .edit()
                         .putString(PREF_INITIAL_BOOK, bookInput.getText().toString())
@@ -74,10 +81,6 @@ public class BookInputFragment extends VisibleFragment {
                 //Start service to search recommendations for the new title
                 Intent iService = new Intent(getActivity(), BookSearchService.class);
                 getActivity().startService(iService);
-
-                NavigationView nv = (NavigationView) ((AppCompatActivity) getActivity()).findViewById(R.id.navigation_view);
-                nv.getMenu().getItem(0).setChecked(true);
-
 
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 BookInfoFragment fragment = new BookInfoFragment();

@@ -51,4 +51,6 @@
     <string name="setting_about">About</string>
     <string name="rate_this_app">Rate this app</string>
     <string name="rate_this_app_comment">Your review will help improve further development of the app. Thank you.</string>
+    <string name="no_search_title_message">Please enter book title for search</string>
+    <string name="no_recommendations_message">There are no more recommendations for the book</string>
 </resources>
