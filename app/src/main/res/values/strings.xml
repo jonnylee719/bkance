@@ -48,4 +48,7 @@
     <string name="snackbar_open">Open</string>
     <string name="notification_new_book">You have a new book</string>
     <string name="notification_content_text">New Book: %1$s</string>
+    <string name="setting_about">About</string>
+    <string name="rate_this_app">Rate this app</string>
+    <string name="rate_this_app_comment">Your review will help improve further development of the app. Thank you.</string>
 </resources>

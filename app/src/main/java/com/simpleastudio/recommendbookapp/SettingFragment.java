@@ -1,24 +1,21 @@
 package com.simpleastudio.recommendbookapp;
 
 import android.app.Activity;
-import android.content.Context;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 
 import com.simpleastudio.recommendbookapp.model.BookLab;
 import com.simpleastudio.recommendbookapp.service.RandomBookService;
@@ -37,6 +34,8 @@ public class SettingFragment extends VisibleFragment {
     Button mTitleInputButton;
     @Bind(R.id.checkbox_daily_rec)
     CheckBox mDailyRecCheckbox;
+    @Bind(R.id.linearlayout_rate_app)
+    LinearLayout linearLayoutRateApp;
     boolean checkBoxTick;
 
     @Override
@@ -88,6 +87,13 @@ public class SettingFragment extends VisibleFragment {
             }
         });
 
+        linearLayoutRateApp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rateApp();
+            }
+        });
+
         return v;
     }
 
@@ -131,5 +137,20 @@ public class SettingFragment extends VisibleFragment {
         fragmentManager.beginTransaction()
                 .replace(R.id.fragmentContainer, fragment)
                 .commit();
+    }
+
+    public void rateApp(){
+        Uri uri = Uri.parse("market://details?id=" + getContext().getPackageName());
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
+                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        try{
+            startActivity(intent);
+        }catch (ActivityNotFoundException e){
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://play.google.com/store/apps/details?id=" + getContext().getPackageName())));
+        }
+
     }
 }
