@@ -244,30 +244,36 @@ public class BookInfoFragment extends VisibleFragment {
 
     public void goodreadsStringRequest(){
         Log.d(TAG, "Sending Goodreads String request");
-        String url = new GoodreadsFetcher(getActivity()).getUrl(mBook.getmTitle());
-        StringRequest request = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Book resultBook = GoodreadsFetcher.parseXmlResponse(response);
-                        mBook.setmDay(resultBook.getmDay());
-                        mBook.setmMonth(resultBook.getmMonth());
-                        mBook.setmYear(resultBook.getmYear());
-                        mBook.setmRatingCount(resultBook.getmRatingCount());
-                        mBook.setmAvgRating(resultBook.getmAvgRating());
-                        mBook.setmAuthors(resultBook.getmAuthors());
-                        mBook.setmThumbnailUrl(resultBook.getmThumbnailUrl());
-                        mBook.setmId(resultBook.getmId());
-                        displayInfoFromGoodreads();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, "Something went wrong at goodreads StringRequest.");
-            }
-        });
-        request.setTag("GET");
-        SingRequestQueue.getInstance(getActivity()).addToRequestQueue(request);
+        if(mBook.getmRatingCount() != -1 && mBook.getmYear() != -1 &&
+                mBook.getmAvgRating() != -1 && mBook.getmAuthors() != null &&
+                mBook.getmId() != null){
+            //if data for mBook has already been fetched from goodreads
+            displayInfoFromGoodreads();
+        } else {
+            String url = new GoodreadsFetcher(getActivity()).getUrl(mBook.getmTitle());
+            StringRequest request = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Book resultBook = GoodreadsFetcher.parseXmlResponse(response);
+                            mBook.setmDay(resultBook.getmDay());
+                            mBook.setmMonth(resultBook.getmMonth());
+                            mBook.setmYear(resultBook.getmYear());
+                            mBook.setmRatingCount(resultBook.getmRatingCount());
+                            mBook.setmAvgRating(resultBook.getmAvgRating());
+                            mBook.setmAuthors(resultBook.getmAuthors());
+                            mBook.setmId(resultBook.getmId());
+                            displayInfoFromGoodreads();
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d(TAG, "Something went wrong at goodreads StringRequest.");
+                }
+            });
+            request.setTag("GET");
+            SingRequestQueue.getInstance(getActivity()).addToRequestQueue(request);
+        }
     }
 
     public void displayInfoFromGoodreads(){

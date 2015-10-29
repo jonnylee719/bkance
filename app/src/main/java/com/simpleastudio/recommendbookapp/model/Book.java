@@ -15,12 +15,12 @@ public class Book implements Serializable {
     private String mDescription;
     private String mAuthors;
     private Date mPublishDate;
-    private int mDay;
-    private int mMonth;
-    private int mYear;
+    private int mDay = -1;
+    private int mMonth = -1;
+    private int mYear = -1;
     private String mIsbn;
-    private int mRatingCount;
-    private double mAvgRating;
+    private int mRatingCount = -1;
+    private double mAvgRating = -1;
     private String mThumbnailUrl;
 
     @Override
