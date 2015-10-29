@@ -97,11 +97,11 @@ public class BookSearchService extends IntentService {
             JSONArray results = similar.getJSONArray("Results");
             int totalItems = results.length();
             int parseItems;
-            if(totalItems >= 50){
-                parseItems = 50;
+            if(totalItems >= 100){
+                parseItems = 100;
             }
             else{
-                parseItems = 50;
+                parseItems = totalItems;
             }
 
             //Parsing a maximum of 50 searched results
