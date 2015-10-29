@@ -24,7 +24,7 @@ import com.simpleastudio.recommendbookapp.model.BookLab;
  */
 public class RandomBookService extends IntentService {
     private static final String TAG = "RandomBookService";
-    private static final int RAND_INTERVAL = 1000*2;
+    private static final int RAND_INTERVAL = 1000*60*60*24;
     public static final String EVENT_NEW_RECOMMENDATION =
             "com.simpleastudio.recommendbookapp.NEW_RANDOM";
     public static final String PERM_PRIVATE =
