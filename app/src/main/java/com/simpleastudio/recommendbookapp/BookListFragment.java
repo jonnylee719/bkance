@@ -105,11 +105,11 @@ public class BookListFragment extends VisibleFragment {
     @Override
     public void actionOnReceive(){
         //Putting the recommended title into current recommended title
-        String recBookTitle = PreferenceManager.getDefaultSharedPreferences(getActivity())
+        String recBookTitle = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
                 .getString(RandomBookService.PREF_RANDOM_REC, null);
         Log.d(TAG, "RecBookTitle: " + recBookTitle);
 
-        PreferenceManager.getDefaultSharedPreferences(getActivity())
+        PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
                 .edit()
                 .putString(BookLab.PREF_REC, recBookTitle)
                 .commit();

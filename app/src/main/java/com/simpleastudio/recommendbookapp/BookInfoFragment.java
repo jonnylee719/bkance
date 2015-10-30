@@ -71,7 +71,7 @@ public class BookInfoFragment extends VisibleFragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         //Get search term from shared preference
-        String storedTitle = PreferenceManager.getDefaultSharedPreferences(getActivity())
+        String storedTitle = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
                 .getString(BookInputFragment.PREF_INITIAL_BOOK, null);
         if(storedTitle == null || storedTitle.equals("")){
             BookInputFragment fragment = new BookInputFragment();
@@ -84,7 +84,7 @@ public class BookInfoFragment extends VisibleFragment {
         setHasOptionsMenu(true);
 
         //Initiate mBook
-        String recBookTitle = PreferenceManager.getDefaultSharedPreferences(getActivity())
+        String recBookTitle = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
                 .getString(BookLab.PREF_REC, null);
         if(recBookTitle == null){
             Book newRecBook = BookLab.get(getActivity()).getRandomBook();
@@ -181,11 +181,11 @@ public class BookInfoFragment extends VisibleFragment {
 
     @Override
     public void actionOnReceive(){
-        String recBookTitle = PreferenceManager.getDefaultSharedPreferences(getActivity())
+        String recBookTitle = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
                 .getString(RandomBookService.PREF_RANDOM_REC, null);
         Log.d(TAG, "RecBookTitle: " + recBookTitle);
 
-        PreferenceManager.getDefaultSharedPreferences(getActivity())
+        PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
                 .edit()
                 .putString(BookLab.PREF_REC, recBookTitle)
                 .commit();

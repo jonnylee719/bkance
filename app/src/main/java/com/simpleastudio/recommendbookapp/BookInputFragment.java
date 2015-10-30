@@ -68,12 +68,12 @@ public class BookInputFragment extends VisibleFragment {
                     return;
                 }
 
-                PreferenceManager.getDefaultSharedPreferences(getActivity())
+                PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
                         .edit()
                         .putBoolean(BookSearchService.PREF_HAVE_NEW_TITLE, true)
                         .commit();
 
-                PreferenceManager.getDefaultSharedPreferences(getActivity())
+                PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
                         .edit()
                         .putString(PREF_INITIAL_BOOK, bookInput.getText().toString())
                         .commit();
@@ -102,11 +102,11 @@ public class BookInputFragment extends VisibleFragment {
     @Override
     public void actionOnReceive(){
         //Putting the recommended title into current recommended title
-        String recBookTitle = PreferenceManager.getDefaultSharedPreferences(getActivity())
+        String recBookTitle = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
                 .getString(RandomBookService.PREF_RANDOM_REC, null);
         Log.d(TAG, "RecBookTitle: " + recBookTitle);
 
-        PreferenceManager.getDefaultSharedPreferences(getActivity())
+        PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
                 .edit()
                 .putString(BookLab.PREF_REC, recBookTitle)
                 .commit();

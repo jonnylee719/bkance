@@ -142,7 +142,7 @@ public class BookLab implements Serializable {
             }
 
             //Everytime random book is fetched, immediately update Shared Preference
-            PreferenceManager.getDefaultSharedPreferences(mAppContext)
+            PreferenceManager.getDefaultSharedPreferences(mAppContext.getApplicationContext())
                     .edit()
                     .putString(BookLab.PREF_REC, bookRec.getmTitle())
                     .commit();

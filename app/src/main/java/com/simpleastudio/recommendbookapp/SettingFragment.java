@@ -53,7 +53,7 @@ public class SettingFragment extends VisibleFragment {
         NavigationView nv = (NavigationView)((AppCompatActivity) getActivity()).findViewById(R.id.navigation_view);
         nv.getMenu().getItem(3).setChecked(true);
 
-        String currentTitle = PreferenceManager.getDefaultSharedPreferences(getActivity())
+        String currentTitle = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
                 .getString(BookInputFragment.PREF_INITIAL_BOOK, null);
 
         if(currentTitle != null){
@@ -73,7 +73,7 @@ public class SettingFragment extends VisibleFragment {
             }
         });
 
-        boolean checkboxState = PreferenceManager.getDefaultSharedPreferences(getActivity())
+        boolean checkboxState = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
                 .getBoolean(PREF_CHECKBOX, false);
         mDailyRecCheckbox.setChecked(checkboxState);
         mDailyRecCheckbox.setOnClickListener(new View.OnClickListener() {
@@ -123,7 +123,7 @@ public class SettingFragment extends VisibleFragment {
     @Override
     public void actionOnReceive(){
         //Putting the recommended title into current recommended title
-        String recBookTitle = PreferenceManager.getDefaultSharedPreferences(getActivity())
+        String recBookTitle = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
                 .getString(RandomBookService.PREF_RANDOM_REC, null);
         Log.d(TAG, "RecBookTitle: " + recBookTitle);
 
