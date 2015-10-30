@@ -208,7 +208,7 @@ public class BookListFragment extends VisibleFragment {
             holder.mTextviewAuthor.setText(b.getmAuthors());
             String ratingCount = NumberFormat.getInstance().format(b.getmRatingCount());
             String avgRating = String.format(getResources().getString(R.string.card_rating), b.getmAvgRating(), ratingCount);
-            if(b.getmRatingCount() != 0 || b.getmAvgRating() != 0){
+            if(b.getmRatingCount() != -1 || b.getmAvgRating() != -1){
                 holder.mTextviewRating.setText(avgRating);
             } else {
                 holder.mTextviewRating.setText("");
