@@ -1,0 +1,104 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    tools:showIn="@layout/activity_book_info"
+    tools:context="com.simpleastudio.recommendbookapp.BookInfoFragment"
+    >
+    <ScrollView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        >
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin">
+
+            <TextView
+                android:id="@+id/textview_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                style="@style/TextAppearance.AppCompat.Headline"/>
+
+            <TextView
+                android:id="@+id/textview_author"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textview_title"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:paddingTop="1dp"
+                android:paddingBottom="12dp"/>
+
+            <com.android.volley.toolbox.NetworkImageView
+                android:contentDescription="@string/thumbnail_description"
+                android:layout_width="195dp"
+                android:layout_height="274.5dp"
+                android:id="@+id/imageview_thumbnail"
+                android:scaleType="fitXY"
+                android:adjustViewBounds="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                />
+
+            <TextView
+                android:id="@+id/textView_goodreads_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textview_author"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/textview_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textView_goodreads_title"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                style="@style/TextAppearance.AppCompat.Body1"/>
+
+            <TextView
+                android:id="@+id/textview_rating_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/textview_rating"
+                android:paddingLeft="16dp"
+                android:layout_alignBottom="@id/textview_rating"
+                style="@style/TextAppearance.AppCompat.Body1"/>
+
+            <TextView
+                android:id="@+id/textview_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="16dp"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_alignBottom="@id/textview_rating"
+                android:layout_toRightOf="@+id/textview_rating_count"
+                android:layout_toEndOf="@+id/textview_rating_count" />
+
+            <TextView
+                android:id="@+id/textview_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textview_rating"
+                android:layout_toLeftOf="@id/imageview_thumbnail"
+                android:paddingTop="16dp"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:lineSpacingExtra="1dp"
+                android:paddingRight="16dp"/>
+
+        </RelativeLayout>
+    </ScrollView>
+    </LinearLayout>
+
+
+
+
