@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -97,7 +96,7 @@ public class GoogleBooksFetcher {
     public void setThumbnail(final String bookTitle, final NetworkImageView networkImageView){
         //Getting the thumbnail url using Json request
         String url = searchBookUrl(bookTitle);
-        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 String thumbnailUrl = getThumbnailUrl(response, bookTitle);

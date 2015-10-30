@@ -55,7 +55,7 @@ public class BookSearchService extends IntentService {
         if(haveNewTitle){
             //Get search results using SingRequestQueue
             String url = new TastekBooksFetcher(this).getRecommedationUrl(inputTitle);
-            JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     ArrayList<Book> newRecList = parseJsonResult(response);
