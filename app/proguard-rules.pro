@@ -7,6 +7,7 @@
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
+
 # Add any project specific keep options here:
 -assumenosideeffects class android.util.Log {
     public static boolean isLoggable(java.lang.String, int);

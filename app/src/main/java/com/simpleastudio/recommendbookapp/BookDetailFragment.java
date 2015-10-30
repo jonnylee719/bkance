@@ -38,6 +38,7 @@ public class BookDetailFragment extends Fragment {
     private static final String TAG = "BookDetailFragment";
     public static final String ARGS_BOOK_TITLE = "com.simpleastudio.recommendbookapp.title";
     private Book mBook;
+
     @Bind(R.id.textview_title) protected TextView mTextViewTitle;
     @Bind(R.id.textview_author) protected TextView mTextViewAuthor;
     @Bind(R.id.textview_date) protected TextView mTextViewDate;
@@ -67,16 +68,21 @@ public class BookDetailFragment extends Fragment {
         String title = getArguments().getString(ARGS_BOOK_TITLE);
         mBook = BookLab.get(getActivity()).getRecommendedBook(title);
 
-        setHasOptionsMenu(true);
-        Toolbar mToolBar = (Toolbar)getActivity().findViewById(R.id.toolbar);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolBar);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //Retain book instance during runtime configuration
+        setRetainInstance(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_book_info, container, false);
         ButterKnife.bind(this, v);
+
+        //Set onCreateView rather than onCreate because on retained fragment situation doesn't go through onCreate
+        setHasOptionsMenu(true);
+        Toolbar mToolBar = (Toolbar)getActivity().findViewById(R.id.toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolBar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         displaymBook();
         setThumbnailImage();
         //Lock navigation drawer
@@ -103,6 +109,13 @@ public class BookDetailFragment extends Fragment {
     public void onPause(){
         super.onPause();
         BookLab.get(getActivity()).save();
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        SingRequestQueue.getInstance(getActivity()).getRequestQueue().cancelAll("GET");
+        Log.i(TAG, "Canceled all request with GET tag");
     }
 
     public void setThumbnailImage(){
