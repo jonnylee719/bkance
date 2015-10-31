@@ -67,14 +67,14 @@ public class TastekBooksFetcher {
         try{
             return getResponse(urlString);
         } catch (IOException e) {
-            Log.e(TAG, "IOException: " + e);
+            //Log.e(TAG, "IOException: " + e);
         }
         return null;
     }
 
     public JSONObject getResponse(String urlString) throws IOException {
         URL url = new URL(urlString);
-        Log.d(TAG, "url: " + url);
+        //Log.d(TAG, "url: " + url);
         HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 
         try{
@@ -85,13 +85,13 @@ public class TastekBooksFetcher {
             String responseMessage = connection.getResponseMessage();
             int responseCode = connection.getResponseCode();
             if(responseCode != 200){
-                Log.d(TAG, "TasteKidAPI request failed. Response Code: " + responseCode +
-                        "Response Message: " + responseMessage);
+                //Log.d(TAG, "TasteKidAPI request failed. Response Code: " + responseCode +
+                        //"Response Message: " + responseMessage);
                 connection.disconnect();
                 return null;
             }
-            Log.d(TAG, "TasteKidAPI request was successful. Response Code: " + responseCode +
-                    "Response Message: " + responseMessage);
+            //Log.d(TAG, "TasteKidAPI request was successful. Response Code: " + responseCode +
+                    //"Response Message: " + responseMessage);
 
             //Read data from response
             StringBuilder builder = new StringBuilder();
@@ -105,9 +105,9 @@ public class TastekBooksFetcher {
             //Log.d(TAG, "Response String: " + responseString);
             return new JSONObject(responseString);
         } catch (JSONException e) {
-            Log.e(TAG, "Json exception: " + e);
+            //Log.e(TAG, "Json exception: " + e);
         } catch (SocketTimeoutException se){
-            Log.e(TAG, "SocketTimeoutException: " + se);
+            //Log.e(TAG, "SocketTimeoutException: " + se);
         }finally {
             connection.disconnect();
         }

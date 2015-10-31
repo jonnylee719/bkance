@@ -157,7 +157,7 @@ public class BookInfoFragment extends VisibleFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView.");
+        //Log.d(TAG, "onCreateView.");
         View v = inflater.inflate(R.layout.fragment_book_info, container, false);
         ButterKnife.bind(this, v);
 
@@ -176,14 +176,14 @@ public class BookInfoFragment extends VisibleFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG, "OnActivityResult.");
+        //Log.d(TAG, "OnActivityResult.");
     }
 
     @Override
     public void actionOnReceive(){
         String recBookTitle = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
                 .getString(RandomBookService.PREF_RANDOM_REC, null);
-        Log.d(TAG, "RecBookTitle: " + recBookTitle);
+        //Log.d(TAG, "RecBookTitle: " + recBookTitle);
 
         PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
                 .edit()
@@ -191,7 +191,7 @@ public class BookInfoFragment extends VisibleFragment {
                 .commit();
 
         mBook = BookLab.get(getActivity()).getRecommendedBook(recBookTitle);
-        Log.d(TAG, "Book fetched: " + mBook.getmTitle());
+        //Log.d(TAG, "Book fetched: " + mBook.getmTitle());
         loadRandomBookInfo();
     }
 
@@ -215,7 +215,7 @@ public class BookInfoFragment extends VisibleFragment {
     public void onStop(){
         super.onStop();
         SingRequestQueue.getInstance(getActivity()).getRequestQueue().cancelAll("GET");
-        Log.i(TAG, "Canceled all request with GET tag");
+        //Log.i(TAG, "Canceled all request with GET tag");
     }
 
     public void loadRandomBookInfo(){
@@ -231,11 +231,11 @@ public class BookInfoFragment extends VisibleFragment {
 
     public void setThumbnailImage(){
         String url = BookLab.get(getActivity()).getThumbnailUrl(mBook.getmTitle());
-        Log.d(TAG, "url: " + url);
+        //Log.d(TAG, "url: " + url);
         if(url == null){
             new GoogleBooksFetcher(getActivity()).setThumbnail(mBook.getmTitle(), mImageView);
         } else if(url.equals("www.throwexception.com")){
-            Log.d(TAG, "Equals to throwexception.com");
+            //Log.d(TAG, "Equals to throwexception.com");
             mImageView.setDefaultImageResId(R.drawable.default_book_cover);
         } else{
             new GoogleBooksFetcher(getActivity()).setThumbnail(mBook.getmTitle(), mImageView);
@@ -243,7 +243,7 @@ public class BookInfoFragment extends VisibleFragment {
     }
 
     public void goodreadsStringRequest(){
-        Log.d(TAG, "Sending Goodreads String request");
+        //Log.d(TAG, "Sending Goodreads String request");
         if(mBook.getmRatingCount() != -1 && mBook.getmYear() != -1 &&
                 mBook.getmAvgRating() != -1 && mBook.getmAuthors() != null &&
                 mBook.getmId() != null){
@@ -268,7 +268,7 @@ public class BookInfoFragment extends VisibleFragment {
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.d(TAG, "Something went wrong at goodreads StringRequest.");
+                    //Log.d(TAG, "Something went wrong at goodreads StringRequest.");
                 }
             });
             request.setTag("GET");
@@ -289,20 +289,20 @@ public class BookInfoFragment extends VisibleFragment {
 
     private String paraBreak(String text){
         String resultText = "";
-        Log.d(TAG, "Text: " + text);
+        //Log.d(TAG, "Text: " + text);
         String[] textArray = text.split("\\. ");
         for(int i = 0; i < textArray.length; i++){
             if(i == 0){
                 resultText = resultText + textArray[i];
-                Log.d(TAG, "textArray (first line): " + textArray[i]);
+                //Log.d(TAG, "textArray (first line): " + textArray[i]);
             } else if(i%3 == 0 && i!=(textArray.length-1)){
                 resultText = resultText + textArray[i] + ". " + "\n" + "\n";
-                Log.d(TAG, "textArray (with new para): " + textArray[i]);
+                //Log.d(TAG, "textArray (with new para): " + textArray[i]);
             } else if(i%3 != 0 && i!=(textArray.length-1)){
-                Log.d(TAG, "textArray (mid body): " + textArray[i]);
+                //Log.d(TAG, "textArray (mid body): " + textArray[i]);
                 resultText = resultText + textArray[i] + ". ";
             } else if (i == (textArray.length -1)){
-                Log.d(TAG, "textArray (last sentence): " + textArray[i]);
+                //Log.d(TAG, "textArray (last sentence): " + textArray[i]);
                 resultText = resultText + textArray[i];
             }
         }

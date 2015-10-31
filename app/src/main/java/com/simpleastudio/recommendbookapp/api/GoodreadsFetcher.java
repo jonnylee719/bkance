@@ -73,7 +73,7 @@ public class GoodreadsFetcher {
 
         try{
             String responseString = getResponse(urlString);
-            Log.d(TAG, "responseString: " + responseString);
+            //Log.d(TAG, "responseString: " + responseString);
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
             XmlPullParser parser = factory.newPullParser();
             parser.setInput(new StringReader(responseString));
@@ -81,7 +81,7 @@ public class GoodreadsFetcher {
 
             return book;
         }catch (IOException ie){
-            Log.e(TAG, "IOException: " + ie);
+            //Log.e(TAG, "IOException: " + ie);
         } catch (XmlPullParserException e) {
             e.printStackTrace();
         }
@@ -107,37 +107,37 @@ public class GoodreadsFetcher {
                 if (eventType == XmlPullParser.START_TAG &&
                         XML_DAY.equals(parser.getName())) {
                     String day = parser.nextText();
-                    Log.d(TAG, "Day: " + day);
+                    //Log.d(TAG, "Day: " + day);
                     if (!day.equals(""))
                         book.setmDay(Integer.parseInt(day));
                 } else if (eventType == XmlPullParser.START_TAG &&
                         XML_MONTH.equals(parser.getName())) {
                     String month = parser.nextText();
-                    Log.d(TAG, "Month: " + month);
+                    //Log.d(TAG, "Month: " + month);
                     if (!month.equals(""))
                         book.setmMonth(Integer.parseInt(month));
                 } else if (eventType == XmlPullParser.START_TAG &&
                         XML_YEAR.equals(parser.getName())) {
                     String year = parser.nextText();
-                    Log.d(TAG, "Year: " + year);
+                    //Log.d(TAG, "Year: " + year);
                     if (!year.equals(""))
                         book.setmYear(Integer.parseInt(year));
                 } else if (eventType == XmlPullParser.START_TAG &&
                         XML_RATING_COUNT.equals(parser.getName())) {
                     String ratingCount = parser.nextText();
-                    Log.d(TAG, "Rating count: " + ratingCount);
+                    //Log.d(TAG, "Rating count: " + ratingCount);
                     if (!ratingCount.equals(""))
                         book.setmRatingCount(Integer.parseInt(ratingCount));
                 } else if (eventType == XmlPullParser.START_TAG &&
                         XML_RATING.equals(parser.getName())) {
                     String rating = parser.nextText();
-                    Log.d(TAG, "Rating: " + rating);
+                    //Log.d(TAG, "Rating: " + rating);
                     if (!rating.equals(""))
                         book.setmAvgRating(Double.parseDouble(rating));
                 }else if (eventType == XmlPullParser.START_TAG &&
                         XML_AUTHOR.equals(parser.getName())) {
                     String author = parser.nextText();
-                    Log.d(TAG, "Author: " + author);
+                    //Log.d(TAG, "Author: " + author);
                     if (!author.equals(""))
                         book.setmAuthors(author);
                 } else if (eventType == XmlPullParser.START_TAG &&
@@ -145,7 +145,7 @@ public class GoodreadsFetcher {
                     String id = parser.nextText();
                     if (!id.equals("") && book.getmId() == null)
                         book.setmId(id);
-                    Log.d(TAG, "id: " + book.getmId());
+                    //Log.d(TAG, "id: " + book.getmId());
                 } else if (eventType == XmlPullParser.END_TAG &&
                         XML_WORK.equals(parser.getName())) {
                     stopParsing = true;
@@ -153,65 +153,65 @@ public class GoodreadsFetcher {
                 eventType = parser.next();
             }
         } catch (IOException ie) {
-            Log.e(TAG, "IOException: ", ie);
+            //Log.e(TAG, "IOException: ", ie);
         } catch (XmlPullParserException xppe) {
-            Log.e(TAG, "XmlException: ", xppe);
+            //Log.e(TAG, "XmlException: ", xppe);
         }
         return book;
     }
 
 
     public Book parseXmlResponse(Book book, XmlPullParser parser) throws XmlPullParserException, IOException{
-            Log.d(TAG, "Started parsing xml Response.");
+            //Log.d(TAG, "Started parsing xml Response.");
             int eventType = parser.next();
             boolean stopParsing = false;
             while(eventType != XmlPullParser.END_DOCUMENT && !stopParsing){
                 if(eventType == XmlPullParser.START_TAG &&
                         XML_DAY.equals(parser.getName())){
                     String day = parser.nextText();
-                    Log.d(TAG, "Day: " + day);
+                    //Log.d(TAG, "Day: " + day);
                     if(!day.equals(""))
                         book.setmDay(Integer.parseInt(day));
                 }
                 else if(eventType == XmlPullParser.START_TAG &&
                         XML_MONTH.equals(parser.getName())){
                     String month = parser.nextText();
-                    Log.d(TAG, "Month: " + month);
+                    //Log.d(TAG, "Month: " + month);
                     if(!month.equals(""))
                         book.setmMonth(Integer.parseInt(month));
                 }
                 else if(eventType == XmlPullParser.START_TAG &&
                         XML_YEAR.equals(parser.getName())){
                     String year = parser.nextText();
-                    Log.d(TAG, "Year: " + year);
+                    //Log.d(TAG, "Year: " + year);
                     if(!year.equals(""))
                         book.setmYear(Integer.parseInt(year));
                 }
                 else if(eventType == XmlPullParser.START_TAG &&
                         XML_RATING_COUNT.equals(parser.getName())){
                     String ratingCount = parser.nextText();
-                    Log.d(TAG, "Rating count: " + ratingCount);
+                    //Log.d(TAG, "Rating count: " + ratingCount);
                     if(!ratingCount.equals(""))
                         book.setmRatingCount(Integer.parseInt(ratingCount));
                 }
                 else if(eventType == XmlPullParser.START_TAG &&
                         XML_RATING.equals(parser.getName())){
                     String rating= parser.nextText();
-                    Log.d(TAG, "Rating: " + rating);
+                    //Log.d(TAG, "Rating: " + rating);
                     if(!rating.equals(""))
                         book.setmAvgRating(Double.parseDouble(rating));
                 }
                 else if(eventType == XmlPullParser.START_TAG &&
                         XML_THUMB.equals(parser.getName())){
                     String url = parser.nextText();
-                    Log.d(TAG, "Url: " + url);
+                    //Log.d(TAG, "Url: " + url);
                     if(!url.equals(""))
                         book.setmThumbnailUrl(url);
                 }
                 else if(eventType == XmlPullParser.START_TAG &&
                         XML_AUTHOR.equals(parser.getName())){
                     String author = parser.nextText();
-                    Log.d(TAG, "Author: " + author);
+                    //Log.d(TAG, "Author: " + author);
                     if(!author.equals(""))
                         book.setmAuthors(author);
                 }
@@ -220,7 +220,7 @@ public class GoodreadsFetcher {
                     String id = parser.nextText();
                     if(!id.equals("") && book.getmId()==null)
                         book.setmId(id);
-                    Log.d(TAG, "id: " + book.getmId());
+                    //Log.d(TAG, "id: " + book.getmId());
                 }
                 else if(eventType == XmlPullParser.END_TAG &&
                         XML_WORK.equals(parser.getName())){
@@ -233,7 +233,7 @@ public class GoodreadsFetcher {
 
     public String getResponse(String urlString) throws IOException {
         URL url = new URL(urlString);
-        Log.d(TAG, "url: " + url);
+        //Log.d(TAG, "url: " + url);
         HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 
         try{
@@ -244,13 +244,13 @@ public class GoodreadsFetcher {
             String responseMessage = connection.getResponseMessage();
             int responseCode = connection.getResponseCode();
             if(responseCode != 200){
-                Log.d(TAG, "GoodreadsAPI request failed. Response Code: " + responseCode +
-                        "Response Message: " + responseMessage);
+                //Log.d(TAG, "GoodreadsAPI request failed. Response Code: " + responseCode +
+                        //"Response Message: " + responseMessage);
                 connection.disconnect();
                 return null;
             }
-            Log.d(TAG, "GoodreadsAPI request was successful. Response Code: " + responseCode +
-                    "Response Message: " + responseMessage);
+            //Log.d(TAG, "GoodreadsAPI request was successful. Response Code: " + responseCode +
+                    //"Response Message: " + responseMessage);
 
             //Read data from response
             StringBuilder builder = new StringBuilder();
@@ -262,7 +262,7 @@ public class GoodreadsFetcher {
             }
             return builder.toString();
         } catch (SocketTimeoutException se){
-            Log.e(TAG, "SocketTimeoutException: " + se);
+            //Log.e(TAG, "SocketTimeoutException: " + se);
         }finally {
             connection.disconnect();
         }

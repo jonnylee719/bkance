@@ -115,12 +115,12 @@ public class BookDetailFragment extends Fragment {
     public void onStop(){
         super.onStop();
         SingRequestQueue.getInstance(getActivity()).getRequestQueue().cancelAll("GET");
-        Log.i(TAG, "Canceled all request with GET tag");
+        //Log.i(TAG, "Canceled all request with GET tag");
     }
 
     public void setThumbnailImage(){
         String url = BookLab.get(getActivity()).getThumbnailUrl(mBook.getmTitle());
-        Log.d(TAG, "url: " + url);
+        //Log.d(TAG, "url: " + url);
         if(url == null){
             new GoogleBooksFetcher(getActivity()).setThumbnail(mBook.getmTitle(), mImageView);
         } else if(url.equals("throwexception")){
@@ -150,7 +150,7 @@ public class BookDetailFragment extends Fragment {
     }
 
     public void goodreadsStringRequest(){
-        Log.d(TAG, "Sending Goodreads String request");
+        //Log.d(TAG, "Sending Goodreads String request");
         String url = new GoodreadsFetcher(getActivity()).getUrl(mBook.getmTitle());
         StringRequest request = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -170,7 +170,7 @@ public class BookDetailFragment extends Fragment {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, "Something went wrong at goodreads StringRequest.");
+                //Log.d(TAG, "Something went wrong at goodreads StringRequest.");
             }
         });
         request.setTag("GET");

@@ -104,7 +104,7 @@ public class BookInputFragment extends VisibleFragment {
         //Putting the recommended title into current recommended title
         String recBookTitle = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
                 .getString(RandomBookService.PREF_RANDOM_REC, null);
-        Log.d(TAG, "RecBookTitle: " + recBookTitle);
+        //Log.d(TAG, "RecBookTitle: " + recBookTitle);
 
         PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
                 .edit()

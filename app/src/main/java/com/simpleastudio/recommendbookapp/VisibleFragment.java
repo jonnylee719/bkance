@@ -34,7 +34,7 @@ public class VisibleFragment extends Fragment {
     private BroadcastReceiver mOnRandomBookNotification = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(TAG, "Received a broadcast intent.");
+            //Log.d(TAG, "Received a broadcast intent.");
             //Send result to random book service so no notification will be send
             setResultCode(Activity.RESULT_CANCELED);
 
@@ -48,7 +48,7 @@ public class VisibleFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Log.d(TAG, "Opened book recommendation.");
+            //Log.d(TAG, "Opened book recommendation.");
             actionOnReceive();
         }
     };

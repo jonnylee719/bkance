@@ -107,7 +107,7 @@ public class BookListFragment extends VisibleFragment {
         //Putting the recommended title into current recommended title
         String recBookTitle = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
                 .getString(RandomBookService.PREF_RANDOM_REC, null);
-        Log.d(TAG, "RecBookTitle: " + recBookTitle);
+        //Log.d(TAG, "RecBookTitle: " + recBookTitle);
 
         PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
                 .edit()
@@ -183,7 +183,7 @@ public class BookListFragment extends VisibleFragment {
 
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "Delete undone.");
+                //Log.d(TAG, "Delete undone.");
                 undoDelete();
             }
         };

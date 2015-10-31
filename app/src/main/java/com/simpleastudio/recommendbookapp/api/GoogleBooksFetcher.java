@@ -61,7 +61,7 @@ public class GoogleBooksFetcher {
         String thumbnailLink = "throwexception";
         if(BookLab.get(mAppContext).getThumbnailUrl(title) != null ){
             thumbnailLink = BookLab.get(mAppContext).getThumbnailUrl(title);
-            Log.d(TAG, "URL from storage: " + thumbnailLink);
+            //Log.d(TAG, "URL from storage: " + thumbnailLink);
         }
         else {
             boolean foundThumbnail = false;
@@ -69,7 +69,7 @@ public class GoogleBooksFetcher {
             int times = 0;
             while(!foundThumbnail && times<20){
                 try {
-                    Log.d(TAG, "Number of searches done: " + times);
+                    //Log.d(TAG, "Number of searches done: " + times);
                     JSONArray items = object.getJSONArray("items");
                     JSONObject item = items.getJSONObject(index);
                     JSONObject volumeInfo = item.getJSONObject("volumeInfo");
@@ -83,7 +83,7 @@ public class GoogleBooksFetcher {
                     }
                     index++;
                 } catch (JSONException e) {
-                    Log.e(TAG, "JSONException: ", e);
+                    //Log.e(TAG, "JSONException: ", e);
                 }
                 times++;
             }
@@ -100,9 +100,9 @@ public class GoogleBooksFetcher {
             @Override
             public void onResponse(JSONObject response) {
                 String thumbnailUrl = getThumbnailUrl(response, bookTitle);
-                Log.d(TAG, "URL: " + thumbnailUrl);
+                //Log.d(TAG, "URL: " + thumbnailUrl);
                 if(thumbnailUrl.equals("throwexception")){
-                    Log.d(TAG, "Equals to exception url");
+                    //Log.d(TAG, "Equals to exception url");
                     networkImageView.setImageResource(R.drawable.default_book_cover);
                     networkImageView.setDefaultImageResId(R.drawable.default_book_cover);
                 } else {

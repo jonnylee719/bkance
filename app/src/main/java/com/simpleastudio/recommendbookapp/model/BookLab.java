@@ -35,7 +35,7 @@ public class BookLab implements Serializable {
 
     public static BookLab get(Context c){
         if(mLab == null){
-            Log.d(TAG, "Trying to load bookLab file");
+            //Log.d(TAG, "Trying to load bookLab file");
             mLab = new BookLab(c.getApplicationContext());
         }
         return mLab;
@@ -83,7 +83,7 @@ public class BookLab implements Serializable {
             hashtable = new FileWriter(mAppContext).loadBooks(fileName);
         } catch (Exception e) {
             hashtable = new Hashtable<String, Book>();
-            Log.e(TAG, "Error loading booklists.", e);
+            //Log.e(TAG, "Error loading booklists.", e);
         }
         return hashtable;
     }
@@ -94,7 +94,7 @@ public class BookLab implements Serializable {
             hashtable = new FileWriter(mAppContext).loadThumbnailURL(fileName);
         }catch (Exception e){
             hashtable = new Hashtable<String, String>();
-            Log.e(TAG, "Error loading booklists.", e);
+            //Log.e(TAG, "Error loading booklists.", e);
         }
         return hashtable;
    }
@@ -159,10 +159,10 @@ public class BookLab implements Serializable {
             mFileWriter.saveBooks(mRecTable, FILENAME_REC_LIST);
             mFileWriter.saveBooks(mPastRecTable, FILENAME_REC_LIST_PAST);
             mFileWriter.saveThumbnailURL(mThumbnailUrlTable, FILENAME_THUMBNAIL_URL);
-            Log.d(TAG, "Hashtables are saved.");
+            //Log.d(TAG, "Hashtables are saved.");
             return true;
         }catch (Exception e){
-            Log.e(TAG, "Error in saving tables: ", e);
+            //Log.e(TAG, "Error in saving tables: ", e);
             return false;
         }
     }

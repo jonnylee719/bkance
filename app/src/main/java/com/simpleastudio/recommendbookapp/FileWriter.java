@@ -66,7 +66,7 @@ public class FileWriter {
             Type hashTableType = new TypeToken<Hashtable<String, Book>>(){}.getType();
             Gson gson = new Gson();
             hashtable = gson.fromJson(jsonString.toString(), hashTableType);
-            Log.d(TAG, "File loaded.");
+            //Log.d(TAG, "File loaded.");
         }catch (FileNotFoundException fe){}
         finally {
             if(reader!= null){
@@ -117,7 +117,7 @@ public class FileWriter {
             Type hashTableType = new TypeToken<Hashtable<String, String>>(){}.getType();
             Gson gson = new Gson();
             hashtable = gson.fromJson(jsonString.toString(), hashTableType);
-            Log.d(TAG, "File loaded.");
+            //Log.d(TAG, "File loaded.");
         }catch (FileNotFoundException fe){}
         finally {
             if(reader!= null){
