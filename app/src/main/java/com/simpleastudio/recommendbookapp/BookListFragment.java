@@ -1,16 +1,16 @@
 package com.simpleastudio.recommendbookapp;
 
-import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,13 +21,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
-import com.android.volley.toolbox.StringRequest;
-import com.simpleastudio.recommendbookapp.api.GoodreadsFetcher;
 import com.simpleastudio.recommendbookapp.api.GoogleBooksFetcher;
 import com.simpleastudio.recommendbookapp.api.SingRequestQueue;
 import com.simpleastudio.recommendbookapp.model.Book;
@@ -51,6 +46,21 @@ public class BookListFragment extends VisibleFragment {
     protected RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    ItemTouchHelper.SimpleCallback mItemTouchHelperCallback =
+            new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT) {
+                @Override
+                public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                    return false;
+                }
+
+                @Override
+                public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                    int position = viewHolder.getAdapterPosition();
+                    ((BookCardAdaptor)mAdapter).deleteListItem(position);
+                }
+            };
+    private ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(mItemTouchHelperCallback);
+    private Snackbar mSnackbar;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -75,6 +85,8 @@ public class BookListFragment extends VisibleFragment {
 
         mAdapter = new BookCardAdaptor(BookLab.get(getActivity()).getmPastRecTable());
         mRecyclerView.setAdapter(mAdapter);
+        mItemTouchHelper.attachToRecyclerView(mRecyclerView);
+
         return v;
     }
 
@@ -124,7 +136,7 @@ public class BookListFragment extends VisibleFragment {
     public class BookCardAdaptor extends RecyclerView.Adapter<BookCardAdaptor.ViewHolder>{
         private ArrayList<Book> mList;
         ImageLoader imageLoader = SingRequestQueue.getInstance(getActivity()).getImageLoader();
-        private Hashtable<String, Book> tempRecord;
+        private Hashtable<Integer, Book> tempRecord;
 
         public ArrayList<Book> tableToList(Hashtable<String, Book> table){
             ArrayList<Book> list = new ArrayList<Book>();
@@ -143,7 +155,7 @@ public class BookListFragment extends VisibleFragment {
         private void saveToTemp(int positionStart, int itemCount){
             for(int i = positionStart; i < (positionStart+itemCount); i++){
                 Book b = this.mList.get(i);
-                this.tempRecord.put(b.getmTitle(), b);
+                this.tempRecord.put(i, b);
             }
         }
 
@@ -155,11 +167,32 @@ public class BookListFragment extends VisibleFragment {
                 this.saveToTemp(0, itemCount);
                 this.mList.clear();
                 this.notifyItemRangeRemoved(0, itemCount);
-                showUndoSnackbar(itemCount);
+                undoDeleteAllSnackbar(itemCount);
             }
         }
 
-        public void undoDelete(){
+        public void deleteListItem(int position){
+            //First clear tempHashTable, so that previously deleted will not appear back at undo
+            tempRecord.clear();
+            this.saveToTemp(position, 1);
+            this.mList.remove(position);
+            this.notifyItemRemoved(position);
+            undoDeleteItemSnackbar(1);
+        }
+
+        public void undoDeleteItem(){
+            Enumeration<Book> books = this.tempRecord.elements();
+            Enumeration<Integer> positions = this.tempRecord.keys();
+            while(books.hasMoreElements()){
+                Book b = books.nextElement();
+                Integer position = positions.nextElement();
+                this.mList.add(position, b);
+                BookLab.get(getActivity()).addPastRec(b);
+                this.notifyItemInserted(position);
+            }
+        }
+
+        public void undoDeleteAll(){
             //Put all the books in temp record back to list
             Enumeration<Book> books = this.tempRecord.elements();
             int positionStart = getItemCount() - 1;
@@ -173,20 +206,33 @@ public class BookListFragment extends VisibleFragment {
             this.notifyItemRangeInserted(positionStart, itemInserted);
         }
 
-        public void showUndoSnackbar(int itemCount){
-            Snackbar.make(getView(), String.format(getString(R.string.snackbar_delete_text), itemCount), Snackbar.LENGTH_LONG)
-                    .setAction(R.string.snackbar_undo, snackbarClickListener)
-                    .show();
+        public void undoDeleteAllSnackbar(int itemCount){
+            if(mSnackbar != null){
+                mSnackbar.dismiss();
+            }
+            mSnackbar = Snackbar.make(getView(), String.format(getString(R.string.snackbar_delete_text), itemCount), Snackbar.LENGTH_LONG)
+                    .setAction(R.string.snackbar_undo, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            undoDeleteAll();
+                        }
+                    });
+            mSnackbar.show();
         }
 
-        final View.OnClickListener snackbarClickListener = new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-                //Log.d(TAG, "Delete undone.");
-                undoDelete();
+        public void undoDeleteItemSnackbar(int itemCount){
+            if(mSnackbar != null){
+                mSnackbar.dismiss();
             }
-        };
+            mSnackbar = Snackbar.make(getView(), String.format(getString(R.string.snackbar_delete_text), itemCount), Snackbar.LENGTH_LONG)
+                    .setAction(R.string.snackbar_undo, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            undoDeleteItem();
+                        }
+                    });
+            mSnackbar.show();
+        }
 
         @Override
         public int getItemCount(){
@@ -227,7 +273,8 @@ public class BookListFragment extends VisibleFragment {
             }
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        public class ViewHolder extends RecyclerView.ViewHolder
+                implements View.OnClickListener{
             protected NetworkImageView mNetworkImageView;
             protected TextView mTextviewTitle;
             protected TextView mTextviewAuthor;
@@ -254,4 +301,5 @@ public class BookListFragment extends VisibleFragment {
             }
         }
     }
+
 }
