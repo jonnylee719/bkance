@@ -1,7 +1,6 @@
 package com.simpleastudio.recommendbookapp;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
@@ -11,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,6 +31,9 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -56,7 +57,7 @@ public class BookListFragment extends VisibleFragment {
                 @Override
                 public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                     int position = viewHolder.getAdapterPosition();
-                    ((BookCardAdaptor)mAdapter).deleteListItem(position);
+                    ((BookCardAdaptor)mAdapter).deleteBook(position);
                 }
             };
     private ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(mItemTouchHelperCallback);
@@ -101,7 +102,7 @@ public class BookListFragment extends VisibleFragment {
         switch (item.getItemId()){
             case R.id.action_delete:
                 BookLab.get(getActivity()).clearPastRecTable();
-                ((BookCardAdaptor)mAdapter).clearList();
+                ((BookCardAdaptor)mAdapter).deleteAllBooks();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -136,7 +137,7 @@ public class BookListFragment extends VisibleFragment {
     public class BookCardAdaptor extends RecyclerView.Adapter<BookCardAdaptor.ViewHolder>{
         private ArrayList<Book> mList;
         ImageLoader imageLoader = SingRequestQueue.getInstance(getActivity()).getImageLoader();
-        private Hashtable<Integer, Book> tempRecord;
+        private LinkedHashMap<Integer, Book> tempRecord;
 
         public ArrayList<Book> tableToList(Hashtable<String, Book> table){
             ArrayList<Book> list = new ArrayList<Book>();
@@ -149,64 +150,49 @@ public class BookListFragment extends VisibleFragment {
 
         public BookCardAdaptor(Hashtable<String, Book> bookTable){
             mList = tableToList(bookTable);
-            tempRecord = new Hashtable<>();
+            tempRecord = new LinkedHashMap<>();
         }
 
-        private void saveToTemp(int positionStart, int itemCount){
-            for(int i = positionStart; i < (positionStart+itemCount); i++){
-                Book b = this.mList.get(i);
-                this.tempRecord.put(i, b);
+        private void saveToTemp(int position){
+            Book b = this.mList.get(position);
+            this.tempRecord.put(position, b);
+        }
+
+        private void undoDelete(){
+            Set set = this.tempRecord.entrySet();
+            BookLab bookLab = BookLab.get(getActivity());
+            for (Object aSet : set) {
+                Map.Entry bookSet = (Map.Entry) aSet;
+                int position = (int) bookSet.getKey();
+                Book book = (Book) bookSet.getValue();
+                this.mList.add(position, book);
+                bookLab.addPastRec(book);
+                notifyItemInserted(position);
             }
+            this.tempRecord.clear();
         }
 
-        public void clearList(){
-            //First clear tempHashTable, so that previously deleted will not appear back at undo
-            tempRecord.clear();
-            if(getItemCount() != 0){
-                int itemCount = this.getItemCount();
-                this.saveToTemp(0, itemCount);
-                this.mList.clear();
-                this.notifyItemRangeRemoved(0, itemCount);
-                undoDeleteAllSnackbar(itemCount);
+        private void deleteAllBooks(){
+            int itemCount = getItemCount();
+            for(int i = 0; i < itemCount; i++){
+                saveToTemp(i);
             }
+            this.mList.clear();
+            BookLab.get(getActivity()).clearPastRecTable();
+            notifyItemRangeRemoved(0, itemCount);
+            deleteSnackbar(itemCount);
         }
 
-        public void deleteListItem(int position){
-            //First clear tempHashTable, so that previously deleted will not appear back at undo
-            tempRecord.clear();
-            this.saveToTemp(position, 1);
+        private void deleteBook(int position){
+            saveToTemp(position);
+            Book b = this.mList.get(position);
             this.mList.remove(position);
-            this.notifyItemRemoved(position);
-            undoDeleteItemSnackbar(1);
+            BookLab.get(getActivity()).removeItemPastRec(b);
+            notifyItemRemoved(position);
+            deleteSnackbar(1);
         }
 
-        public void undoDeleteItem(){
-            Enumeration<Book> books = this.tempRecord.elements();
-            Enumeration<Integer> positions = this.tempRecord.keys();
-            while(books.hasMoreElements()){
-                Book b = books.nextElement();
-                Integer position = positions.nextElement();
-                this.mList.add(position, b);
-                BookLab.get(getActivity()).addPastRec(b);
-                this.notifyItemInserted(position);
-            }
-        }
-
-        public void undoDeleteAll(){
-            //Put all the books in temp record back to list
-            Enumeration<Book> books = this.tempRecord.elements();
-            int positionStart = getItemCount() - 1;
-            int itemInserted = 0;
-            while(books.hasMoreElements()){
-                itemInserted++;
-                Book b = books.nextElement();
-                this.mList.add(b);
-                BookLab.get(getActivity()).addPastRec(b);
-            }
-            this.notifyItemRangeInserted(positionStart, itemInserted);
-        }
-
-        public void undoDeleteAllSnackbar(int itemCount){
+        public void deleteSnackbar(int itemCount){
             if(mSnackbar != null){
                 mSnackbar.dismiss();
             }
@@ -214,21 +200,7 @@ public class BookListFragment extends VisibleFragment {
                     .setAction(R.string.snackbar_undo, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            undoDeleteAll();
-                        }
-                    });
-            mSnackbar.show();
-        }
-
-        public void undoDeleteItemSnackbar(int itemCount){
-            if(mSnackbar != null){
-                mSnackbar.dismiss();
-            }
-            mSnackbar = Snackbar.make(getView(), String.format(getString(R.string.snackbar_delete_text), itemCount), Snackbar.LENGTH_LONG)
-                    .setAction(R.string.snackbar_undo, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            undoDeleteItem();
+                            undoDelete();
                         }
                     });
             mSnackbar.show();
