@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -116,6 +117,12 @@ public class BookListFragment extends VisibleFragment {
     }
 
     @Override
+    public void onPause(){
+        super.onPause();
+        BookLab.get(getActivity()).save();
+    }
+
+    @Override
     public void actionOnReceive(){
         //Putting the recommended title into current recommended title
         String recBookTitle = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
@@ -187,7 +194,8 @@ public class BookListFragment extends VisibleFragment {
             saveToTemp(position);
             Book b = this.mList.get(position);
             this.mList.remove(position);
-            BookLab.get(getActivity()).removeItemPastRec(b);
+            boolean deleted = BookLab.get(getActivity()).removeItemPastRec(b.getmTitle());
+            Log.d(TAG, "Deleted item: " + deleted);
             notifyItemRemoved(position);
             deleteSnackbar(1);
         }

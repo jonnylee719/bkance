@@ -117,10 +117,9 @@ public class BookLab implements Serializable {
         return mPastRecTable.isEmpty();
     }
 
-    public boolean removeItemPastRec(Book book){
+    public boolean removeItemPastRec(String title){
         boolean removed;
-        if(mPastRecTable.contains(book)){
-            mPastRecTable.remove(book);
+        if(mPastRecTable.remove(title) != null){
             removed = true;
         } else {
             removed = false;
