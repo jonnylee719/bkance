@@ -120,6 +120,9 @@ public class BookListFragment extends VisibleFragment {
     public void onPause(){
         super.onPause();
         BookLab.get(getActivity()).save();
+        if(mSnackbar.isShown()){
+            mSnackbar.dismiss();
+        }
     }
 
     @Override
