@@ -87,7 +87,7 @@ public class BookInfoFragment extends VisibleFragment {
         String recBookTitle = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
                 .getString(BookLab.PREF_REC, null);
         if(recBookTitle == null){
-            Book newRecBook = BookLab.get(getActivity()).getRandomBook();
+            Book newRecBook =  BookLab.get(getActivity()).getRandomBook();
             if(newRecBook != null){
                 mBook = newRecBook;
             }

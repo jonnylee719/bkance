@@ -130,7 +130,7 @@ public class BookListFragment extends VisibleFragment {
         //Putting the recommended title into current recommended title
         String recBookTitle = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
                 .getString(RandomBookService.PREF_RANDOM_REC, null);
-        //Log.d(TAG, "RecBookTitle: " + recBookTitle);
+        Log.d(TAG, "RecBookTitle: " + recBookTitle);
 
         PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
                 .edit()
@@ -189,6 +189,7 @@ public class BookListFragment extends VisibleFragment {
             }
             this.mList.clear();
             BookLab.get(getActivity()).clearPastRecTable();
+            Log.d(TAG, "All items deleted.");
             notifyItemRangeRemoved(0, itemCount);
             deleteSnackbar(itemCount);
         }
