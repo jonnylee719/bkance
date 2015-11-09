@@ -1,14 +1,19 @@
 package com.simpleastudio.recommendbookapp;
 
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.MenuCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,9 +35,13 @@ import com.simpleastudio.recommendbookapp.service.RandomBookService;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -42,10 +51,10 @@ import butterknife.ButterKnife;
 /**
  * Created by Jonathan on 9/10/2015.
  */
-public class BookListFragment extends VisibleFragment {
+public class BookListFragment extends VisibleFragment implements SearchView.OnQueryTextListener {
     private static final String TAG = "BookListFragment";
-    @Bind(R.id.book_recycler_view)
-    protected RecyclerView mRecyclerView;
+    @Bind(R.id.book_recycler_view) protected RecyclerView mRecyclerView;
+    private List<Book> mBookList;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     ItemTouchHelper.SimpleCallback mItemTouchHelperCallback =
@@ -85,6 +94,8 @@ public class BookListFragment extends VisibleFragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+
+
         mAdapter = new BookCardAdaptor(BookLab.get(getActivity()).getmPastRecTable());
         mRecyclerView.setAdapter(mAdapter);
         mItemTouchHelper.attachToRecyclerView(mRecyclerView);
@@ -96,6 +107,38 @@ public class BookListFragment extends VisibleFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.booklist_actionbar_menu, menu);
+
+        final MenuItem item = menu.findItem(R.id.booklist_search_bar);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.setOnQueryTextListener(this);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String query) {
+        Log.d(TAG, "Query text has changed to: " + query);
+        final List<Book> filteredBookList = filter(mBookList, query);
+        ((BookCardAdaptor)mAdapter).animateTo(filteredBookList);
+        mRecyclerView.scrollToPosition(0);
+        Log.d(TAG, "Filtered book list size: " + filteredBookList.size());
+        return true;
+    }
+
+    private List<Book> filter(List<Book> books, String query){
+        query = query.toLowerCase();
+
+        final List<Book> filteredModelList = new ArrayList<>();
+        for(Book book: books){
+            final String bookTitle = book.getmTitle().toLowerCase();
+            if(bookTitle.contains(query)){
+                filteredModelList.add(book);
+            }
+        }
+        return filteredModelList;
     }
 
     @Override
@@ -105,6 +148,7 @@ public class BookListFragment extends VisibleFragment {
                 BookLab.get(getActivity()).clearPastRecTable();
                 ((BookCardAdaptor)mAdapter).deleteAllBooks();
                 return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -120,9 +164,12 @@ public class BookListFragment extends VisibleFragment {
     public void onPause(){
         super.onPause();
         BookLab.get(getActivity()).save();
-        if(mSnackbar.isShown()){
-            mSnackbar.dismiss();
+        if(mSnackbar != null){
+            if(mSnackbar.isShown()){
+                mSnackbar.dismiss();
+            }
         }
+
     }
 
     @Override
@@ -160,6 +207,8 @@ public class BookListFragment extends VisibleFragment {
 
         public BookCardAdaptor(Hashtable<String, Book> bookTable){
             mList = tableToList(bookTable);
+            //Saving a master copy of the list in the fragment for searchview filter
+            mBookList = new ArrayList<>(mList);
             tempRecord = new LinkedHashMap<>();
         }
 
@@ -254,6 +303,64 @@ public class BookListFragment extends VisibleFragment {
             } else {
                 holder.mNetworkImageView.setErrorImageResId(R.drawable.default_book_cover);
                 holder.mNetworkImageView.setImageUrl(url, imageLoader);
+            }
+        }
+
+        public void setmList(List<Book> newList){
+            mList = new ArrayList<>(newList);
+        }
+
+        public Book removeItem(int position){
+            final Book book = mList.remove(position);
+            notifyItemRemoved(position);
+            return book;
+        }
+
+        public void addItem(int position, Book book){
+            mList.add(position, book);
+            notifyItemInserted(position);
+        }
+
+        public void moveItem(int fromPosition, int toPosition){
+            final Book book = mList.remove(fromPosition);
+            mList.add(toPosition, book);
+            notifyItemMoved(fromPosition, toPosition);
+        }
+
+        public void animateTo(List<Book> newList){
+            Log.d(TAG, "Animating to new list.");
+            Log.d(TAG, "New list size: " + newList.size());
+            applyAndAnimateRemovals(newList);
+            applyAndAnimateAdditions(newList);
+            applyAndAnimateMovedItems(newList);
+            Log.d(TAG, "Current list size in adaptor: " + mList.size());
+        }
+
+        private void applyAndAnimateRemovals(List<Book> newList){
+            for(int i = mList.size() - 1; i >= 0; i--){
+                final Book book = mList.get(i);
+                if(!newList.contains(book)){
+                    removeItem(i);
+                }
+            }
+        }
+
+        private void applyAndAnimateAdditions(List<Book> newList){
+            for(int i = 0; i < mList.size(); i++){
+                final Book book = newList.get(i);
+                if(!newList.contains(book)){
+                    addItem(i, book);
+                }
+            }
+        }
+
+        private void applyAndAnimateMovedItems(List<Book> newList){
+            for(int toPosition = newList.size() -1; toPosition >= 0; toPosition--){
+                final Book book = newList.get(toPosition);
+                final int fromPosition = mList.indexOf(book);
+                if(fromPosition >= 0 && fromPosition != toPosition){
+                    moveItem(fromPosition, toPosition);
+                }
             }
         }
 
