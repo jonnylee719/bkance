@@ -94,13 +94,23 @@ public class BookListFragment extends VisibleFragment implements SearchView.OnQu
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        //Converting hashtable to array list for adaptor
+        mBookList = tableToList(BookLab.get(getActivity()).getmPastRecTable());
 
-
-        mAdapter = new BookCardAdaptor(BookLab.get(getActivity()).getmPastRecTable());
+        mAdapter = new BookCardAdaptor(mBookList);
         mRecyclerView.setAdapter(mAdapter);
         mItemTouchHelper.attachToRecyclerView(mRecyclerView);
 
         return v;
+    }
+
+    public ArrayList<Book> tableToList(Hashtable<String, Book> table){
+        ArrayList<Book> list = new ArrayList<Book>();
+        Enumeration<Book> books = table.elements();
+        while(books.hasMoreElements()){
+            list.add(books.nextElement());
+        }
+        return list;
     }
 
     @Override
@@ -192,23 +202,12 @@ public class BookListFragment extends VisibleFragment implements SearchView.OnQu
     }
 
     public class BookCardAdaptor extends RecyclerView.Adapter<BookCardAdaptor.ViewHolder>{
-        private ArrayList<Book> mList;
+        private final List<Book> mList;
         ImageLoader imageLoader = SingRequestQueue.getInstance(getActivity()).getImageLoader();
         private LinkedHashMap<Integer, Book> tempRecord;
 
-        public ArrayList<Book> tableToList(Hashtable<String, Book> table){
-            ArrayList<Book> list = new ArrayList<Book>();
-            Enumeration<Book> books = table.elements();
-            while(books.hasMoreElements()){
-                list.add(books.nextElement());
-            }
-            return list;
-        }
-
-        public BookCardAdaptor(Hashtable<String, Book> bookTable){
-            mList = tableToList(bookTable);
-            //Saving a master copy of the list in the fragment for searchview filter
-            mBookList = new ArrayList<>(mList);
+        public BookCardAdaptor(List<Book> books){
+            mList = new ArrayList<>(books);
             tempRecord = new LinkedHashMap<>();
         }
 
@@ -306,10 +305,6 @@ public class BookListFragment extends VisibleFragment implements SearchView.OnQu
             }
         }
 
-        public void setmList(List<Book> newList){
-            mList = new ArrayList<>(newList);
-        }
-
         public Book removeItem(int position){
             final Book book = mList.remove(position);
             notifyItemRemoved(position);
@@ -322,7 +317,9 @@ public class BookListFragment extends VisibleFragment implements SearchView.OnQu
         }
 
         public void moveItem(int fromPosition, int toPosition){
+            Log.d(TAG, "Adaptor list size: " + mList.size());
             final Book book = mList.remove(fromPosition);
+            Log.d(TAG, "Adaptor list size after removal: " + mList.size());
             mList.add(toPosition, book);
             notifyItemMoved(fromPosition, toPosition);
         }
@@ -346,9 +343,9 @@ public class BookListFragment extends VisibleFragment implements SearchView.OnQu
         }
 
         private void applyAndAnimateAdditions(List<Book> newList){
-            for(int i = 0; i < mList.size(); i++){
+            for(int i = 0; i < newList.size(); i++){
                 final Book book = newList.get(i);
-                if(!newList.contains(book)){
+                if(!mList.contains(book)){
                     addItem(i, book);
                 }
             }
