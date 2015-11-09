@@ -1,14 +1,11 @@
 package com.simpleastudio.recommendbookapp;
 
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.MenuCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,15 +30,13 @@ import com.simpleastudio.recommendbookapp.model.Book;
 import com.simpleastudio.recommendbookapp.model.BookLab;
 import com.simpleastudio.recommendbookapp.service.RandomBookService;
 
+import java.lang.reflect.Array;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -67,16 +62,35 @@ public class BookListFragment extends VisibleFragment implements SearchView.OnQu
                 @Override
                 public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                     int position = viewHolder.getAdapterPosition();
-                    ((BookCardAdaptor)mAdapter).deleteBook(position);
+                    final Book book = ((BookCardAdaptor)mAdapter).mList.get(position);
+                    mTempList.clear();
+                    if(mBookList.contains(book)){
+                        int positionInBookList = mBookList.indexOf(book);
+                        mBookList.remove(book);
+                        mTempList.put(positionInBookList, book);
+                        BookLab.get(getActivity()).removeItemPastRec(book.getmTitle());
+                        //Displaying the new bookList
+                        List<Book> newFilteredList;
+                        if(currentQuery != null){
+                            newFilteredList = filter(mBookList, currentQuery);
+                        } else {
+                            newFilteredList = mBookList;
+                        }
+                        ((BookCardAdaptor)mAdapter).animateTo(newFilteredList);
+                        launchDeleteSnackBar(1);
+                    }
                 }
             };
     private ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(mItemTouchHelperCallback);
     private Snackbar mSnackbar;
+    private LinkedHashMap<Integer, Book> mTempList;
+    private String currentQuery;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        mTempList = new LinkedHashMap<>();
     }
 
     @Override
@@ -113,6 +127,43 @@ public class BookListFragment extends VisibleFragment implements SearchView.OnQu
         return list;
     }
 
+    //Undoing deletion when undo button is clicked in the UndoSnackbar
+    public void onUndoDelete(){
+        Set set = mTempList.entrySet();
+        Log.d(TAG, "Number of books in tempList: " + set.size());
+        BookLab bookLab = BookLab.get(getActivity());
+        for (Object aSet : set) {
+            Map.Entry bookSet = (Map.Entry) aSet;
+            int position = (int) bookSet.getKey();
+            Book book = (Book) bookSet.getValue();
+            mBookList.add(position, book);
+            bookLab.addPastRec(book);
+        }
+        List<Book> newFilteredList;
+        if(currentQuery != null){
+            newFilteredList = filter(mBookList, currentQuery);
+        } else {
+            newFilteredList = mBookList;
+        }
+        ((BookCardAdaptor)mAdapter).animateTo(newFilteredList);
+        mTempList.clear();
+    }
+
+    //Delete snackbar
+    public void launchDeleteSnackBar(int itemCount){
+        if(mSnackbar != null){
+            mSnackbar.dismiss();
+        }
+        mSnackbar = Snackbar.make(getView(), String.format(getString(R.string.snackbar_delete_text), itemCount), Snackbar.LENGTH_LONG)
+                .setAction(R.string.snackbar_undo, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onUndoDelete();
+                    }
+                });
+        mSnackbar.show();
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
         super.onCreateOptionsMenu(menu, inflater);
@@ -131,6 +182,7 @@ public class BookListFragment extends VisibleFragment implements SearchView.OnQu
     @Override
     public boolean onQueryTextChange(String query) {
         Log.d(TAG, "Query text has changed to: " + query);
+        currentQuery = query;
         final List<Book> filteredBookList = filter(mBookList, query);
         ((BookCardAdaptor)mAdapter).animateTo(filteredBookList);
         mRecyclerView.scrollToPosition(0);
@@ -155,13 +207,44 @@ public class BookListFragment extends VisibleFragment implements SearchView.OnQu
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.action_delete:
-                BookLab.get(getActivity()).clearPastRecTable();
-                ((BookCardAdaptor)mAdapter).deleteAllBooks();
+                onDeleteAll();
                 return true;
 
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    //Deleting all visible book items in the adaptor
+    public void onDeleteAll(){
+        mTempList.clear();
+        //Get all visible books in adaptor
+        final List<Book> adaptorList = ((BookCardAdaptor)mAdapter).mList;
+        int listSize = adaptorList.size();
+        BookLab bookLab = BookLab.get(getActivity());
+        Log.d(TAG, "Number of books in adaptorList: " + listSize);
+        for(int position = 0; position < listSize; position++){
+            Book book = adaptorList.get(position);
+            Log.d(TAG, "Book title: " + book.getmTitle());
+            if(mBookList.contains(book)){
+                Log.d(TAG, "mBookList contains book in arrayList: " + mBookList.contains(book));
+                int positionInBookList = mBookList.indexOf(book);
+                Log.d(TAG, "Book at position " + positionInBookList + " is called " + mBookList.get(positionInBookList).getmTitle());
+                Log.d(TAG, "Book position in mBookList: " + positionInBookList);
+                mTempList.put(positionInBookList, book);
+                Log.d(TAG, "Number of books in tempList: " + mTempList.size());
+                bookLab.removeItemPastRec(book.getmTitle());
+            }
+        }
+        mBookList.removeAll(adaptorList);
+        List<Book> newFilteredList;
+        if(currentQuery != null){
+            newFilteredList = filter(mBookList, currentQuery);
+        } else {
+            newFilteredList = mBookList;
+        }
+        ((BookCardAdaptor)mAdapter).animateTo(newFilteredList);
+        launchDeleteSnackBar(listSize);
     }
 
     @Override
@@ -202,7 +285,7 @@ public class BookListFragment extends VisibleFragment implements SearchView.OnQu
     }
 
     public class BookCardAdaptor extends RecyclerView.Adapter<BookCardAdaptor.ViewHolder>{
-        private final List<Book> mList;
+        public final List<Book> mList;
         ImageLoader imageLoader = SingRequestQueue.getInstance(getActivity()).getImageLoader();
         private LinkedHashMap<Integer, Book> tempRecord;
 
