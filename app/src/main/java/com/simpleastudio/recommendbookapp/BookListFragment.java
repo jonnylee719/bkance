@@ -294,61 +294,6 @@ public class BookListFragment extends VisibleFragment implements SearchView.OnQu
             tempRecord = new LinkedHashMap<>();
         }
 
-        private void saveToTemp(int position){
-            Book b = this.mList.get(position);
-            this.tempRecord.put(position, b);
-        }
-
-        private void undoDelete(){
-            Set set = this.tempRecord.entrySet();
-            BookLab bookLab = BookLab.get(getActivity());
-            for (Object aSet : set) {
-                Map.Entry bookSet = (Map.Entry) aSet;
-                int position = (int) bookSet.getKey();
-                Book book = (Book) bookSet.getValue();
-                this.mList.add(position, book);
-                bookLab.addPastRec(book);
-                notifyItemInserted(position);
-            }
-            this.tempRecord.clear();
-        }
-
-        private void deleteAllBooks(){
-            int itemCount = getItemCount();
-            for(int i = 0; i < itemCount; i++){
-                saveToTemp(i);
-            }
-            this.mList.clear();
-            BookLab.get(getActivity()).clearPastRecTable();
-            Log.d(TAG, "All items deleted.");
-            notifyItemRangeRemoved(0, itemCount);
-            deleteSnackbar(itemCount);
-        }
-
-        private void deleteBook(int position){
-            saveToTemp(position);
-            Book b = this.mList.get(position);
-            this.mList.remove(position);
-            boolean deleted = BookLab.get(getActivity()).removeItemPastRec(b.getmTitle());
-            Log.d(TAG, "Deleted item: " + deleted);
-            notifyItemRemoved(position);
-            deleteSnackbar(1);
-        }
-
-        public void deleteSnackbar(int itemCount){
-            if(mSnackbar != null){
-                mSnackbar.dismiss();
-            }
-            mSnackbar = Snackbar.make(getView(), String.format(getString(R.string.snackbar_delete_text), itemCount), Snackbar.LENGTH_LONG)
-                    .setAction(R.string.snackbar_undo, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            undoDelete();
-                        }
-                    });
-            mSnackbar.show();
-        }
-
         @Override
         public int getItemCount(){
             return mList.size();
