@@ -1,6 +1,11 @@
 package com.simpleastudio.recommendbookapp;
 
+import android.os.Bundle;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.RecyclerView;
+import android.test.ActivityTestCase;
 import android.test.suitebuilder.annotation.LargeTest;
 
 import org.junit.Before;
@@ -15,9 +20,12 @@ import com.simpleastudio.recommendbookapp.model.Book;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 /**
@@ -28,10 +36,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 public class BookListFragmentTest{
 
     private List<Book> testBookList = new ArrayList<>();
-
+    protected BookListFragment fragment;
 
     @Rule
-    public ActivityTestRule<TestFragmentActivity> mActivityRule =
+    public ActivityTestRule mActivityRule =
             new ActivityTestRule(TestFragmentActivity.class);
 
     @Before
@@ -49,17 +57,18 @@ public class BookListFragmentTest{
             }
             testBookList.add(b);
         }
-
-    }
-
-    public void all_books_from_list_are_included_in_adaptor(){
-
+        fragment = new BookListFragment();
+        FragmentManager fm = ((TestFragmentActivity)mActivityRule.getActivity()).getSupportFragmentManager();
+        fm.beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+        getInstrumentation().waitForIdleSync();
+        ((BookListFragment.BookCardAdaptor)fragment.mAdapter).animateTo(testBookList);
     }
 
     @Test
-    public void listGoesOverTheFold() {
-        onView(withText("Hello World!")).check(matches(isDisplayed()));
+    public void searchview_is_setup(){
+        onView(withId(R.id.booklist_search_bar)).check(matches(isDisplayed()));
     }
+
 
 
 }

@@ -50,7 +50,7 @@ public class BookListFragment extends VisibleFragment implements SearchView.OnQu
     private static final String TAG = "BookListFragment";
     @Bind(R.id.book_recycler_view) protected RecyclerView mRecyclerView;
     private List<Book> mBookList;
-    private RecyclerView.Adapter mAdapter;
+    protected RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     ItemTouchHelper.SimpleCallback mItemTouchHelperCallback =
             new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT) {

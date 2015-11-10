@@ -28,6 +28,7 @@
         <activity android:name=".BookDetailActivity"
             android:label="@string/title_activity_book_detail">
         </activity>
+        <activity android:name=".TestFragmentActivity"/>
 
         <service android:name=".service.BookSearchService" />
         <service android:name=".service.RandomBookService" />
