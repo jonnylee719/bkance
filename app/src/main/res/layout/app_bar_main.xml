@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.simpleastudio.recommendbookapp.SingleFragmentActivity">
+    tools:context="com.simpleastudio.recommendbookapp.NavigationActivityBase">
 
     <android.support.design.widget.AppBarLayout android:layout_height="wrap_content"
         android:layout_width="match_parent"
@@ -23,7 +23,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         tools:showIn="@layout/activity_single_fragment"
-        tools:context="com.simpleastudio.recommendbookapp.SingleFragmentActivity"
+        tools:context="com.simpleastudio.recommendbookapp.NavigationActivityBase"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_height="match_parent"
         android:id="@+id/fragmentContainer"/>

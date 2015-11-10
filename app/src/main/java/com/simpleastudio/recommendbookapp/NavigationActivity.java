@@ -1,6 +1,7 @@
 package com.simpleastudio.recommendbookapp;
 
 import android.content.res.Configuration;
+import android.graphics.drawable.DrawableWrapper;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -19,42 +20,26 @@ import java.util.Set;
 /**
  * Created by Jonathan on 22/10/2015.
  */
-public class NavigationActivity extends SingleFragmentActivity{
+public class NavigationActivity extends NavigationActivityBase{
     private static final String TAG = "NavigationActivity";
-    private Toolbar mToolbar;
-    private DrawerLayout mDrawer;
-    private NavigationView nvDrawer;
-    private ActionBarDrawerToggle drawerToggle;
 
     @Override
-    protected Fragment createFragment() {
+    protected Fragment setStartFragment() {
         return new BookInfoFragment();
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fragment);
-
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-
-        nvDrawer = (NavigationView) findViewById(R.id.navigation_view);
-        setUpDrawerContent(nvDrawer);
-
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerToggle = setUpDrawerToggle();
-
-        //Tie DrawerLayout events to the ActionToggle
-        mDrawer.setDrawerListener(drawerToggle);
-
+    protected int getLayoutResId() {
+        return R.layout.activity_fragment;
     }
 
-    private ActionBarDrawerToggle setUpDrawerToggle(){
-        return new ActionBarDrawerToggle(this, mDrawer, mToolbar, R.string.drawer_open, R.string.drawer_close);
+    @Override
+    protected int setNavigationDrawerMenu() {
+        return R.menu.drawer;
     }
 
-    private void setUpDrawerContent(NavigationView navigationView){
+    @Override
+    protected void setUpDrawerContent(NavigationView navigationView){
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
@@ -96,30 +81,8 @@ public class NavigationActivity extends SingleFragmentActivity{
         fragmentManager.beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
 
         item.setChecked(true);
+        DrawerLayout mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawer.closeDrawers();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        if(drawerToggle.onOptionsItemSelected(item)){
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState){
-        super.onPostCreate(savedInstanceState);
-        //Sync the toggle state after onRestoreInstanceState has occurred
-        drawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig){
-        super.onConfigurationChanged(newConfig);
-        //Pass any configuration change to the drawer toggle
-        drawerToggle.onConfigurationChanged(newConfig);
     }
 
 }
