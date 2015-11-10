@@ -19,7 +19,7 @@ public abstract class NavigationActivityBase extends AppCompatActivity {
     protected abstract Fragment setStartFragment();
     protected abstract int getLayoutResId();
     protected abstract int setNavigationDrawerMenu();
-    protected abstract void setUpDrawerContent(NavigationView nvDrawer);
+    protected abstract void selectDrawerItem(MenuItem menuItem);
 
     protected Toolbar mToolbar;
     protected DrawerLayout mDrawer;
@@ -57,6 +57,16 @@ public abstract class NavigationActivityBase extends AppCompatActivity {
 
     private ActionBarDrawerToggle setUpDrawerToggle(){
         return new ActionBarDrawerToggle(this, mDrawer, mToolbar, R.string.drawer_open, R.string.drawer_close);
+    }
+
+    protected void setUpDrawerContent(NavigationView navigationView){
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                selectDrawerItem(menuItem);
+                return true;
+            }
+        });
     }
 
     @Override

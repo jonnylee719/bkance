@@ -17,9 +17,7 @@ public abstract class SingleFragmentActivity extends AppCompatActivity{
     private static final String TAG = "SingleFragmentActivity";
 
     protected abstract Fragment createFragment();
-    protected int getLayoutResId(){
-        return R.layout.activity_fragment;
-    }
+    protected abstract int getLayoutResId();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +33,10 @@ public abstract class SingleFragmentActivity extends AppCompatActivity{
                     .add(R.id.fragmentContainer, fragment)
                     .commit();
         }
+
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 
 

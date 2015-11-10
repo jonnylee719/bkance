@@ -14,7 +14,7 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.simpleastudio.recommendbookapp.NavigationActivity;
+import com.simpleastudio.recommendbookapp.BookNavigationActivity;
 import com.simpleastudio.recommendbookapp.R;
 import com.simpleastudio.recommendbookapp.model.Book;
 import com.simpleastudio.recommendbookapp.model.BookLab;
@@ -99,11 +99,11 @@ public class RandomBookService extends IntentService {
                 .setContentTitle(getString(R.string.notification_new_book))
                 .setContentText(String.format(getString(R.string.notification_content_text), title))
                 .setAutoCancel(true);
-        Intent resultIntent = new Intent(this, NavigationActivity.class);
+        Intent resultIntent = new Intent(this, BookNavigationActivity.class);
 
         //Task stack builder allows backward navigation from opened activity to home
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(NavigationActivity.class);
+        stackBuilder.addParentStack(BookNavigationActivity.class);
         stackBuilder.addNextIntent(resultIntent);
 
         PendingIntent pendingIntent =
