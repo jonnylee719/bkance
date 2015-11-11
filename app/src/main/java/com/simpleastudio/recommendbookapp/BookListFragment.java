@@ -49,7 +49,7 @@ import butterknife.ButterKnife;
 public class BookListFragment extends VisibleFragment implements SearchView.OnQueryTextListener {
     private static final String TAG = "BookListFragment";
     @Bind(R.id.book_recycler_view) protected RecyclerView mRecyclerView;
-    private List<Book> mBookList;
+    protected List<Book> mBookList;
     protected RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     ItemTouchHelper.SimpleCallback mItemTouchHelperCallback =

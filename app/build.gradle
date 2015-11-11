@@ -29,6 +29,9 @@ android {
     }
     productFlavors {
     }
+    configurations {
+        androidTestCompile.exclude group: 'com.android.support', module: 'support-annotations'
+    }
 }
 
 repositories{
@@ -46,8 +49,19 @@ dependencies {
     compile 'com.mcxiaoke.volley:library:1.0.19'
     androidTestCompile 'org.assertj:assertj-core:1.7.0'
     testCompile 'junit:junit:4.12'
-    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
-    androidTestCompile 'com.android.support.test:runner:0.4.1'
+    androidTestCompile ('com.android.support.test.espresso:espresso-contrib:2.1') {
+        // Resolved java.lang.NoClassDefFoundError: your.package.name.EspressoTargetActivity
+        // 'espresso-contrib' has already 'support-v4' package.
+        exclude group: 'com.android.support', module: 'support-v4'
+
+        // Resolved java.lang.IllegalAccessError: Class ref in pre-verified class resolved to unexpected implementation
+        // 'espresso-contrib' has already 'recyclerview-v7' package.
+        exclude group: 'com.android.support', module: 'recyclerview-v7'
+    }
+
+    // You can compile without 'runner'. Because 'rules' has.
+    // androidTestCompile 'com.android.support.test:runner:0.2'
+    androidTestCompile 'com.android.support.test:rules:0.2'
 }
 
 def Properties props = new Properties()
