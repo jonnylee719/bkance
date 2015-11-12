@@ -24,9 +24,13 @@ public class BookLab implements Serializable {
     public static final String PREF_REC = "randomRecTitle";
 
     private Hashtable<String, Book> mRecTable;
+    public static final String REC_TABLE = "REC_TABLE";
     private Hashtable<String, Book> mPastRecTable;
+    public static final String PAST_REC_TABLE = "PAST_REC_TABLE";
     private Hashtable<String, String> mThumbnailUrlTable;
+    public static final String THUMBNAIL_TABLE = "THUMBNAIL_TABLE";
     private Hashtable<String, Book> mFavoriteBooksTable;
+    public static final String FAV_BOOKS_TABLE = "FAV_BOOKS_TABLE";
 
     private BookLab(Context c){
         mAppContext = c;
@@ -49,6 +53,141 @@ public class BookLab implements Serializable {
         mRecTable.put(b.getmTitle(), b);
     }
 
+    public Hashtable getTable(String tableName){
+        Hashtable tableToReturn;
+        switch (tableName){
+            case REC_TABLE:
+                tableToReturn = mRecTable;
+                break;
+            case PAST_REC_TABLE:
+                tableToReturn = mPastRecTable;
+                break;
+            case FAV_BOOKS_TABLE:
+                tableToReturn = mFavoriteBooksTable;
+                break;
+            case THUMBNAIL_TABLE:
+                tableToReturn = mThumbnailUrlTable;
+                break;
+            default:
+                tableToReturn = null;
+                break;
+        }
+        return tableToReturn;
+    }
+
+    public boolean clearTable(String tableName){
+        boolean tableCleared;
+        switch (tableName){
+            case REC_TABLE:
+                mRecTable.clear();
+                tableCleared = mRecTable.isEmpty();
+                break;
+            case PAST_REC_TABLE:
+                mPastRecTable.clear();
+                tableCleared = mPastRecTable.isEmpty();
+                break;
+            case FAV_BOOKS_TABLE:
+                mFavoriteBooksTable.clear();
+                tableCleared = mFavoriteBooksTable.isEmpty();
+                break;
+            case THUMBNAIL_TABLE:
+                mThumbnailUrlTable.clear();
+                tableCleared = mThumbnailUrlTable.isEmpty();
+                break;
+            default:
+                tableCleared = false;
+                break;
+        }
+        return tableCleared;
+    }
+
+    public boolean addBookToTable(String tableName, Book book){
+        boolean bookAdded;
+        switch (tableName){
+            case REC_TABLE:
+                bookAdded = addBook(book, mRecTable);
+                break;
+            case PAST_REC_TABLE:
+                bookAdded = addBook(book, mPastRecTable);
+                break;
+            case FAV_BOOKS_TABLE:
+                bookAdded = addBook(book, mFavoriteBooksTable);
+                break;
+            default:
+                bookAdded = false;
+                break;
+        }
+        return bookAdded;
+    }
+
+    private boolean addBook(Book book, Hashtable<String, Book> table){
+        if(table != null && !table.contains(book)){
+            table.put(book.getmTitle(), book);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public Book getBookFromTable(String tableName, String title){
+        Book retrievedBook;
+        switch (tableName){
+            case REC_TABLE:
+                retrievedBook = getBook(title, mRecTable);
+                break;
+            case PAST_REC_TABLE:
+                retrievedBook = getBook(title, mPastRecTable);
+                break;
+            case FAV_BOOKS_TABLE:
+                retrievedBook = getBook(title, mFavoriteBooksTable);
+                break;
+            default:
+                retrievedBook = null;
+                break;
+        }
+        return retrievedBook;
+    }
+
+    private Book getBook(String title, Hashtable<String, Book> table){
+        if(table != null && !table.containsKey(title)){
+            Book b = table.get(title);
+            return b;
+        }
+        else {
+            return null;
+        }
+    }
+
+    public boolean removeBookFromTable(String tableName, String title){
+        boolean bookRemoved;
+        switch (tableName){
+            case REC_TABLE:
+                bookRemoved = removeBook(title, mRecTable);
+                break;
+            case PAST_REC_TABLE:
+                bookRemoved = removeBook(title, mPastRecTable);
+                break;
+            case FAV_BOOKS_TABLE:
+                bookRemoved = removeBook(title, mFavoriteBooksTable);
+                break;
+            default:
+                bookRemoved = false;
+                break;
+        }
+        return bookRemoved;
+    }
+
+    private boolean removeBook(String title, Hashtable<String, Book> table){
+        if(table != null && table.containsKey(title)){
+            table.remove(title);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     public Hashtable<String, String> getmThumbnailUrlTable(){
         return mThumbnailUrlTable;
     }
@@ -66,18 +205,6 @@ public class BookLab implements Serializable {
             url = null;
         }
         return url;
-    }
-
-    public boolean putToPastRecTable(String title){
-        if(mRecTable.containsKey(title)){
-            Book b = mRecTable.get(title);
-            mPastRecTable.put(title, b);
-            mRecTable.remove(title);
-            return true;
-        }
-        else {
-            return false;
-        }
     }
 
     private Hashtable<String, Book> loadTable(String fileName){
@@ -153,6 +280,18 @@ public class BookLab implements Serializable {
             this.putToPastRecTable(bookRec.getmTitle());
         }
         return bookRec;
+    }
+
+    private boolean putToPastRecTable(String title){
+        if(mRecTable.containsKey(title)){
+            Book b = mRecTable.get(title);
+            mPastRecTable.put(title, b);
+            mRecTable.remove(title);
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     public boolean save(){
