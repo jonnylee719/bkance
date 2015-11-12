@@ -66,7 +66,7 @@ public class BookDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         String title = getArguments().getString(ARGS_BOOK_TITLE);
-        mBook = BookLab.get(getActivity()).getRecommendedBook(title);
+        mBook = BookLab.get(getActivity()).getBookFromTable(BookLab.PAST_REC_TABLE, title);
 
         //Retain book instance during runtime configuration
         setRetainInstance(true);

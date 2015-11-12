@@ -109,7 +109,7 @@ public class BookInfoFragment extends VisibleFragment {
         }
         else{
             //Get recommendation stored in Shared Pref to start with
-            mBook = BookLab.get(getActivity()).getRecommendedBook(recBookTitle);
+            mBook = BookLab.get(getActivity()).getBookFromTable(BookLab.PAST_REC_TABLE, recBookTitle);
         }
     }
 
@@ -190,7 +190,7 @@ public class BookInfoFragment extends VisibleFragment {
                 .putString(BookLab.PREF_REC, recBookTitle)
                 .commit();
 
-        mBook = BookLab.get(getActivity()).getRecommendedBook(recBookTitle);
+        mBook = BookLab.get(getActivity()).getBookFromTable(BookLab.PAST_REC_TABLE, recBookTitle);
         //Log.d(TAG, "Book fetched: " + mBook.getmTitle());
         loadRandomBookInfo();
     }

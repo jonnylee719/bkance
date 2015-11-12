@@ -68,7 +68,8 @@ public class BookListFragment extends VisibleFragment implements SearchView.OnQu
                         int positionInBookList = mBookList.indexOf(book);
                         mBookList.remove(book);
                         mTempList.put(positionInBookList, book);
-                        BookLab.get(getActivity()).removeItemPastRec(book.getmTitle());
+                        BookLab.get(getActivity())
+                                .removeBookFromTable(BookLab.PAST_REC_TABLE, book.getmTitle());
                         //Displaying the new bookList
                         List<Book> newFilteredList;
                         if(currentQuery != null){
@@ -109,7 +110,7 @@ public class BookListFragment extends VisibleFragment implements SearchView.OnQu
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         //Converting hashtable to array list for adaptor
-        mBookList = tableToList(BookLab.get(getActivity()).getmPastRecTable());
+        mBookList = tableToList(BookLab.get(getActivity()).getTable(BookLab.PAST_REC_TABLE));
 
         mAdapter = new BookCardAdaptor(mBookList);
         mRecyclerView.setAdapter(mAdapter);
@@ -137,7 +138,7 @@ public class BookListFragment extends VisibleFragment implements SearchView.OnQu
             int position = (int) bookSet.getKey();
             Book book = (Book) bookSet.getValue();
             mBookList.add(position, book);
-            bookLab.addPastRec(book);
+            bookLab.addBookToTable(BookLab.PAST_REC_TABLE, book);
         }
         List<Book> newFilteredList;
         if(currentQuery != null){
@@ -233,7 +234,7 @@ public class BookListFragment extends VisibleFragment implements SearchView.OnQu
                 Log.d(TAG, "Book position in mBookList: " + positionInBookList);
                 mTempList.put(positionInBookList, book);
                 Log.d(TAG, "Number of books in tempList: " + mTempList.size());
-                bookLab.removeItemPastRec(book.getmTitle());
+                bookLab.removeBookFromTable(BookLab.PAST_REC_TABLE, book.getmTitle());
             }
         }
         mBookList.removeAll(adaptorList);

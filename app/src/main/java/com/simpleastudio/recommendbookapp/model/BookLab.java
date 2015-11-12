@@ -48,11 +48,6 @@ public class BookLab implements Serializable {
         return mLab;
     }
 
-    public void addBook(Book b){
-        //Use book title as key
-        mRecTable.put(b.getmTitle(), b);
-    }
-
     public Hashtable getTable(String tableName){
         Hashtable tableToReturn;
         switch (tableName){
@@ -245,21 +240,10 @@ public class BookLab implements Serializable {
                     .commit();
 
             //Puts the book to PastRecList immediately to prevent multi-thread problem
-            this.putToPastRecTable(bookRec.getmTitle());
+            this.addBook(bookRec, mPastRecTable);
+            this.removeBook(bookRec.getmTitle(), mRecTable);
         }
         return bookRec;
-    }
-
-    private boolean putToPastRecTable(String title){
-        if(mRecTable.containsKey(title)){
-            Book b = mRecTable.get(title);
-            mPastRecTable.put(title, b);
-            mRecTable.remove(title);
-            return true;
-        }
-        else {
-            return false;
-        }
     }
 
     public boolean save(){
