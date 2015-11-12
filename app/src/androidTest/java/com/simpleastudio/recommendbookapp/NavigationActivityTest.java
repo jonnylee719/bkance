@@ -82,6 +82,8 @@ public class NavigationActivityTest {
         open_fragment_from_navigation_drawer("Previous", "Previous");
         //Check BookInput fragment
         open_fragment_from_navigation_drawer("Enter book title", "Enter book title");
+        //Check MyBooks fragment
+        open_fragment_from_navigation_drawer("My Books", "My Books");
     }
 
     public void open_fragment_from_navigation_drawer(String navigation_item_label, String fragment_title){
