@@ -229,38 +229,6 @@ public class BookLab implements Serializable {
         return hashtable;
    }
 
-    public void clearRecTable(){
-        mRecTable.clear();
-    }
-
-    public Book getRecommendedBook(String title){
-        if(mPastRecTable.containsKey(title)){
-            return mPastRecTable.get(title);
-        }
-        else {
-            return null;
-        }
-    }
-
-    public boolean clearPastRecTable(){
-        mPastRecTable.clear();
-        return mPastRecTable.isEmpty();
-    }
-
-    public boolean removeItemPastRec(String title){
-        boolean removed;
-        if(mPastRecTable.remove(title) != null){
-            removed = true;
-        } else {
-            removed = false;
-        }
-        return removed;
-    }
-
-    public void addPastRec(Book book){
-        mPastRecTable.put(book.getmTitle(), book);
-    }
-
     public Book getRandomBook(){
         //Get recommendation items in order
         Book bookRec = null;
@@ -308,9 +276,4 @@ public class BookLab implements Serializable {
             return false;
         }
     }
-
-    public Hashtable<String, Book> getmPastRecTable(){
-        return mPastRecTable;
-    }
-
 }
