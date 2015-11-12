@@ -20,16 +20,19 @@ public class BookLab implements Serializable {
     private static final String FILENAME_REC_LIST = "recommendationList.json";
     private static final String FILENAME_REC_LIST_PAST = "pastRecommendationList.json";
     private static final String FILENAME_THUMBNAIL_URL = "thumbnailurlList.json";
+    private static final String FILENAME_FAV_LIST = "favoriteBooks.json";
     public static final String PREF_REC = "randomRecTitle";
 
     private Hashtable<String, Book> mRecTable;
     private Hashtable<String, Book> mPastRecTable;
     private Hashtable<String, String> mThumbnailUrlTable;
+    private Hashtable<String, Book> mFavoriteBooksTable;
 
     private BookLab(Context c){
         mAppContext = c;
         mRecTable = loadTable(FILENAME_REC_LIST);
         mPastRecTable = loadTable(FILENAME_REC_LIST_PAST);
+        mFavoriteBooksTable = loadTable(FILENAME_FAV_LIST);
         mThumbnailUrlTable = loadThumbnailUrl(FILENAME_THUMBNAIL_URL);
     }
 
@@ -157,6 +160,7 @@ public class BookLab implements Serializable {
         try{
             mFileWriter.saveBooks(mRecTable, FILENAME_REC_LIST);
             mFileWriter.saveBooks(mPastRecTable, FILENAME_REC_LIST_PAST);
+            mFileWriter.saveBooks(mFavoriteBooksTable, FILENAME_FAV_LIST);
             mFileWriter.saveThumbnailURL(mThumbnailUrlTable, FILENAME_THUMBNAIL_URL);
             //Log.d(TAG, "Hashtables are saved.");
             return true;
