@@ -1,8 +1,12 @@
 package com.simpleastudio.recommendbookapp;
 
 import android.content.Context;
+import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.ViewInteraction;
+import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.CardView;
 import android.test.suitebuilder.annotation.LargeTest;
 
 import org.junit.Before;
@@ -11,21 +15,32 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import android.support.test.rule.ActivityTestRule;
+import android.util.Log;
+import android.widget.Button;
 import android.widget.EditText;
 
+import com.simpleastudio.recommendbookapp.matchers.MyViewAction;
+import com.simpleastudio.recommendbookapp.matchers.RecyclerViewMatcher;
 import com.simpleastudio.recommendbookapp.model.Book;
 import com.simpleastudio.recommendbookapp.model.BookLab;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.support.test.InstrumentationRegistry.getContext;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnHolderItem;
+import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItem;
+import static android.support.test.espresso.contrib.RecyclerViewActions.scrollToPosition;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
+import static android.support.test.espresso.matcher.ViewMatchers.isDescendantOfA;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.simpleastudio.recommendbookapp.matchers.TestUtils.withRecyclerView;
@@ -68,8 +83,13 @@ public class BookListFragmentTest{
         FragmentManager fm = ((TestFragmentActivity)mActivityRule.getActivity()).getSupportFragmentManager();
         fm.beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
         getInstrumentation().waitForIdleSync();
+        //Clearing all lists in BookLab
+        BookLab.get(getContext()).clearTable(BookLab.FAV_BOOKS_TABLE);
+        BookLab.get(getContext()).clearTable(BookLab.REC_TABLE);
+        BookLab.get(getContext()).clearTable(BookLab.PAST_REC_TABLE);
         //Setting fragment book list to be testBookList
         fragment.mBookList = testBookList;
+        ((BookListFragment.BookCardAdaptor)fragment.mAdapter).animateTo(testBookList);
     }
 
     @Test
@@ -100,8 +120,8 @@ public class BookListFragmentTest{
         int numOfItems_favorite = BookLab.get(context).getTable(BookLab.FAV_BOOKS_TABLE).size();
 
         //Click on the add button of book item at position 1
-        onView(withRecyclerView(R.id.book_recycler_view).atPositionOnView(1, R.id.card_button_add))
-                .perform(click());
+        ViewInteraction recyclerView = onView(withId(R.id.book_recycler_view));
+        recyclerView.perform(RecyclerViewActions.actionOnItemAtPosition(0, MyViewAction.clickChildViewWithId(R.id.card_button_add)));
 
         //Assert adaptor list has changed
         int expectedNumOfItems = numOfItems - 1;
@@ -113,8 +133,9 @@ public class BookListFragmentTest{
         assertThat(numOfItemsAfterClick_fragment, equalTo(expectedNumOfItems));
 
         //Assert mFavoriteBooksTable has one more book item
+        int expectedNumOfItems_favorite = numOfItems_favorite + 1;
         int numOfItemsAfterClick_favorite = BookLab.get(context).getTable(BookLab.FAV_BOOKS_TABLE).size();
-        assertThat(numOfItemsAfterClick_favorite, equalTo(expectedNumOfItems));
+        assertThat(numOfItemsAfterClick_favorite, equalTo(expectedNumOfItems_favorite));
     }
 
 
