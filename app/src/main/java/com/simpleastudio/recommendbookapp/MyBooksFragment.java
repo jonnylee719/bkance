@@ -117,6 +117,11 @@ public class MyBooksFragment extends VisibleFragment implements SearchView.OnQue
         mRecyclerView.setAdapter(mAdapter);
         mItemTouchHelper.attachToRecyclerView(mRecyclerView);
 
+        //Hiding add button
+        Button addButton = (Button) v.findViewById(R.id.card_button_add);
+        addButton.setEnabled(false);
+        addButton.setVisibility(View.GONE);
+
         return v;
     }
 
@@ -412,7 +417,7 @@ public class MyBooksFragment extends VisibleFragment implements SearchView.OnQue
             public void onClick(View v) {
                 int position = getAdapterPosition();
                 Book b = mList.get(position);
-                Log.d(TAG, "Book title clicked in BookListFragment: " + b.getmTitle());
+                Log.d(TAG, "Book title clicked in MyBooksFragment: " + b.getmTitle());
                 Intent i = new Intent(getContext(), BookDetailActivity.class);
                 i.putExtra(BookDetailFragment.ARGS_BOOK_TITLE, b.getmTitle());
                 startActivity(i);
