@@ -51,7 +51,7 @@ public class SettingFragment extends VisibleFragment {
         //Making title as Setting
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.navigation_setting);
         NavigationView nv = (NavigationView)((AppCompatActivity) getActivity()).findViewById(R.id.navigation_view);
-        nv.getMenu().getItem(3).setChecked(true);
+        nv.getMenu().getItem(4).setChecked(true);
 
         String currentTitle = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
                 .getString(BookInputFragment.PREF_INITIAL_BOOK, null);

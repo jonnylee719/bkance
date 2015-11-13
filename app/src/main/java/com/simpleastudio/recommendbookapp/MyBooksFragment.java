@@ -104,7 +104,7 @@ public class MyBooksFragment extends VisibleFragment implements SearchView.OnQue
                 .setTitle(R.string.navigation_my_books);
         NavigationView nv = (NavigationView)((AppCompatActivity) getActivity())
                 .findViewById(R.id.navigation_view);
-        nv.getMenu().getItem(3).setChecked(true);
+        nv.getMenu().getItem(2).setChecked(true);
 
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());

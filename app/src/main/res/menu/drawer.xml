@@ -12,6 +12,10 @@
             android:title="@string/navigation_previous"
             android:icon="@drawable/ic_view_list"/>
         <item
+            android:id="@+id/navigation_my_books"
+            android:title="@string/navigation_my_books"
+            android:icon="@drawable/ic_view_list"/>
+        <item
             android:id="@+id/navigation_input"
             android:title="@string/navigation_input"
             android:icon="@drawable/ic_input"/>

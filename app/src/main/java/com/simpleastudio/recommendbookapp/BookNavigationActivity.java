@@ -38,6 +38,9 @@ public class BookNavigationActivity extends NavigationActivityBase{
             case R.id.navigation_previous:
                 fragmentClass = BookListFragment.class;
                 break;
+            case R.id.navigation_my_books:
+                fragmentClass = MyBooksFragment.class;
+                break;
             case R.id.navigation_input:
                 fragmentClass = BookInputFragment.class;
                 break;
