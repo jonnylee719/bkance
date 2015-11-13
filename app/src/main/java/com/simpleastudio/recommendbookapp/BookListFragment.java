@@ -266,6 +266,21 @@ public class BookListFragment extends VisibleFragment implements SearchView.OnQu
 
     }
 
+    public boolean addToMyBooks(Book book){
+        boolean added = false;
+        BookLab.get(getActivity()).removeBookFromTable(BookLab.PAST_REC_TABLE, book.getmTitle());
+        added = BookLab.get(getActivity()).addBookToTable(BookLab.FAV_BOOKS_TABLE, book);
+        mBookList.remove(book);
+        List<Book> newFilteredList;
+        if(currentQuery != null){
+            newFilteredList = filter(mBookList, currentQuery);
+        } else {
+            newFilteredList = mBookList;
+        }
+        ((BookCardAdaptor)mAdapter).animateTo(newFilteredList);
+        return added;
+    }
+
     @Override
     public void actionOnReceive(){
         //Putting the recommended title into current recommended title
@@ -397,6 +412,7 @@ public class BookListFragment extends VisibleFragment implements SearchView.OnQu
             protected TextView mTextviewAuthor;
             protected TextView mTextviewRating;
             protected Button mMoreButton;
+            protected Button mAddButton;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -406,6 +422,15 @@ public class BookListFragment extends VisibleFragment implements SearchView.OnQu
                 mTextviewRating = (TextView) itemView.findViewById(R.id.card_textview_rating);
                 mMoreButton = (Button) itemView.findViewById(R.id.card_button_more);
                 mMoreButton.setOnClickListener(this);
+                mAddButton = (Button) itemView.findViewById(R.id.card_button_add);
+                mAddButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int position = getAdapterPosition();
+                        Book b = mList.get(position);
+                        addToMyBooks(b);
+                    }
+                });
             }
 
             @Override

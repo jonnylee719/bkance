@@ -1,5 +1,6 @@
 package com.simpleastudio.recommendbookapp;
 
+import android.content.Context;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.FragmentManager;
 import android.test.suitebuilder.annotation.LargeTest;
@@ -13,6 +14,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.widget.EditText;
 
 import com.simpleastudio.recommendbookapp.model.Book;
+import com.simpleastudio.recommendbookapp.model.BookLab;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,6 +88,33 @@ public class BookListFragmentTest{
                 .check(matches(withText("Fountainhead")));
 
 
+    }
+
+    @Test
+    public void add_to_my_books_button(){
+        //Current number of items in list
+        int numOfItems = ((BookListFragment.BookCardAdaptor)fragment.mAdapter).mList.size();
+
+        //Current number of items in mFavoriteBooksTable
+        Context context = mActivityRule.getActivity().getApplicationContext();
+        int numOfItems_favorite = BookLab.get(context).getTable(BookLab.FAV_BOOKS_TABLE).size();
+
+        //Click on the add button of book item at position 1
+        onView(withRecyclerView(R.id.book_recycler_view).atPositionOnView(1, R.id.card_button_add))
+                .perform(click());
+
+        //Assert adaptor list has changed
+        int expectedNumOfItems = numOfItems - 1;
+        int numOfItemsAfterClick_adaptor = ((BookListFragment.BookCardAdaptor)fragment.mAdapter).mList.size();
+        assertThat(numOfItemsAfterClick_adaptor, equalTo(expectedNumOfItems));
+
+        //Assert booklistfragment list has changed
+        int numOfItemsAfterClick_fragment = fragment.mBookList.size();
+        assertThat(numOfItemsAfterClick_fragment, equalTo(expectedNumOfItems));
+
+        //Assert mFavoriteBooksTable has one more book item
+        int numOfItemsAfterClick_favorite = BookLab.get(context).getTable(BookLab.FAV_BOOKS_TABLE).size();
+        assertThat(numOfItemsAfterClick_favorite, equalTo(expectedNumOfItems));
     }
 
 
