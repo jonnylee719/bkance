@@ -54,4 +54,5 @@
     <string name="no_search_title_message">Please enter book title for search</string>
     <string name="no_recommendations_message">There are no more recommendations for the book</string>
     <string name="search_title">Search book list</string>
+    <string name="navigation_my_books">My Books</string>
 </resources>
