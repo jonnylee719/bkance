@@ -117,11 +117,6 @@ public class MyBooksFragment extends VisibleFragment implements SearchView.OnQue
         mRecyclerView.setAdapter(mAdapter);
         mItemTouchHelper.attachToRecyclerView(mRecyclerView);
 
-        //Hiding add button
-        Button addButton = (Button) v.findViewById(R.id.card_button_add);
-        addButton.setEnabled(false);
-        addButton.setVisibility(View.GONE);
-
         return v;
     }
 
@@ -411,6 +406,11 @@ public class MyBooksFragment extends VisibleFragment implements SearchView.OnQue
                 mTextviewRating = (TextView) itemView.findViewById(R.id.card_textview_rating);
                 mMoreButton = (Button) itemView.findViewById(R.id.card_button_more);
                 mMoreButton.setOnClickListener(this);
+
+                //Hiding add button
+                Button addButton = (Button) itemView.findViewById(R.id.card_button_add);
+                addButton.setEnabled(false);
+                addButton.setVisibility(View.GONE);
             }
 
             @Override
