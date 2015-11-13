@@ -412,6 +412,7 @@ public class BookListFragment extends VisibleFragment implements SearchView.OnQu
             public void onClick(View v) {
                 int position = getAdapterPosition();
                 Book b = mList.get(position);
+                Log.d(TAG, "Book title clicked in BookListFragment: " + b.getmTitle());
                 Intent i = new Intent(getContext(), BookDetailActivity.class);
                 i.putExtra(BookDetailFragment.ARGS_BOOK_TITLE, b.getmTitle());
                 startActivity(i);

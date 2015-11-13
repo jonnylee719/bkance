@@ -112,12 +112,14 @@ public class BookLab implements Serializable {
                 bookAdded = false;
                 break;
         }
+        Log.d(TAG, "Book added to " + tableName + " : " + bookAdded);
         return bookAdded;
     }
 
     private boolean addBook(Book book, Hashtable<String, Book> table){
-        if(table != null && !table.contains(book)){
+        if(table != null){
             table.put(book.getmTitle(), book);
+            Log.d(TAG, "Book added: " + table.contains(book));
             return true;
         }
         else {
@@ -141,11 +143,12 @@ public class BookLab implements Serializable {
                 retrievedBook = null;
                 break;
         }
+        Log.d(TAG, "Retrieved Book: " + retrievedBook);
         return retrievedBook;
     }
 
     private Book getBook(String title, Hashtable<String, Book> table){
-        if(table != null && !table.containsKey(title)){
+        if(table != null && table.containsKey(title)){
             Book b = table.get(title);
             return b;
         }
@@ -240,7 +243,8 @@ public class BookLab implements Serializable {
                     .commit();
 
             //Puts the book to PastRecList immediately to prevent multi-thread problem
-            this.addBook(bookRec, mPastRecTable);
+            boolean bookPut = this.addBook(bookRec, mPastRecTable);
+            Log.d(TAG, bookRec.toString() + " put to past rec table: " + bookPut);
             this.removeBook(bookRec.getmTitle(), mRecTable);
         }
         return bookRec;
